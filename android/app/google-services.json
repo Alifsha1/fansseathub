@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "744602426193",
+    "project_id": "fansseathub",
+    "storage_bucket": "fansseathub.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:744602426193:android:afa4d45faf3e3e186bd170",
+        "android_client_info": {
+          "package_name": "com.example.fansseathub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxehn2_lmbnziMlj3aB82GOrpWRVb7bzg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
