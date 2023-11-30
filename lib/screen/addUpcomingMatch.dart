@@ -2,14 +2,14 @@ import 'package:fansseathub/helper/widgets/addingField.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
-class AddNextGame extends StatefulWidget {
-  const AddNextGame({super.key});
+class AddUpcomingGame extends StatefulWidget {
+  const AddUpcomingGame({super.key});
 
   @override
-  State<AddNextGame> createState() => _AddFirstGameState();
+  State<AddUpcomingGame> createState() => _AddFirstGameState();
 }
 
-class _AddFirstGameState extends State<AddNextGame> {
+class _AddFirstGameState extends State<AddUpcomingGame> {
   final formkey = GlobalKey<FormState>();
   final TextEditingController team1controller = TextEditingController();
   final TextEditingController team2controller = TextEditingController();
@@ -52,10 +52,10 @@ class _AddFirstGameState extends State<AddNextGame> {
                 Row(
                   children: [
                     Text(
-                      'Add next game details',
+                      'Add upcoming game details',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 35,
+                        fontSize: 28,
                         fontWeight: FontWeight.w500,
                       ),
                     ),

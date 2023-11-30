@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
 
 void showSnackbar(context, color, message) {
@@ -63,30 +65,65 @@ class highlightsList extends StatelessWidget {
 }
 
 class ButtonElevated extends StatelessWidget {
-  const ButtonElevated({super.key});
+  final String buttonText;
+  const ButtonElevated({super.key, required this.buttonText});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: ElevatedButton(
-          onPressed: () {},
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
-          child: Text(
-            '+Add new video',
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.white,
-            ),
-          )),
+    return ElevatedButton(
+        onPressed: () {},
+        style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.black,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10))),
+        child: Text(
+          buttonText,
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+          ),
+        ));
+  }
+}
+
+class AdminSideHeadings extends StatelessWidget {
+  final String headings;
+  const AdminSideHeadings({super.key, required this.headings});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      headings,
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 25,
+        fontWeight: FontWeight.bold,
+      ),
     );
   }
 }
 
-class GameaddingField extends StatelessWidget {
-  const GameaddingField({super.key});
+class AdminTextField extends StatelessWidget {
+  final String? Function(String?)? validator;
+  final String hinttext;
+  final TextEditingController controller;
+  const AdminTextField(
+      {super.key,
+      required this.hinttext,
+      this.validator,
+      required this.controller});
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField();
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+        hintText: hinttext,
+        filled: true,
+        fillColor: Colors.white,
+      ),
+      validator: validator,
+    );
   }
 }

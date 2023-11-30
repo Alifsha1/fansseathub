@@ -6,7 +6,8 @@ import 'package:fansseathub/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class SignupScreen extends StatefulWidget {
-  const SignupScreen({super.key});
+  final String? Function(String?)? validator;
+  const SignupScreen({super.key, this.validator});
 
   @override
   State<SignupScreen> createState() => _SignupScreenState();

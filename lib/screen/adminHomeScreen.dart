@@ -1,4 +1,5 @@
 import 'package:fansseathub/helper/widgets/widgets.dart';
+import 'package:fansseathub/screen/addUpcomingMatch.dart';
 import 'package:fansseathub/screen/homeScreen.dart';
 import 'package:fansseathub/screen/nxtGameAdding.dart';
 import 'package:fansseathub/screen/userLoginScreen.dart';
@@ -59,11 +60,20 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                 ),
               ),
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.all(10.0),
-              child: Text(
-                '+Add upcoming matches',
-                style: TextStyle(fontSize: 20),
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const AddUpcomingGame(),
+                    ),
+                  );
+                },
+                child: Text(
+                  '+Add upcoming matches',
+                  style: TextStyle(fontSize: 20),
+                ),
               ),
             ),
             Padding(
@@ -134,7 +144,9 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
               SizedBox(
                 height: 40,
               ),
-              ButtonElevated(),
+              ButtonElevated(
+                buttonText: '+Add new video',
+              ),
             ],
           ),
         ),
