@@ -1,5 +1,6 @@
 import 'dart:io';
-import 'package:fansseathub/model/match_details.dart';
+import 'package:fansseathub/hive/hive_Functions.dart';
+import 'package:fansseathub/model/matchdetails.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fansseathub/helper/widgets/addingField.dart';
@@ -25,13 +26,15 @@ class _AddFirstGameState extends State<AddNextGame> {
   final TextEditingController stadiumcontroller = TextEditingController();
   File? _selectedImageteam1;
   File? _selectedImageteam2;
-  late Box matchdetailsbox;
+  late Box<MatchDetails> matchdetailsbox;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    matchdetailsbox = Hive.box('matchdetiles');
+    matchdetailsbox = Hive.box('matchdetails');
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,14 +91,20 @@ class _AddFirstGameState extends State<AddNextGame> {
                   stadiumController: stadiumcontroller,
                   imageSelectedteam1: _selectedImageteam1,
                   imageSelectedteam2: _selectedImageteam2,
-                  onTap: ()async{
-                     File? pickimage = await _pickImageFromGallery();
+                  onTap1: () async {
+                    File? pickimage = await pickImageFromGallery();
                     setState(() {
                       _selectedImageteam1 = pickimage;
+                      // _selectedImageteam2 = pickimage;
+                    });
+                  },
+                  onTap2: () async {
+                    File? pickimage = await pickImageFromGallery();
+                    setState(() {
+                      // _selectedImageteam1 = pickimage;
                       _selectedImageteam2 = pickimage;
                     });
                   },
-                  
                 ),
                 SizedBox(
                   height: 20,
@@ -103,15 +112,12 @@ class _AddFirstGameState extends State<AddNextGame> {
                 SizedBox(
                   child: ElevatedButton(
                       onPressed: () {
-                        submit();
-
-                         if (formkey.currentState!.validate()) {
-
-                          
-
-
-                         }
-                        //Navigator.pop(context);
+                        if (formkey.currentState!.validate()) {
+                          submit();
+                          dataClear();
+                           Navigator.pop(context);
+                          print("matchdetailsaddding");
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
@@ -134,52 +140,59 @@ class _AddFirstGameState extends State<AddNextGame> {
   }
 
   submit() {
-   
-      if(_selectedImageteam1 == null &&_selectedImageteam2 == null){
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              backgroundColor: Colors.red,
-              content: Text(
-                'You Must select an image',
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          )
-        );
-        return;
-      }else{
-        saveDetails();
-      }
-    
-  }
-   Future<File?> _pickImageFromGallery()async{
-    final pickedimage = 
-         await ImagePicker().pickImage(source: ImageSource.gallery);
-         if(pickedimage!=null){
-          return File(pickedimage.path);
-         }
-         return null;
-  }
-
-  void saveDetails(){
-    final isValid = formkey.currentState?.validate();
-    if (isValid != null && isValid){
-      formkey.currentState?.save();
-      matchdetailsbox.add(MatchDetails(
-        team1:team1controller.text ,
-         team2: team2controller.text,
-          imagePath1: _selectedImageteam1.toString(),
-           imagePath2: _selectedImageteam2.toString(),
-            time: int.parse(timecontroller.text) ,
-             date: int.parse(datecontroller.text),
-              category: categorycontroller.text,
-               gameno: int.parse(gamenocontroller.text),
-                typeofgame: typecontroller.text,
-                 stadium: stadiumcontroller.text
-                 )
-                );
-
+    if (_selectedImageteam1 == null && _selectedImageteam2 == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        backgroundColor: Colors.red,
+        content: Text(
+          'You Must select an image',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ));
+      return;
+    } else {
+      String matchKey = DateTime.now().microsecondsSinceEpoch.toString();
+      Repository.addmatchdetails(
+        MatchDetails(
+            matchKey: matchKey,
+            team1: team1controller.text,
+            team2: team2controller.text,
+            imagePath1: _selectedImageteam1!.path,
+            imagePath2: _selectedImageteam2!.path,
+            time: timecontroller.text,
+            date: datecontroller.text,
+            category: categorycontroller.text,
+            gameno: gamenocontroller.text,
+            typeofgame: typecontroller.text,
+            stadium: stadiumcontroller.text),
+        matchKey,
+      );
+      dataClear();
+      print("savedateils");
     }
+   
+  }
+
+  Future<File?> pickImageFromGallery() async {
+    final pickedimage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedimage != null) {
+      return File(pickedimage.path);
+    }
+    return null;
+  }
+
+  void dataClear() {
+    team1controller.clear();
+    team2controller.clear();
+    _selectedImageteam1 = null;
+    _selectedImageteam2 = null;
+    timecontroller.clear();
+    datecontroller.clear();
+    categorycontroller.clear();
+    gamenocontroller.clear();
+    typecontroller.clear();
+    stadiumcontroller.clear();
   }
 }

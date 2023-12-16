@@ -67,7 +67,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (_isUserSigned) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
+            builder: (context) =>  HomeScreen(isUserSigned: _isUserSigned,idAdminSigned: _isAdminSigned,),
           ),
           (route) => false);
     } else if (_isAdminSigned) {

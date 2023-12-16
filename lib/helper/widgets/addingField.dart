@@ -14,11 +14,12 @@ class GameAddingField extends StatefulWidget {
   final TextEditingController typeController;
   final TextEditingController stadiumController;
   final TextEditingController gamenoController;
-  final void Function()? onTap;
+  final void Function()? onTap1;
+  final void Function()? onTap2;
   File? imageSelectedteam1;
   File? imageSelectedteam2;
-  
-   GameAddingField(
+
+  GameAddingField(
       {super.key,
       required this.team1Controller,
       required this.team2Controller,
@@ -28,10 +29,10 @@ class GameAddingField extends StatefulWidget {
       required this.typeController,
       required this.stadiumController,
       required this.gamenoController,
-      required this.onTap,
+      required this.onTap1,
+      required this.onTap2,
       required this.imageSelectedteam1,
-      required this.imageSelectedteam2
-      });
+      required this.imageSelectedteam2});
 
   @override
   State<GameAddingField> createState() => _GameAddingFieldState();
@@ -51,7 +52,7 @@ class _GameAddingFieldState extends State<GameAddingField> {
               fieldHint: 'Enter Team',
               flag: 'flag team 1',
               team: 'Team 1',
-              onTap: widget.onTap,
+              onTap: widget.onTap1,
               selectedImageteam1: widget.imageSelectedteam1,
             ),
             SizedBox(
@@ -70,7 +71,7 @@ class _GameAddingFieldState extends State<GameAddingField> {
               fieldHint: 'Enter Team',
               flag: 'flag team 2',
               team: 'Team 2',
-              onTap: widget.onTap,
+              onTap: widget.onTap2,
               selectedImageteam2: widget.imageSelectedteam2,
             ),
           ],

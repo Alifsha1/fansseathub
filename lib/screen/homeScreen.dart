@@ -1,4 +1,5 @@
 import 'package:fansseathub/helper/widgets/widgets.dart';
+import 'package:fansseathub/screen/adminHomeScreen.dart';
 import 'package:fansseathub/screen/matchDetailsScreen.dart';
 import 'package:fansseathub/screen/userLoginScreen.dart';
 import 'package:fansseathub/sections/assets.dart';
@@ -7,7 +8,13 @@ import 'package:fansseathub/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final bool isUserSigned;
+  final bool idAdminSigned;
+  const HomeScreen({
+    super.key,
+    required this.isUserSigned,
+    required this.idAdminSigned,
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -15,6 +22,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   AuthService authService = AuthService();
+
+  @override
+  void initState() {
+    super.initState();
+    print('${widget.isUserSigned},${widget.idAdminSigned}');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,6 +59,21 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
+        actions: [
+          widget.idAdminSigned
+              ? SizedBox()
+              : Padding(
+                  padding: const EdgeInsets.only(right: 15),
+                  child: IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (context) => AdminHomeScreen()));
+                      },
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: Colors.black,
+                      )))
+        ],
         elevation: 0,
       ),
       drawer: Drawer(
@@ -55,11 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.all(10.0),
               child: GestureDetector(
                   onTap: () {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => const HomeScreen(),
-                      ),
-                    );
+                    Navigator.of(context).pop();
                   },
                   child: const Text(
                     'Home',
@@ -86,13 +111,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: () {},
                 child: InkWell(
                   onTap: () async {
-                    await authService.signout();
+                    await authService.showSignOutConfirmationDialog(context);
                     // ignore: use_build_context_synchronously
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                          builder: (context) => const UserLoginScreen(),
-                        ),
-                        (route) => false);
+                  
                   },
                   child: const Text(
                     'Logout',
@@ -117,7 +138,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const MatchDetailsScreen(),
+                        builder: (context) =>
+                            const MatchDetailsScreen(type: 'cricket',typeHeading: 'CRICKET',),
                       ),
                     );
                   },
@@ -126,8 +148,26 @@ class _HomeScreenState extends State<HomeScreen> {
                     sports: 'CRICKET',
                   ),
                 ),
-                Catogory(displayImage: foot, sports: 'FOOTBALL'),
-                Catogory(displayImage: bad, sports: 'BADMINTON'),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const MatchDetailsScreen(type: 'football',typeHeading: 'FOOTBALL',),
+                        ),
+                      );
+                    },
+                    child: Catogory(displayImage: foot, sports: 'FOOTBALL')),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const MatchDetailsScreen(type: 'badminton',typeHeading: 'BADMINTON',),
+                        ),
+                      );
+                    },
+                    child: Catogory(displayImage: bad, sports: 'BADMINTON')),
               ],
             ),
           ),

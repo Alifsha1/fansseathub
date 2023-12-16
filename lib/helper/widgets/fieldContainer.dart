@@ -10,22 +10,21 @@ class GameNameContainer extends StatefulWidget {
   final String flag;
   final TextEditingController controller;
   final String teamserrormessage;
-   File? selectedImageteam1;
-   File? selectedImageteam2;
+  File? selectedImageteam1;
+  File? selectedImageteam2;
 
   final void Function()? onTap;
-  GameNameContainer({
-    super.key,
-    required this.team,
-    required this.fieldHint,
-    required this.flag,
-    required this.controller,
-    required this.teamserrormessage,
-    required this.onTap,
-     this.selectedImageteam1,
-     this.selectedImageteam2
-  
-  });
+
+  GameNameContainer(
+      {super.key,
+      required this.team,
+      required this.fieldHint,
+      required this.flag,
+      required this.controller,
+      required this.teamserrormessage,
+      this.onTap,
+      this.selectedImageteam1,
+      this.selectedImageteam2});
 
   @override
   State<GameNameContainer> createState() => _GameNameContainerState();
@@ -57,23 +56,36 @@ class _GameNameContainerState extends State<GameNameContainer> {
           ),
           GestureDetector(
             onTap: widget.onTap,
-            child:widget.selectedImageteam1!=null || widget.selectedImageteam2 != null
-                  ? ClipOval(
+            child: widget.selectedImageteam1 != null ||
+                    widget.selectedImageteam2 != null
+                ? ClipOval(
                     child: Image.file(
-                    widget.selectedImageteam1 ?? widget.selectedImageteam2!,
+                      widget.selectedImageteam1 ?? widget.selectedImageteam2!,
                       fit: BoxFit.cover,
                       width: 140,
                       height: 140,
                     ),
-                  ) :
-             Icon(
-              Icons.image_outlined,
-              color: Colors.white,
-              size: 70,
-            ),
+                  )
+                : Icon(
+                    Icons.image_outlined,
+                    color: Colors.white,
+                    size: 70,
+                  ),
           )
         ],
       ),
     );
   }
+  // void ontapfunctionone(){
+  //    onTap: widget.onTap1;
+  //           child:widget.selectedImageteam1!=null || widget.selectedImageteam2 != null
+  //                 ? ClipOval(
+  //                   child: Image.file(
+  //                   widget.selectedImageteam1 ?? widget.selectedImageteam2!,
+  //                     fit: BoxFit.cover,
+  //                     width: 140,
+  //                     height: 140,
+  //                   ),
+  //                 )
+  // }
 }

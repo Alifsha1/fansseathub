@@ -14,6 +14,8 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+   bool _isUserSigned = false;
+  bool _isAdminSigned = false;
   // ignore: unused_field
   bool _isLoading = false;
   final formkey = GlobalKey<FormState>();
@@ -235,7 +237,7 @@ class _SignupScreenState extends State<SignupScreen> {
           // ignore: use_build_context_synchronously
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
-              builder: (context) => const HomeScreen(),
+              builder: (context) =>  HomeScreen(isUserSigned:_isUserSigned,idAdminSigned: _isAdminSigned, ),
             ),
           );
         } else {

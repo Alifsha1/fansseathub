@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 void showSnackbar(context, color, message) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -50,19 +51,6 @@ class HeadingWhite extends StatelessWidget {
   }
 }
 
-class highlightsList extends StatelessWidget {
-  const highlightsList({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      width: MediaQuery.sizeOf(context).width,
-      decoration:
-          BoxDecoration(color: const Color.fromARGB(255, 204, 197, 197)),
-    );
-  }
-}
 
 class ButtonElevated extends StatelessWidget {
   final String buttonText;
@@ -152,3 +140,4 @@ class AdminTextField extends StatelessWidget {
     );
   }
 }
+

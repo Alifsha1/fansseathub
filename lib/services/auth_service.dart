@@ -1,5 +1,6 @@
 import 'package:fansseathub/helper/helper_functions.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
+import 'package:fansseathub/screen/userLoginScreen.dart';
 import 'package:fansseathub/services/database_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,7 @@ class AuthService {
   }
 
   //======signout=====
-  Future signout() async {
+  Future signout(BuildContext context) async {
     try {
       await HelperFunction.saveUSerLoggedInStatus(false);
       await HelperFunction.saveUSerEmailSF("");
@@ -55,5 +56,41 @@ class AuthService {
     } catch (e) {
       return null;
     }
+  }
+
+  showSignOutConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Sign Out",
+              style: TextStyle(color: Colors.black, fontSize: 15)),
+          content: Text("Are you sure you want to sign out?",
+              style: TextStyle(color: Colors.black, fontSize: 15)),
+          actions: [
+            TextButton(
+              child: Text("Cancel",
+                  style: TextStyle(color: Colors.black, fontSize: 15)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text("Sign Out",
+                  style: TextStyle(color: Colors.black, fontSize: 15)),
+              onPressed: () {
+                signout(context);
+                Navigator.of(context).pop();
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => const UserLoginScreen(),
+                    ),
+                    (route) => false);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

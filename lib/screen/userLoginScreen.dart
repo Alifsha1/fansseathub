@@ -18,6 +18,9 @@ class UserLoginScreen extends StatefulWidget {
 }
 
 class _UserLoginScreenState extends State<UserLoginScreen> {
+
+   bool _isUserSigned = false;
+  bool _isAdminSigned = false;
   final formkey = GlobalKey<FormState>();
   String email = "";
   String password = "";
@@ -260,7 +263,7 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
 
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
-              builder: (context) => const HomeScreen(),
+              builder: (context) =>  HomeScreen(idAdminSigned:_isAdminSigned,isUserSigned:_isAdminSigned, ),
             ),
           );
         } else {
