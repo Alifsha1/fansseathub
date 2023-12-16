@@ -1,7 +1,7 @@
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:fansseathub/screen/addUpcomingMatch.dart';
 import 'package:fansseathub/screen/homeScreen.dart';
-import 'package:fansseathub/screen/nxtGameAdding.dart';
+import 'package:fansseathub/helper/widgets/nxtGameAdding.dart';
 import 'package:fansseathub/screen/userLoginScreen.dart';
 import 'package:fansseathub/services/auth_service.dart';
 import 'package:flutter/material.dart';

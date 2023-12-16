@@ -8,6 +8,9 @@ class Fieldforsecond extends StatefulWidget {
   final String timeofgame;
   final String sportsName;
   final String category;
+  final String timeerrorMessage;
+  final String categoryerrorMessage;
+  final String typeerrorMessage;
 
   const Fieldforsecond(
       {super.key,
@@ -16,7 +19,10 @@ class Fieldforsecond extends StatefulWidget {
       required this.category,
       required this.timecontroller,
       required this.categorycontroller,
-      required this.typecontroller});
+      required this.typecontroller,
+      required this.timeerrorMessage,
+      required this.categoryerrorMessage,
+      required this.typeerrorMessage});
 
   @override
   State<Fieldforsecond> createState() => _FieldforsecondState();
@@ -25,7 +31,7 @@ class Fieldforsecond extends StatefulWidget {
 class _FieldforsecondState extends State<Fieldforsecond> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.sizeOf(context).width / 2.5,
       child: Column(
         children: [
@@ -38,6 +44,7 @@ class _FieldforsecondState extends State<Fieldforsecond> {
             height: 10,
           ),
           AdminTextField(
+            errormessage: widget.timeerrorMessage,
             controller: widget.timecontroller,
             hinttext: 'Enter time',
           ),
@@ -53,6 +60,7 @@ class _FieldforsecondState extends State<Fieldforsecond> {
             height: 10,
           ),
           AdminTextField(
+            errormessage: widget.categoryerrorMessage,
             hinttext: 'Enter category',
             controller: widget.categorycontroller,
           ),
@@ -68,6 +76,7 @@ class _FieldforsecondState extends State<Fieldforsecond> {
             height: 10,
           ),
           AdminTextField(
+            errormessage: widget.typeerrorMessage,
             hinttext: 'Enter type',
             controller: widget.typecontroller,
           ),
@@ -84,6 +93,10 @@ class DateContainer extends StatefulWidget {
   final String gameno;
   final String dateofgame;
   final String stadiumName;
+  final String dateerrorMessage;
+  final String gameerrorMessage;
+  final String stadiumerrorMessage;
+
   const DateContainer({
     super.key,
     required this.stadiumName,
@@ -92,6 +105,9 @@ class DateContainer extends StatefulWidget {
     required this.datecontroller,
     required this.gamenocontroller,
     required this.stadiumcontroller,
+    required this.dateerrorMessage,
+    required this.gameerrorMessage,
+    required this.stadiumerrorMessage,
   });
 
   @override
@@ -101,7 +117,7 @@ class DateContainer extends StatefulWidget {
 class _DateContainerState extends State<DateContainer> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.sizeOf(context).width / 2.5,
       child: Column(
         children: [
@@ -114,6 +130,7 @@ class _DateContainerState extends State<DateContainer> {
             height: 10,
           ),
           AdminTextField(
+            errormessage: widget.dateerrorMessage,
             hinttext: 'Enter date',
             controller: widget.datecontroller,
           ),
@@ -130,6 +147,7 @@ class _DateContainerState extends State<DateContainer> {
           ),
           AdminTextField(
             hinttext: 'Enter no',
+            errormessage: widget.gameerrorMessage,
             controller: widget.gamenocontroller,
           ),
           SizedBox(
@@ -144,6 +162,7 @@ class _DateContainerState extends State<DateContainer> {
             height: 10,
           ),
           AdminTextField(
+            errormessage: widget.stadiumerrorMessage,
             hinttext: 'Enter stadium',
             controller: widget.stadiumcontroller,
           ),

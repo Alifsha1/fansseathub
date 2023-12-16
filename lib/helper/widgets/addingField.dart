@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fansseathub/helper/widgets/fieldContainer.dart';
 import 'package:fansseathub/helper/widgets/fieldContainerTwo.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
@@ -12,7 +14,11 @@ class GameAddingField extends StatefulWidget {
   final TextEditingController typeController;
   final TextEditingController stadiumController;
   final TextEditingController gamenoController;
-  const GameAddingField(
+  final void Function()? onTap;
+  File? imageSelectedteam1;
+  File? imageSelectedteam2;
+  
+   GameAddingField(
       {super.key,
       required this.team1Controller,
       required this.team2Controller,
@@ -21,7 +27,11 @@ class GameAddingField extends StatefulWidget {
       required this.categoryController,
       required this.typeController,
       required this.stadiumController,
-      required this.gamenoController});
+      required this.gamenoController,
+      required this.onTap,
+      required this.imageSelectedteam1,
+      required this.imageSelectedteam2
+      });
 
   @override
   State<GameAddingField> createState() => _GameAddingFieldState();
@@ -36,11 +46,13 @@ class _GameAddingFieldState extends State<GameAddingField> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             GameNameContainer(
+              teamserrormessage: "team name cannot be empty",
               controller: widget.team1Controller,
               fieldHint: 'Enter Team',
               flag: 'flag team 1',
               team: 'Team 1',
-              //team1controller,
+              onTap: widget.onTap,
+              selectedImageteam1: widget.imageSelectedteam1,
             ),
             SizedBox(
               width: 5,
@@ -53,16 +65,22 @@ class _GameAddingFieldState extends State<GameAddingField> {
               width: 5,
             ),
             GameNameContainer(
+              teamserrormessage: "team name cannot be empty",
               controller: widget.team2Controller,
               fieldHint: 'Enter Team',
               flag: 'flag team 2',
               team: 'Team 2',
+              onTap: widget.onTap,
+              selectedImageteam2: widget.imageSelectedteam2,
             ),
           ],
         ),
         Row(
           children: [
             Fieldforsecond(
+              timeerrorMessage: "time name cannot be empty",
+              categoryerrorMessage: "category name cannot be empty",
+              typeerrorMessage: "type name cannot be empty",
               timecontroller: widget.timeController,
               categorycontroller: widget.categoryController,
               typecontroller: widget.typeController,
@@ -71,9 +89,12 @@ class _GameAddingFieldState extends State<GameAddingField> {
               sportsName: 'Type',
             ),
             SizedBox(
-              width: 50,
+              width: 48,
             ),
             DateContainer(
+              dateerrorMessage: "date name cannot be empty",
+              gameerrorMessage: "gameno name cannot be empty",
+              stadiumerrorMessage: "stadium name cannot be empty",
               datecontroller: widget.dateController,
               gamenocontroller: widget.gamenoController,
               stadiumcontroller: widget.stadiumController,

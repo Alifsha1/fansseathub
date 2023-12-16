@@ -1,4 +1,5 @@
 import 'package:fansseathub/helper/widgets/widgets.dart';
+import 'package:fansseathub/screen/matchDetailsScreen.dart';
 import 'package:fansseathub/screen/userLoginScreen.dart';
 import 'package:fansseathub/sections/assets.dart';
 import 'package:fansseathub/sections/catogory.dart';
@@ -112,9 +113,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                Catogory(
-                  displayImage: crik,
-                  sports: 'CRICKET',
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const MatchDetailsScreen(),
+                      ),
+                    );
+                  },
+                  child: Catogory(
+                    displayImage: crik,
+                    sports: 'CRICKET',
+                  ),
                 ),
                 Catogory(displayImage: foot, sports: 'FOOTBALL'),
                 Catogory(displayImage: bad, sports: 'BADMINTON'),

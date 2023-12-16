@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fansseathub/helper/widgets/addingField.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +21,8 @@ class _AddFirstGameState extends State<AddUpcomingGame> {
   final TextEditingController typecontroller = TextEditingController();
   final TextEditingController gamenocontroller = TextEditingController();
   final TextEditingController stadiumcontroller = TextEditingController();
+   File? _selectedImageteam1;
+   File? _selectedImageteam2;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,11 +77,17 @@ class _AddFirstGameState extends State<AddUpcomingGame> {
                   gamenoController: gamenocontroller,
                   typeController: typecontroller,
                   stadiumController: stadiumcontroller,
+                  imageSelectedteam1: _selectedImageteam1,
+                  imageSelectedteam2: _selectedImageteam2,
+                  onTap: () {
+                    
+                  },
                 ),
                 SizedBox(
                   child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pop(context);
+                        submit();
+                        //Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
@@ -97,5 +107,9 @@ class _AddFirstGameState extends State<AddUpcomingGame> {
         )),
       ),
     );
+  }
+
+  submit() {
+    if (formkey.currentState!.validate()) {}
   }
 }

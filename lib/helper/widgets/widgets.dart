@@ -103,7 +103,25 @@ class AdminSideHeadings extends StatelessWidget {
   }
 }
 
+class AdminSideHeadingsBlack extends StatelessWidget {
+  final String headings;
+  const AdminSideHeadingsBlack({super.key, required this.headings});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      headings,
+      style: TextStyle(
+        color: Colors.black,
+        fontSize: 25,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+}
+
 class AdminTextField extends StatelessWidget {
+  final String errormessage;
   final String? Function(String?)? validator;
   final String hinttext;
   final TextEditingController controller;
@@ -111,7 +129,8 @@ class AdminTextField extends StatelessWidget {
       {super.key,
       required this.hinttext,
       this.validator,
-      required this.controller});
+      required this.controller,
+      required this.errormessage});
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +142,13 @@ class AdminTextField extends StatelessWidget {
         filled: true,
         fillColor: Colors.white,
       ),
-      validator: validator,
+      validator: (value) {
+        if (value!.isNotEmpty) {
+          return null;
+        } else {
+          return errormessage;
+        }
+      },
     );
   }
 }

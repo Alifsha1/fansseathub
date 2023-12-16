@@ -258,7 +258,6 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
           await HelperFunction.saveUSerEmailSF(email);
           await HelperFunction.saveUSerNameSF(snapshot.docs[0]['Name']);
 
-          // ignore: use_build_context_synchronously
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (context) => const HomeScreen(),
