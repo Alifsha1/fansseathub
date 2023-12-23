@@ -327,11 +327,9 @@ showEditingDialog(context, MatchDetails match, formKey, mediaWidth, mediaHeight,
                         child: const Text('cancel')),
                     ElevatedButton(
                         onPressed: () {
-                          print('updating');
-
                           Repository.updatematchdetails(
                               MatchDetails(
-                                  matchKey: matchKey!,
+                                  matchKey: matchKey,
                                   team1: team1Controller.text,
                                   team2: team2Controller.text,
                                   imagePath1:
