@@ -63,20 +63,20 @@ class AuthService {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Sign Out",
+          title: const Text("Sign Out",
               style: TextStyle(color: Colors.black, fontSize: 15)),
-          content: Text("Are you sure you want to sign out?",
+          content: const Text("Are you sure you want to sign out?",
               style: TextStyle(color: Colors.black, fontSize: 15)),
           actions: [
             TextButton(
-              child: Text("Cancel",
+              child: const Text("Cancel",
                   style: TextStyle(color: Colors.black, fontSize: 15)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text("Sign Out",
+              child: const Text("Sign Out",
                   style: TextStyle(color: Colors.black, fontSize: 15)),
               onPressed: () {
                 signout(context);

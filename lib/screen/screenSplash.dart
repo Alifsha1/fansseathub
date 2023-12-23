@@ -1,7 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:fansseathub/helper/helper_functions.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:fansseathub/screen/adminHomeScreen.dart';
-import 'package:fansseathub/screen/homeScreen.dart';
+import 'package:fansseathub/screen/bottomBar.dart';
+
 import 'package:fansseathub/screen/userLoginScreen.dart';
 import 'package:flutter/material.dart';
 
@@ -67,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (_isUserSigned) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-            builder: (context) =>  HomeScreen(isUserSigned: _isUserSigned,idAdminSigned: _isAdminSigned,),
+            builder: (context) =>  BottomBar(isUsersigned: _isUserSigned, idAdminsigned: _isAdminSigned),
           ),
           (route) => false);
     } else if (_isAdminSigned) {

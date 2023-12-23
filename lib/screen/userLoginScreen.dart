@@ -1,13 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fansseathub/helper/helper_functions.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:fansseathub/screen/adminLoginScreen.dart';
 import 'package:fansseathub/screen/forgetScreen.dart';
-import 'package:fansseathub/screen/homeScreen.dart';
 import 'package:fansseathub/screen/signupScreen.dart';
 import 'package:fansseathub/services/auth_service.dart';
-import 'package:fansseathub/services/database_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UserLoginScreen extends StatefulWidget {
@@ -18,9 +14,8 @@ class UserLoginScreen extends StatefulWidget {
 }
 
 class _UserLoginScreenState extends State<UserLoginScreen> {
-
-   bool _isUserSigned = false;
-  bool _isAdminSigned = false;
+  final bool isUserSigned = false;
+  final bool isAdminSigned = false;
   final formkey = GlobalKey<FormState>();
   String email = "";
   String password = "";
@@ -103,14 +98,8 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                             style: TextStyle(color: Colors.white, fontSize: 17),
                           ),
                         ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15)),
-                            hintText: 'gmail',
-                            filled: true,
-                            fillColor: Colors.white,
-                          ),
+                        FormTextField(
+                          hinttext: 'gmail',
                           onChanged: (val) {
                             setState(() {
                               email = val;
@@ -131,25 +120,19 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                             style: TextStyle(color: Colors.white, fontSize: 17),
                           ),
                         ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15)),
-                            hintText: 'password',
-                            filled: true,
-                            fillColor: Colors.white,
-                          ),
+                        FormTextField(
+                          hinttext: 'password',
+                          onChanged: (val) {
+                            setState(() {
+                              password = val;
+                            });
+                          },
                           validator: (val) {
                             if (val!.length < 6) {
                               return "password must be at least 6 characters";
                             } else {
                               return null;
                             }
-                          },
-                          onChanged: (val) {
-                            setState(() {
-                              password = val;
-                            });
                           },
                         ),
                         const SizedBox(
@@ -159,7 +142,9 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                           width: MediaQuery.sizeOf(context).width,
                           child: ElevatedButton(
                             onPressed: () {
-                              login();
+                              login(formkey, setState, _isLoading, authService,
+                                  email, password, context, isAdminSigned);
+                              //login();
                             },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.white),
@@ -242,37 +227,5 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
         ),
       )),
     );
-  }
-
-  login() async {
-    if (formkey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
-      await authService
-          .loginWithUserNameandPassword(email, password)
-          .then((value) async {
-        if (value == true) {
-          QuerySnapshot snapshot =
-              await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
-                  .gettingUserData(email);
-
-          await HelperFunction.saveUSerLoggedInStatus(true);
-          await HelperFunction.saveUSerEmailSF(email);
-          await HelperFunction.saveUSerNameSF(snapshot.docs[0]['Name']);
-
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) =>  HomeScreen(idAdminSigned:_isAdminSigned,isUserSigned:_isAdminSigned, ),
-            ),
-          );
-        } else {
-          showSnackbar(context, Colors.red, value);
-          setState(() {
-            _isLoading = false;
-          });
-        }
-      });
-    }
   }
 }

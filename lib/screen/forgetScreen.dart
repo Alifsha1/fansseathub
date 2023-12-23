@@ -16,7 +16,6 @@ class _ForgetScreenState extends State<ForgetScreen> {
   String email = "";
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     emailController.dispose();
   }
@@ -97,28 +96,21 @@ class _ForgetScreenState extends State<ForgetScreen> {
                           const SizedBox(
                             height: 10,
                           ),
-                          TextFormField(
-                            controller: emailController,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15)),
-                              hintText: 'gmail',
-                              filled: true,
-                              fillColor: Colors.white,
-                            ),
-                            onChanged: (val) {
-                              setState(() {
-                                email = val;
-                              });
-                            },
-                            validator: (val) {
-                              return RegExp(
-                                          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                      .hasMatch(val!)
-                                  ? null
-                                  : "Please enter a valid email";
-                            },
-                          ),
+                          FormTextField(
+                              hinttext: 'gmail',
+                              controller: emailController,
+                              validator: (val) {
+                                return RegExp(
+                                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                        .hasMatch(val!)
+                                    ? null
+                                    : "Please enter a valid email";
+                              },
+                              onChanged: (val) {
+                                setState(() {
+                                  email = val;
+                                });
+                              }),
                           const SizedBox(
                             height: 4,
                           ),
@@ -158,22 +150,6 @@ class _ForgetScreenState extends State<ForgetScreen> {
       ),
     );
   }
-  // Future resetpassword()async{
-  //   showDialog(context: context,
-  //   barrierDismissible: false,
-  //    builder: (context)=>Center(child: CircularProgressIndicator(),));
-  //    try{
-  //       await FirebaseAuth.instance
-  //       .sendPasswordResetEmail(email: emailController.text.trim());
-  //       showSnackbar(context, Colors.red, 'password reset email sent');
-  //       Navigator.of(context).popUntil((route) => route.isFirst);
-  //    }on FirebaseAuthException catch(e){
-  //     print(e);
-  //     showSnackbar(context, Colors.red, e.message);
-  //     Navigator.of(context).pop();
-
-  //    }
-  // }
 
   Future resetpassword() async {
     showDialog(

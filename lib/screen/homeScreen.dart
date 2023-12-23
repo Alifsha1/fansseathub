@@ -1,7 +1,6 @@
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:fansseathub/screen/adminHomeScreen.dart';
 import 'package:fansseathub/screen/matchDetailsScreen.dart';
-import 'package:fansseathub/screen/userLoginScreen.dart';
 import 'package:fansseathub/sections/assets.dart';
 import 'package:fansseathub/sections/catogory.dart';
 import 'package:fansseathub/services/auth_service.dart';
@@ -26,105 +25,35 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    print('${widget.isUserSigned},${widget.idAdminSigned}');
   }
 
   @override
   Widget build(BuildContext context) {
+    final mediaWidth = MediaQuery.of(context).size.width;
+    //final mediaHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Heading(),
+        title: const Heading(),
         iconTheme: const IconThemeData(color: Colors.black),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(60),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: SizedBox(
-              height: 45,
-              child: TextFormField(
-                decoration: InputDecoration(
-                  suffixIcon: const Icon(
-                    Icons.search,
-                    color: Colors.white,
-                  ),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  hintText: 'search',
-                  hintStyle: const TextStyle(color: Colors.white),
-                  filled: true,
-                  fillColor: const Color.fromARGB(255, 64, 63, 63),
-                ),
-              ),
-            ),
-          ),
-        ),
         actions: [
-          widget.idAdminSigned
-              ? SizedBox()
+          widget.isUserSigned
+              ? const SizedBox()
               : Padding(
                   padding: const EdgeInsets.only(right: 15),
                   child: IconButton(
                       onPressed: () {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => AdminHomeScreen()));
+                            builder: (context) => const AdminHomeScreen()));
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.arrow_back,
                         color: Colors.black,
                       )))
         ],
         elevation: 0,
       ),
-      drawer: Drawer(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text(
-                    'Home',
-                    style: TextStyle(fontSize: 20),
-                  )),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Text(
-                'Profile',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Text(
-                'Favorites',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: GestureDetector(
-                onTap: () {},
-                child: InkWell(
-                  onTap: () async {
-                    await authService.showSignOutConfirmationDialog(context);
-                    // ignore: use_build_context_synchronously
-                  
-                  },
-                  child: const Text(
-                    'Logout',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+      drawer: drawerUserScreen(context, mediaWidth, authService),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(top: 5, left: 20, right: 20),
@@ -138,8 +67,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) =>
-                            const MatchDetailsScreen(type: 'cricket',typeHeading: 'CRICKET',),
+                        builder: (context) => const MatchDetailsScreen(
+                          type: 'cricket',
+                          typeHeading: 'CRICKET',
+                        ),
                       ),
                     );
                   },
@@ -152,8 +83,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) =>
-                              const MatchDetailsScreen(type: 'football',typeHeading: 'FOOTBALL',),
+                          builder: (context) => const MatchDetailsScreen(
+                            type: 'football',
+                            typeHeading: 'FOOTBALL',
+                          ),
                         ),
                       );
                     },
@@ -162,8 +95,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) =>
-                              const MatchDetailsScreen(type: 'badminton',typeHeading: 'BADMINTON',),
+                          builder: (context) => const MatchDetailsScreen(
+                            type: 'badminton',
+                            typeHeading: 'BADMINTON',
+                          ),
                         ),
                       );
                     },
@@ -173,6 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+      backgroundColor: Colors.grey[200],
     );
   }
 }

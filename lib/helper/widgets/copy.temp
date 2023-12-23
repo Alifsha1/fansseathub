@@ -211,3 +211,1112 @@ void saveDetails(){
 
     }
    }
+   //----------homeScreen-------------
+
+   import 'package:fansseathub/helper/widgets/widgets.dart';
+import 'package:fansseathub/screen/adminHomeScreen.dart';
+import 'package:fansseathub/screen/matchDetailsScreen.dart';
+import 'package:fansseathub/screen/userLoginScreen.dart';
+import 'package:fansseathub/sections/assets.dart';
+import 'package:fansseathub/sections/catogory.dart';
+import 'package:fansseathub/services/auth_service.dart';
+import 'package:flutter/material.dart';
+
+class HomeScreen extends StatefulWidget {
+  final bool isUserSigned;
+  final bool idAdminSigned;
+  const HomeScreen({
+    super.key,
+    required this.isUserSigned,
+    required this.idAdminSigned,
+  });
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  AuthService authService = AuthService();
+
+  @override
+  void initState() {
+    super.initState();
+    print('${widget.isUserSigned},${widget.idAdminSigned}');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Heading(),
+        iconTheme: const IconThemeData(color: Colors.black),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(60),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            child: SizedBox(
+              height: 45,
+              child: TextFormField(
+                decoration: InputDecoration(
+                  suffixIcon: const Icon(
+                    Icons.search,
+                    color: Colors.white,
+                  ),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                  hintText: 'search',
+                  hintStyle: const TextStyle(color: Colors.white),
+                  filled: true,
+                  fillColor: const Color.fromARGB(255, 64, 63, 63),
+                ),
+              ),
+            ),
+          ),
+        ),
+        actions: [
+          widget.idAdminSigned
+              ? SizedBox()
+              : Padding(
+                  padding: const EdgeInsets.only(right: 15),
+                  child: IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (context) => AdminHomeScreen()));
+                      },
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: Colors.black,
+                      )))
+        ],
+        elevation: 0,
+      ),
+      drawer: Drawer(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Home',
+                    style: TextStyle(fontSize: 20),
+                  )),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Text(
+                'Profile',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Text(
+                'Favorites',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: GestureDetector(
+                onTap: () {},
+                child: InkWell(
+                  onTap: () async {
+                    await authService.showSignOutConfirmationDialog(context);
+                    // ignore: use_build_context_synchronously
+                  
+                  },
+                  child: const Text(
+                    'Logout',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 5, left: 20, right: 20),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            const MatchDetailsScreen(type: 'cricket',typeHeading: 'CRICKET',),
+                      ),
+                    );
+                  },
+                  child: Catogory(
+                    displayImage: crik,
+                    sports: 'CRICKET',
+                  ),
+                ),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const MatchDetailsScreen(type: 'football',typeHeading: 'FOOTBALL',),
+                        ),
+                      );
+                    },
+                    child: Catogory(displayImage: foot, sports: 'FOOTBALL')),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const MatchDetailsScreen(type: 'badminton',typeHeading: 'BADMINTON',),
+                        ),
+                      );
+                    },
+                    child: Catogory(displayImage: bad, sports: 'BADMINTON')),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+ import 'dart:io';
+import 'package:fansseathub/helper/helper_functions.dart';
+import 'package:fansseathub/hive/hive_Functions.dart';
+import 'package:fansseathub/model/matchdetails.dart';
+import 'package:hive/hive.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:fansseathub/helper/widgets/addingField.dart';
+import 'package:fansseathub/helper/widgets/widgets.dart';
+import 'package:flutter/material.dart';
+
+class AddNextGame extends StatefulWidget {
+  const AddNextGame({super.key});
+
+  @override
+  State<AddNextGame> createState() => _AddFirstGameState();
+}
+
+class _AddFirstGameState extends State<AddNextGame> {
+  final formkey = GlobalKey<FormState>();
+  final TextEditingController team1controller = TextEditingController();
+  final TextEditingController team2controller = TextEditingController();
+  final TextEditingController timecontroller = TextEditingController();
+  final TextEditingController datecontroller = TextEditingController();
+  final TextEditingController categorycontroller = TextEditingController();
+  final TextEditingController typecontroller = TextEditingController();
+  final TextEditingController gamenocontroller = TextEditingController();
+  final TextEditingController stadiumcontroller = TextEditingController();
+  File? _selectedImageteam1;
+  File? _selectedImageteam2;
+  late Box<MatchDetails> matchdetailsbox;
+
+  @override
+  void initState() {
+   
+    super.initState();
+    matchdetailsbox = Hive.box('matchdetails');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: SingleChildScrollView(
+        child: SafeArea(
+            child: Padding(
+          padding: const EdgeInsets.only(top: 10, left: 14, right: 14),
+          child: Form(
+            key: formkey,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const Spacer(),
+                    const HeadingWhite()
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Row(
+                  children: [
+                    Text(
+                      'Add next game details',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 35,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                GameAddingField(
+                  team1Controller: team1controller,
+                  team2Controller: team2controller,
+                  dateController: datecontroller,
+                  timeController: timecontroller,
+                  categoryController: categorycontroller,
+                  gamenoController: gamenocontroller,
+                  typeController: typecontroller,
+                  stadiumController: stadiumcontroller,
+                  imageSelectedteam1: _selectedImageteam1,
+                  imageSelectedteam2: _selectedImageteam2,
+                  onTap1: () async {
+                    File? pickimage = await pickImageFromGallery();
+                    setState(() {
+                      _selectedImageteam1 = pickimage;
+                      // _selectedImageteam2 = pickimage;
+                    });
+                  },
+                  onTap2: () async {
+                    File? pickimage = await pickImageFromGallery();
+                    setState(() {
+                      // _selectedImageteam1 = pickimage;
+                      _selectedImageteam2 = pickimage;
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                SizedBox(
+                  child: ElevatedButton(
+                      onPressed: () {
+                        if (formkey.currentState!.validate()) {
+                          submit();
+                          dataClear();
+                           Navigator.pop(context);
+                         
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50))),
+                      child: const Text(
+                        '     Submit    ',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                        ),
+                      )),
+                )
+              ],
+            ),
+          ),
+        )),
+      ),
+    );
+  }
+
+  submit() {
+    if (_selectedImageteam1 == null && _selectedImageteam2 == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        backgroundColor: Colors.red,
+        content: Text(
+          'You Must select an image',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ));
+      return;
+    } else {
+      String matchKey = DateTime.now().microsecondsSinceEpoch.toString();
+      Repository.addmatchdetails(
+        MatchDetails(
+            matchKey: matchKey,
+            team1: team1controller.text,
+            team2: team2controller.text,
+            imagePath1: _selectedImageteam1!.path,
+            imagePath2: _selectedImageteam2!.path,
+            time: timecontroller.text,
+            date: datecontroller.text,
+            category: categorycontroller.text,
+            gameno: gamenocontroller.text,
+            typeofgame: typecontroller.text,
+            stadium: stadiumcontroller.text),
+        matchKey,
+      );
+      dataClear();
+      
+    }
+   
+  }
+
+
+
+  void dataClear() {
+    team1controller.clear();
+    team2controller.clear();
+    _selectedImageteam1 = null;
+    _selectedImageteam2 = null;
+    timecontroller.clear();
+    datecontroller.clear();
+    categorycontroller.clear();
+    gamenocontroller.clear();
+    typecontroller.clear();
+    stadiumcontroller.clear();
+  }
+}
+ // TextFormField(
+                        //   decoration: InputDecoration(
+                        //     border: OutlineInputBorder(
+                        //         borderRadius: BorderRadius.circular(15)),
+                        //     hintText: 'password',
+                        //     filled: true,
+                        //     fillColor: Colors.white,
+                        //   ),
+                        //   validator: (val) {
+                        //     if (val!.length < 6) {
+                        //       return "password must be at least 6 characters";
+                        //     } else {
+                        //       return null;
+                        //     }
+                        //   },
+                        //   onChanged: (val) {
+                        //     setState(() {
+                        //       password = val;
+                        //     });
+                        //   },
+                        // ),
+                           // TextFormField(
+                        //   decoration: InputDecoration(
+                        //     border: OutlineInputBorder(
+                        //         borderRadius: BorderRadius.circular(15)),
+                        //     hintText: 'gmail',
+                        //     filled: true,
+                        //     fillColor: Colors.white,
+                        //   ),
+                          // onChanged: (val) {
+                          //   setState(() {
+                          //     email = val;
+                          //   });
+                          // },
+                        //   validator: (val) {
+                        //     return RegExp(
+                        //                 r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                        //             .hasMatch(val!)
+                        //         ? null
+                        //         : "Please enter a valid email";
+                        //   },
+                        // ),
+                        // login() async {
+  //   if (formkey.currentState!.validate()) {
+  //     setState(() {
+  //       _isLoading = true;
+  //     });
+  //     await authService
+  //         .loginWithUserNameandPassword(email, password)
+  //         .then((value) async {
+  //       if (value == true) {
+  //         QuerySnapshot snapshot =
+  //             await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+  //                 .gettingUserData(email);
+
+  //         await HelperFunction.saveUSerLoggedInStatus(true);
+  //         await HelperFunction.saveUSerEmailSF(email);
+  //         await HelperFunction.saveUSerNameSF(snapshot.docs[0]['Name']);
+
+  //         // ignore: use_build_context_synchronously
+  //         Navigator.of(context).pushReplacement(
+  //           MaterialPageRoute(
+  //             builder: (context) =>
+  //                 BottomBar(isUsersigned: true, idAdminsigned: isAdminSigned),
+  //           ),
+  //         );
+  //       } else {
+  //         showSnackbar(context, Colors.red, value);
+  //         setState(() {
+  //           _isLoading = false;
+  //         });
+  //       }
+  //     });
+  //   }
+  // }
+  // signup() async {
+  //   if (formkey.currentState!.validate()) {
+  //     setState(() {
+  //       _isLoading = true;
+  //     });
+  //     await authService
+  //         .signupUserWithEmailandPassword(fullName, email, password, context)
+  //         .then((value) async {
+  //       if (value == true) {
+  //         await HelperFunction.saveUSerLoggedInStatus(true);
+  //         await HelperFunction.saveUSerEmailSF(email);
+  //         await HelperFunction.saveUSerNameSF(fullName);
+  //         // ignore: use_build_context_synchronously
+  //         Navigator.of(context).pushReplacement(
+  //           MaterialPageRoute(
+  //             builder: (context) => BottomBar(
+  //                 isUsersigned: _isUserSigned, idAdminsigned: _isAdminSigned),
+  //           ),
+  //         );
+  //       } else {
+  //         showSnackbar(context, Colors.red, value);
+  //         setState(() {
+  //           _isLoading = false;
+  //         });
+  //       }
+  //     });
+  //   }
+  // }
+signup textfirld-----
+// TextFormField(
+                          //   decoration: InputDecoration(
+                          //     border: OutlineInputBorder(
+                          //         borderRadius: BorderRadius.circular(15)),
+                          //     hintText: 'password',
+                          //     filled: true,
+                          //     fillColor: Colors.white,
+                          //   ),
+                          //   validator: (val) {
+                          //     if (val!.length < 6) {
+                          //       return "password must be at least 6 characters";
+                          //     } else {
+                          //       return null;
+                          //     }
+                          //   },
+                          //   onChanged: (val) {
+                          //     setState(() {
+                          //       password = val;
+                          //     });
+                          //   },
+                          // ),
+                              // TextFormField(
+                          //   decoration: InputDecoration(
+                          //     border: OutlineInputBorder(
+                          //         borderRadius: BorderRadius.circular(15)),
+                          //     hintText: 'gmail',
+                          //     filled: true,
+                          //     fillColor: Colors.white,
+                          //   ),
+                          //   onChanged: (val) {
+                          //     setState(() {
+                          //       email = val;
+                          //     });
+                          //   },
+                          //   validator: (val) {
+                          //     return RegExp(
+                          //                 r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                          //             .hasMatch(val!)
+                          //         ? null
+                          //         : "Please enter a valid email";
+                          //   },
+                          // ),
+                               // TextFormField(
+                          //   decoration: InputDecoration(
+                          //     border: OutlineInputBorder(
+                          //         borderRadius: BorderRadius.circular(15)),
+                          //     hintText: 'name',
+                          //     filled: true,
+                          //     fillColor: Colors.white,
+                          //   ),
+                          //   onChanged: (val) {
+                          //     setState(() {
+                          //       fullName = val;
+                          //     });
+                          //   },
+                          //   validator: (val) {
+                          //     if (val!.isNotEmpty) {
+                          //       return null;
+                          //     } else {
+                          //       return "name cannot be empty";
+                          //     }
+                          //   },
+                          // ),
+                          // showDialog(
+                                  //   context: context,
+                                  //   builder: (context) {
+                                  //     final TextEditingController
+                                  //         team1Controller =
+                                  //         TextEditingController(
+                                  //             text: match.team1);
+                                  //     final TextEditingController
+                                  //         team2Controller =
+                                  //         TextEditingController(
+                                  //             text: match.team2);
+                                  //     final TextEditingController
+                                  //         timeController =
+                                  //         TextEditingController(
+                                  //             text: match.time);
+                                  //     final TextEditingController
+                                  //         dateController =
+                                  //         TextEditingController(
+                                  //             text: match.date);
+                                  //     final TextEditingController
+                                  //         categoryController =
+                                  //         TextEditingController(
+                                  //             text: match.category);
+                                  //     final TextEditingController
+                                  //         typeController =
+                                  //         TextEditingController(
+                                  //             text: match.typeofgame);
+                                  //     final TextEditingController
+                                  //         gamenoController =
+                                  //         TextEditingController(
+                                  //             text: match.gameno);
+                                  //     final TextEditingController
+                                  //         stadiumController =
+                                  //         TextEditingController(
+                                  //             text: match.stadium);
+                                  //     String? selectedImageteam1;
+                                  //     String? selectedImageteam2;
+                                  //     String? matchKey = match.matchKey;
+                                  //     return SingleChildScrollView(
+                                  //       child: AlertDialog(
+                                  //         content: Container(
+                                  //           key: _formKey,
+                                  //           width: mediaWidth,
+                                  //           height: mediaHeight,
+                                  //           color: Colors.white,
+                                  //           child: Column(
+                                  //             children: [
+                                  //               AdminTextField(
+                                  //                   hinttext: 'Team1',
+                                  //                   controller: team1Controller,
+                                  //                   errormessage:
+                                  //                       'Please enter Team 1'),
+                                  //               AdminTextField(
+                                  //                   hinttext: 'Team2',
+                                  //                   controller: team2Controller,
+                                  //                   errormessage:
+                                  //                       'Please enter Team 2'),
+                                  //               AdminTextField(
+                                  //                   hinttext: 'Time',
+                                  //                   controller: timeController,
+                                  //                   errormessage:
+                                  //                       'Please enter time'),
+                                  //               AdminTextField(
+                                  //                   hinttext: 'date',
+                                  //                   controller: dateController,
+                                  //                   errormessage:
+                                  //                       'Please enter date'),
+                                  //               AdminTextField(
+                                  //                   hinttext: 'category',
+                                  //                   controller:
+                                  //                       categoryController,
+                                  //                   errormessage:
+                                  //                       'Please enter the category'),
+                                  //               AdminTextField(
+                                  //                   hinttext: 'type',
+                                  //                   controller: typeController,
+                                  //                   errormessage:
+                                  //                       'Please enter the type'),
+                                  //               AdminTextField(
+                                  //                   hinttext: 'gameno',
+                                  //                   controller:
+                                  //                       gamenoController,
+                                  //                   errormessage:
+                                  //                       'Please enter gameno'),
+                                  //               AdminTextField(
+                                  //                   hinttext: 'stadium',
+                                  //                   controller:
+                                  //                       stadiumController,
+                                  //                   errormessage:
+                                  //                       'Please enter stadium'),
+                                  //               Row(
+                                  //                 children: [
+                                  //                   GestureDetector(
+                                  //                       onTap: () {
+                                  //                         pickImageFromGallery()
+                                  //                             .then(
+                                  //                                 (pickImage) {
+                                  //                           if (pickImage !=
+                                  //                               null) {
+                                  //                             setState(() {
+                                  //                               selectedImageteam1 =
+                                  //                                   pickImage
+                                  //                                       .path;
+                                  //                             });
+                                  //                           }
+                                  //                         });
+                                  //                       },
+                                  //                       child: CircleAvatar(
+                                  //                           radius:
+                                  //                               mediaHeight *
+                                  //                                   .05,
+                                  //                           // ignore: unnecessary_null_comparison
+                                  //                           child: selectedImageteam1 !=
+                                  //                                   null
+                                  //                               ? Image.file(File(
+                                  //                                   selectedImageteam1))
+                                  //                               : Image.file(
+                                  //                                   File(match
+                                  //                                       .imagePath1)))),
+
+                                  //                   const Spacer(),
+                                  //                   GestureDetector(
+                                  //                     onTap: () {
+                                  //                       pickImageFromGallery()
+                                  //                           .then((pickImage) {
+                                  //                         if (pickImage !=
+                                  //                             null) {
+                                  //                           setState(() {
+                                  //                             match.imagePath2 =
+                                  //                                 pickImage
+                                  //                                     .path;
+                                  //                           });
+                                  //                         }
+                                  //                       });
+                                  //                     },
+                                  //                     child: CircleAvatar(
+                                  //                       radius:
+                                  //                           mediaHeight * .05,
+                                  //                       backgroundImage:
+                                  //                           FileImage(
+                                  //                         File(
+                                  //                           match.imagePath2,
+                                  //                         ),
+                                  //                       ),
+                                  //                     ),
+                                  //                   ),
+                                  //                   // )
+                                  //                 ],
+                                  //               ),
+                                  //               Row(
+                                  //                 mainAxisAlignment:
+                                  //                     MainAxisAlignment
+                                  //                         .spaceAround,
+                                  //                 children: [
+                                  //                   ElevatedButton(
+                                  //                       onPressed: () {
+                                  //                         Navigator.pop(
+                                  //                             context);
+                                  //                       },
+                                  //                       style: ElevatedButton.styleFrom(
+                                  //                           backgroundColor:
+                                  //                               Colors.black,
+                                  //                           shape: RoundedRectangleBorder(
+                                  //                               borderRadius:
+                                  //                                   BorderRadius
+                                  //                                       .circular(
+                                  //                                           50))),
+                                  //                       child: const Text(
+                                  //                           'cancel')),
+                                  //                   ElevatedButton(
+                                  //                       onPressed: () {
+                                  //                         print('updating');
+
+                                  //                         Repository.updatematchdetails(
+                                  //                             MatchDetails(
+                                  //                                 matchKey:
+                                  //                                     matchKey,
+                                  //                                 team1: team1Controller
+                                  //                                     .text,
+                                  //                                 team2:
+                                  //                                     team2Controller
+                                  //                                         .text,
+                                  //                                 imagePath1:
+                                  //                                     selectedImageteam1 ??
+                                  //                                         match
+                                  //                                             .imagePath1,
+                                  //                                 imagePath2:
+                                  //                                     selectedImageteam2 ??
+                                  //                                         match
+                                  //                                             .imagePath2,
+                                  //                                 time: timeController
+                                  //                                     .text,
+                                  //                                 date: dateController
+                                  //                                     .text,
+                                  //                                 category:
+                                  //                                     categoryController
+                                  //                                         .text,
+                                  //                                 gameno:
+                                  //                                     gamenoController
+                                  //                                         .text,
+                                  //                                 typeofgame:
+                                  //                                     typeController
+                                  //                                         .text,
+                                  //                                 stadium:
+                                  //                                     stadiumController
+                                  //                                         .text),
+                                  //                             matchKey);
+
+                                  //                         Navigator.pop(
+                                  //                             context);
+                                  //                       },
+                                  //                       style: ElevatedButton.styleFrom(
+                                  //                           backgroundColor:
+                                  //                               Colors.black,
+                                  //                           shape: RoundedRectangleBorder(
+                                  //                               borderRadius:
+                                  //                                   BorderRadius
+                                  //                                       .circular(
+                                  //                                           50))),
+                                  //                       child:
+                                  //                           const Text('SAVE')),
+                                  //                 ],
+                                  //               ),
+                                  //             ],
+                                  //           ),
+                                  //         ),
+                                  //       ),
+                                  //     );
+                                  //   },
+                                  // );
+                                    // drawer: Drawer(
+      //   child: Column(
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     children: [
+      //       const Padding(
+      //         padding: EdgeInsets.only(bottom: 25),
+      //         child: Divider(
+      //           thickness: 1,
+      //           indent: 10,
+      //           endIndent: 10,
+      //           color: Colors.grey,
+      //         ),
+      //       ),
+      //       Padding(
+      //         padding: const EdgeInsets.only(
+      //           left: 65,
+      //         ),
+      //         child: Row(
+      //           children: [
+      //             IconButton(
+      //                 onPressed: () {
+      //                   Navigator.of(context).pop();
+      //                 },
+      //                 icon: const Icon(
+      //                   Icons.home,
+      //                   color: Colors.black,
+      //                 )),
+      //             SizedBox(
+      //               width: mediaWidth * .04,
+      //             ),
+      //             GestureDetector(
+      //                 onTap: () {
+      //                   Navigator.of(context).push(
+      //                     MaterialPageRoute(
+      //                       builder: (context) => HomeScreen(
+      //                         idAdminSigned: _isAdminSigned,
+      //                         isUserSigned: _isUserSigned,
+      //                       ),
+      //                     ),
+      //                   );
+      //                 },
+      //                 child: const Text(
+      //                   'Home',
+      //                   style: TextStyle(fontSize: 20),
+      //                 )),
+      //           ],
+      //         ),
+      //       ),
+      //       Padding(
+      //         padding: const EdgeInsets.only(
+      //           left: 65,
+      //         ),
+      //         child: Row(
+      //           children: [
+      //             IconButton(
+      //                 onPressed: () {
+      //                   Navigator.of(context).push(
+      //                     MaterialPageRoute(
+      //                       builder: (context) => const AddNextGame(),
+      //                     ),
+      //                   );
+      //                 },
+      //                 icon: const Icon(
+      //                   Icons.add,
+      //                   color: Colors.black,
+      //                 )),
+      //             SizedBox(
+      //               width: mediaWidth * .04,
+      //             ),
+      //             const Text(
+      //               '+Add Next Game',
+      //               style: TextStyle(fontSize: 20),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //       Padding(
+      //         padding: const EdgeInsets.only(
+      //           left: 65,
+      //         ),
+      //         child: Row(
+      //           children: [
+      //             IconButton(
+      //                 onPressed: () {
+      //                   Navigator.of(context).push(
+      //                     MaterialPageRoute(
+      //                       builder: (context) => const StadiumDetails(),
+      //                     ),
+      //                   );
+      //                 },
+      //                 icon: const Icon(
+      //                   Icons.add,
+      //                   color: Colors.black,
+      //                 )),
+      //             SizedBox(
+      //               width: mediaWidth * .04,
+      //             ),
+      //             const Text(
+      //               'AddDetails',
+      //               style: TextStyle(fontSize: 20),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //       Padding(
+      //         padding: const EdgeInsets.only(left: 68),
+      //         child: Row(
+      //           children: [
+      //             IconButton(
+      //                 onPressed: () async {
+      //                   await authService
+      //                       .showSignOutConfirmationDialog(context);
+      //                 },
+      //                 icon: const Icon(
+      //                   Icons.logout_outlined,
+      //                   color: Colors.black,
+      //                 )),
+      //             SizedBox(
+      //               width: mediaWidth * .04,
+      //             ),
+      //             GestureDetector(
+      //               onTap: () {},
+      //               child: InkWell(
+      //                 onTap: () async {
+      //                   await authService
+      //                       .showSignOutConfirmationDialog(context);
+      //                   // ignore: use_build_context_synchronously
+      //                 },
+      //                 child: const Text(
+      //                   'Logout',
+      //                   style: TextStyle(fontSize: 20),
+      //                 ),
+      //               ),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //       const Padding(
+      //         padding: EdgeInsets.only(top: 25),
+      //         child: Divider(
+      //           thickness: 1,
+      //           indent: 10,
+      //           endIndent: 10,
+      //           color: Color.fromARGB(255, 163, 160, 160),
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
+      // drawer: Drawer(
+      //   child: Column(
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     children: [
+      //       const Padding(
+      //         padding: EdgeInsets.only(bottom: 25),
+      //         child: Divider(
+      //           thickness: 1,
+      //           indent: 10,
+      //           endIndent: 10,
+      //           color: Colors.grey,
+      //         ),
+      //       ),
+      //       Padding(
+      //         padding: const EdgeInsets.only(
+      //           left: 65,
+      //         ),
+      //         child: Row(
+      //           children: [
+      //             IconButton(
+      //                 onPressed: () {
+      //                   Navigator.of(context).pop();
+      //                 },
+      //                 icon: const Icon(
+      //                   Icons.home,
+      //                   color: Colors.black,
+      //                 )),
+      //             SizedBox(
+      //               width: mediaWidth * .04,
+      //             ),
+      //             GestureDetector(
+      //                 onTap: () {
+      //                   Navigator.of(context).pop();
+      //                 },
+      //                 child: const Text(
+      //                   'Home',
+      //                   style: TextStyle(fontSize: 20),
+      //                 )),
+      //           ],
+      //         ),
+      //       ),
+      //       Padding(
+      //         padding: const EdgeInsets.only(
+      //           left: 65,
+      //         ),
+      //         child: Row(
+      //           children: [
+      //             IconButton(
+      //                 onPressed: () {
+      //                   Navigator.of(context).pop();
+      //                 },
+      //                 icon: const Icon(
+      //                   Icons.person,
+      //                   color: Colors.black,
+      //                 )),
+      //             SizedBox(
+      //               width: mediaWidth * .04,
+      //             ),
+      //             const Text(
+      //               'Profile',
+      //               style: TextStyle(fontSize: 20),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //       Padding(
+      //         padding: const EdgeInsets.only(
+      //           left: 65,
+      //         ),
+      //         child: Row(
+      //           children: [
+      //             IconButton(
+      //                 onPressed: () {
+      //                   Navigator.of(context).pop();
+      //                 },
+      //                 icon: const Icon(
+      //                   Icons.favorite,
+      //                   color: Colors.black,
+      //                 )),
+      //             SizedBox(
+      //               width: mediaWidth * .04,
+      //             ),
+      //             const Text(
+      //               'Favorites',
+      //               style: TextStyle(fontSize: 20),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //       Padding(
+      //         padding: const EdgeInsets.only(left: 65),
+      //         child: Row(
+      //           children: [
+      //             IconButton(
+      //                 onPressed: () {
+      //                   Navigator.of(context).pop();
+      //                 },
+      //                 icon: const Icon(
+      //                   Icons.logout_outlined,
+      //                   color: Colors.black,
+      //                 )),
+      //             SizedBox(
+      //               width: mediaWidth * .04,
+      //             ),
+      //             GestureDetector(
+      //               onTap: () {},
+      //               child: InkWell(
+      //                 onTap: () async {
+      //                   await authService
+      //                       .showSignOutConfirmationDialog(context);
+      //                   // ignore: use_build_context_synchronously
+      //                 },
+      //                 child: const Text(
+      //                   'Logout',
+      //                   style: TextStyle(fontSize: 20),
+      //                 ),
+      //               ),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //       const Padding(
+      //         padding: EdgeInsets.only(top: 25),
+      //         child: Divider(
+      //           thickness: 1,
+      //           indent: 10,
+      //           endIndent: 10,
+      //           color: Color.fromARGB(255, 163, 160, 160),
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
+       // TextFormField(
+                          //   controller: emailController,
+                          //   decoration: InputDecoration(
+                          //     border: OutlineInputBorder(
+                          //         borderRadius: BorderRadius.circular(15)),
+                          //     hintText: 'gmail',
+                          //     filled: true,
+                          //     fillColor: Colors.white,
+                          //   ),
+                          //   onChanged: (val) {
+                          //     setState(() {
+                          //       email = val;
+                          //     });
+                          //   },
+                          //   validator: (val) {
+                          //     return RegExp(
+                          //                 r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                          //             .hasMatch(val!)
+                          //         ? null
+                          //         : "Please enter a valid email";
+                          //   },
+                          // ),
+                        // Future adminlogin() async {
+  //   showDialog(
+  //       context: context,
+  //       builder: (context) {
+  //         return const AlertDialog(
+  //           title: Center(
+  //             child: CircularProgressIndicator(),
+  //           ),
+  //         );
+  //       });
+  //   await FirebaseFirestore.instance
+  //       .collection("admin")
+  //       .doc("adminLogin")
+  //       .snapshots()
+  //       .forEach((element) {
+  //     if (element.data()?['adminEmail'] == adminEmailController.text &&
+  //         element.data()?['adminPassword'] == adminpasswordController.text) {
+  //       Navigator.pushAndRemoveUntil(
+  //           context,
+  //           MaterialPageRoute(builder: (context) => const AdminHomeScreen()),
+  //           (route) => false);
+  //       HelperFunction.saveAdminLoggedInStatus(true);
+  //       HelperFunction.saveAdminEmailSF(adminEmailController.text);
+  //     }
+  //   }).catchError((e) {
+  //     showDialog(
+  //         context: context,
+  //         builder: (context) {
+  //           return AlertDialog(
+  //             title: const Text('invalid'),
+  //             content: Text(e.toString()),
+  //           );
+  //         });
+  //   });
+  // }

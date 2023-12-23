@@ -1,6 +1,5 @@
 import 'package:fansseathub/helper/helper_functions.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
-import 'package:fansseathub/screen/homeScreen.dart';
 import 'package:fansseathub/screen/userLoginScreen.dart';
 import 'package:fansseathub/services/auth_service.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +13,10 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-   bool _isUserSigned = false;
-  bool _isAdminSigned = false;
+  final bool _isUserSigned = false;
+  final bool _isAdminSigned = false;
   // ignore: unused_field
-  bool _isLoading = false;
+  final bool _isLoading = false;
   final formkey = GlobalKey<FormState>();
   String email = "";
   String password = "";
@@ -73,27 +72,18 @@ class _SignupScreenState extends State<SignupScreen> {
                                   TextStyle(color: Colors.white, fontSize: 17),
                             ),
                           ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15)),
-                              hintText: 'name',
-                              filled: true,
-                              fillColor: Colors.white,
-                            ),
-                            onChanged: (val) {
-                              setState(() {
-                                fullName = val;
-                              });
-                            },
-                            validator: (val) {
+                     
+                          FormTextField(hinttext: 'name', validator:  (val) {
                               if (val!.isNotEmpty) {
                                 return null;
                               } else {
                                 return "name cannot be empty";
                               }
-                            },
-                          ),
+                            }, onChanged: (val) {
+                              setState(() {
+                                fullName = val;
+                              });
+                            }),
                           const Padding(
                             padding: EdgeInsets.only(top: 4, left: 5),
                             child: Text(
@@ -102,27 +92,18 @@ class _SignupScreenState extends State<SignupScreen> {
                                   TextStyle(color: Colors.white, fontSize: 17),
                             ),
                           ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15)),
-                              hintText: 'gmail',
-                              filled: true,
-                              fillColor: Colors.white,
-                            ),
-                            onChanged: (val) {
-                              setState(() {
-                                email = val;
-                              });
-                            },
-                            validator: (val) {
+                      
+                          FormTextField(hinttext: 'gmail', validator: (val) {
                               return RegExp(
                                           r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                       .hasMatch(val!)
                                   ? null
                                   : "Please enter a valid email";
-                            },
-                          ),
+                            }, onChanged: (val) {
+                              setState(() {
+                                email = val;
+                              });
+                            }),
                           const Padding(
                             padding: EdgeInsets.only(top: 4, left: 5),
                             child: Text(
@@ -131,27 +112,18 @@ class _SignupScreenState extends State<SignupScreen> {
                                   TextStyle(color: Colors.white, fontSize: 17),
                             ),
                           ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15)),
-                              hintText: 'password',
-                              filled: true,
-                              fillColor: Colors.white,
-                            ),
-                            validator: (val) {
+                          
+                          FormTextField(hinttext: 'password', validator:(val) {
                               if (val!.length < 6) {
                                 return "password must be at least 6 characters";
                               } else {
                                 return null;
                               }
-                            },
-                            onChanged: (val) {
+                            }, onChanged: (val) {
                               setState(() {
                                 password = val;
                               });
-                            },
-                          ),
+                            }),
                           const SizedBox(
                             height: 20,
                           ),
@@ -159,7 +131,17 @@ class _SignupScreenState extends State<SignupScreen> {
                             width: MediaQuery.sizeOf(context).width,
                             child: ElevatedButton(
                               onPressed: () {
-                                signup();
+                                signup(
+                                    formkey,
+                                    setState,
+                                    _isLoading,
+                                    authService,
+                                    fullName,
+                                    email,
+                                    password,
+                                    context,
+                                    _isUserSigned,
+                                    _isAdminSigned);
                               },
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white),
@@ -220,33 +202,5 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
       ),
     );
-  }
-
-  signup() async {
-    if (formkey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
-      await authService
-          .signupUserWithEmailandPassword(fullName, email, password, context)
-          .then((value) async {
-        if (value == true) {
-          await HelperFunction.saveUSerLoggedInStatus(true);
-          await HelperFunction.saveUSerEmailSF(email);
-          await HelperFunction.saveUSerNameSF(fullName);
-          // ignore: use_build_context_synchronously
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) =>  HomeScreen(isUserSigned:_isUserSigned,idAdminSigned: _isAdminSigned, ),
-            ),
-          );
-        } else {
-          showSnackbar(context, Colors.red, value);
-          setState(() {
-            _isLoading = false;
-          });
-        }
-      });
-    }
   }
 }

@@ -32,7 +32,7 @@ class _FieldforsecondState extends State<Fieldforsecond> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.sizeOf(context).width / 2.5,
+      width: MediaQuery.sizeOf(context).width,
       child: Column(
         children: [
           Row(
@@ -40,7 +40,7 @@ class _FieldforsecondState extends State<Fieldforsecond> {
               AdminSideHeadings(headings: widget.timeofgame),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           AdminTextField(
@@ -48,7 +48,7 @@ class _FieldforsecondState extends State<Fieldforsecond> {
             controller: widget.timecontroller,
             hinttext: 'Enter time',
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -56,7 +56,7 @@ class _FieldforsecondState extends State<Fieldforsecond> {
               AdminSideHeadings(headings: widget.category),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           AdminTextField(
@@ -64,7 +64,7 @@ class _FieldforsecondState extends State<Fieldforsecond> {
             hinttext: 'Enter category',
             controller: widget.categorycontroller,
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -72,7 +72,7 @@ class _FieldforsecondState extends State<Fieldforsecond> {
               AdminSideHeadings(headings: widget.sportsName),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           AdminTextField(
@@ -118,7 +118,7 @@ class _DateContainerState extends State<DateContainer> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.sizeOf(context).width / 2.5,
+      width: MediaQuery.sizeOf(context).width,
       child: Column(
         children: [
           Row(
@@ -126,7 +126,7 @@ class _DateContainerState extends State<DateContainer> {
               AdminSideHeadings(headings: widget.dateofgame),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           AdminTextField(
@@ -134,7 +134,7 @@ class _DateContainerState extends State<DateContainer> {
             hinttext: 'Enter date',
             controller: widget.datecontroller,
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -142,7 +142,7 @@ class _DateContainerState extends State<DateContainer> {
               AdminSideHeadings(headings: widget.gameno),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           AdminTextField(
@@ -150,7 +150,7 @@ class _DateContainerState extends State<DateContainer> {
             errormessage: widget.gameerrorMessage,
             controller: widget.gamenocontroller,
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -158,7 +158,7 @@ class _DateContainerState extends State<DateContainer> {
               AdminSideHeadings(headings: widget.stadiumName),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           AdminTextField(

@@ -1,8 +1,9 @@
 import 'dart:io';
-import 'package:fansseathub/hive/hive_Functions.dart';
+import 'package:fansseathub/helper/helper_functions.dart';
+
 import 'package:fansseathub/model/matchdetails.dart';
 import 'package:hive/hive.dart';
-import 'package:image_picker/image_picker.dart';
+
 import 'package:fansseathub/helper/widgets/addingField.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,6 @@ class _AddFirstGameState extends State<AddNextGame> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     matchdetailsbox = Hive.box('matchdetails');
   }
@@ -53,19 +53,19 @@ class _AddFirstGameState extends State<AddNextGame> {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.arrow_back,
                         color: Colors.white,
                       ),
                     ),
-                    Spacer(),
-                    HeadingWhite()
+                    const Spacer(),
+                    const HeadingWhite()
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Row(
+                const Row(
                   children: [
                     Text(
                       'Add next game details',
@@ -77,7 +77,7 @@ class _AddFirstGameState extends State<AddNextGame> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 GameAddingField(
@@ -95,35 +95,47 @@ class _AddFirstGameState extends State<AddNextGame> {
                     File? pickimage = await pickImageFromGallery();
                     setState(() {
                       _selectedImageteam1 = pickimage;
-                      // _selectedImageteam2 = pickimage;
+                     
                     });
                   },
                   onTap2: () async {
                     File? pickimage = await pickImageFromGallery();
                     setState(() {
-                      // _selectedImageteam1 = pickimage;
+                      
                       _selectedImageteam2 = pickimage;
                     });
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 SizedBox(
                   child: ElevatedButton(
                       onPressed: () {
                         if (formkey.currentState!.validate()) {
-                          submit();
+                          submit(
+                              context,
+                              _selectedImageteam1!.path,
+                              _selectedImageteam2!.path,
+                              categorycontroller,
+                              datecontroller,
+                              gamenocontroller,
+                              matchdetailsbox,
+                              stadiumcontroller,
+                              team1controller,
+                              team2controller,
+                              timecontroller,
+                              typecontroller);
                           dataClear();
-                           Navigator.pop(context);
-                          print("matchdetailsaddding");
+
+                          Navigator.pop(context);
                         }
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50))),
-                      child: Text(
+                      child: const Text(
                         '     Submit    ',
                         style: TextStyle(
                           fontSize: 20,
@@ -137,50 +149,6 @@ class _AddFirstGameState extends State<AddNextGame> {
         )),
       ),
     );
-  }
-
-  submit() {
-    if (_selectedImageteam1 == null && _selectedImageteam2 == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        backgroundColor: Colors.red,
-        content: Text(
-          'You Must select an image',
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-      ));
-      return;
-    } else {
-      String matchKey = DateTime.now().microsecondsSinceEpoch.toString();
-      Repository.addmatchdetails(
-        MatchDetails(
-            matchKey: matchKey,
-            team1: team1controller.text,
-            team2: team2controller.text,
-            imagePath1: _selectedImageteam1!.path,
-            imagePath2: _selectedImageteam2!.path,
-            time: timecontroller.text,
-            date: datecontroller.text,
-            category: categorycontroller.text,
-            gameno: gamenocontroller.text,
-            typeofgame: typecontroller.text,
-            stadium: stadiumcontroller.text),
-        matchKey,
-      );
-      dataClear();
-      print("savedateils");
-    }
-   
-  }
-
-  Future<File?> pickImageFromGallery() async {
-    final pickedimage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedimage != null) {
-      return File(pickedimage.path);
-    }
-    return null;
   }
 
   void dataClear() {

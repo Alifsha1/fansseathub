@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fansseathub/helper/helper_functions.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
-import 'package:fansseathub/screen/adminHomeScreen.dart';
 import 'package:fansseathub/screen/userLoginScreen.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +12,6 @@ class AdminLoginScreen extends StatefulWidget {
 
 class _AdminLoginScreenState extends State<AdminLoginScreen> {
   final formkey = GlobalKey<FormState>();
-  //String email = "";
   String adminEmail = "";
   String adminPassword = "";
   TextEditingController adminEmailController = TextEditingController();
@@ -134,7 +131,8 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                               onPressed: () {
                                 if (adminEmailController.text.isNotEmpty &&
                                     adminpasswordController.text.isNotEmpty) {
-                                  adminlogin();
+                                  adminlogin(context, adminEmailController.text,
+                                      adminpasswordController.text);
                                 }
                               },
                               style: ElevatedButton.styleFrom(
@@ -181,41 +179,5 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
         ),
       ),
     );
-  }
-
-  Future adminlogin() async {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return const AlertDialog(
-            title: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        });
-    await FirebaseFirestore.instance
-        .collection("admin")
-        .doc("adminLogin")
-        .snapshots()
-        .forEach((element) {
-      if (element.data()?['adminEmail'] == adminEmailController.text &&
-          element.data()?['adminPassword'] == adminpasswordController.text) {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const AdminHomeScreen()),
-            (route) => false);
-        HelperFunction.saveAdminLoggedInStatus(true);
-        HelperFunction.saveAdminEmailSF(adminEmailController.text);
-      }
-    }).catchError((e) {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text('invalid'),
-              content: Text(e.toString()),
-            );
-          });
-    });
   }
 }

@@ -1,11 +1,8 @@
 import 'dart:io';
-
 import 'package:fansseathub/helper/widgets/addingField.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
-import 'package:fansseathub/model/matchdetails.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:fansseathub/screen/nextMatchDetailsScreen.dart';
 
 class AddUpcomingGame extends StatefulWidget {
   const AddUpcomingGame({super.key});
@@ -24,8 +21,8 @@ class _AddFirstGameState extends State<AddUpcomingGame> {
   final TextEditingController typecontroller = TextEditingController();
   final TextEditingController gamenocontroller = TextEditingController();
   final TextEditingController stadiumcontroller = TextEditingController();
-   File? _selectedImageteam1;
-   File? _selectedImageteam2;
+  File? _selectedImageteam1;
+  File? _selectedImageteam2;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,19 +41,19 @@ class _AddFirstGameState extends State<AddUpcomingGame> {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.arrow_back,
                         color: Colors.white,
                       ),
                     ),
-                    Spacer(),
-                    HeadingWhite()
+                    const Spacer(),
+                    const HeadingWhite()
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Row(
+                const Row(
                   children: [
                     Text(
                       'Add upcoming game details',
@@ -68,7 +65,7 @@ class _AddFirstGameState extends State<AddUpcomingGame> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 GameAddingField(
@@ -82,16 +79,15 @@ class _AddFirstGameState extends State<AddUpcomingGame> {
                   stadiumController: stadiumcontroller,
                   imageSelectedteam1: _selectedImageteam1,
                   imageSelectedteam2: _selectedImageteam2,
-                      onTap1: ()async{
-                     File? pickimage = await pickImageFromGallery();
+                  onTap1: () async {
+                    File? pickimage = await pickImageFromGallery();
                     setState(() {
                       _selectedImageteam1 = pickimage;
-                      
                     });
-                  },     onTap2: ()async{
-                     File? pickimage = await pickImageFromGallery();
+                  },
+                  onTap2: () async {
+                    File? pickimage = await pickImageFromGallery();
                     setState(() {
-                
                       _selectedImageteam2 = pickimage;
                     });
                   },
@@ -106,7 +102,7 @@ class _AddFirstGameState extends State<AddUpcomingGame> {
                           backgroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50))),
-                      child: Text(
+                      child: const Text(
                         '     Submit    ',
                         style: TextStyle(
                           fontSize: 20,
@@ -123,35 +119,30 @@ class _AddFirstGameState extends State<AddUpcomingGame> {
   }
 
   submit() {
-   
-      if(_selectedImageteam1 == null &&_selectedImageteam2 == null){
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              backgroundColor: Colors.red,
-              content: Text(
-                'You Must select an image',
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          )
-        );
-        return;
-      }else{
-        saveDetails();
-      }
-    
-  }
-   Future<File?>pickImageFromGallery()async{
-    final pickedimage = 
-         await ImagePicker().pickImage(source: ImageSource.gallery);
-         if(pickedimage!=null){
-          return File(pickedimage.path);
-         }
-         return null;
+    if (_selectedImageteam1 == null && _selectedImageteam2 == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        backgroundColor: Colors.red,
+        content: Text(
+          'You Must select an image',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ));
+      return;
+    } else {
+      saveDetails();
+    }
   }
 
-  void saveDetails(){
-    
+  Future<File?> pickImageFromGallery() async {
+    final pickedimage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedimage != null) {
+      return File(pickedimage.path);
+    }
+    return null;
   }
+
+  void saveDetails() {}
 }

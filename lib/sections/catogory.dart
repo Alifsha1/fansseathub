@@ -12,37 +12,55 @@ class Catogory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: 220,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: Image.asset(
-                displayImage,
-                fit: BoxFit.cover,
-              )),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Row(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            // ignore: prefer_const_literals_to_create_immutables
+            boxShadow: [
+              const BoxShadow(
+                blurRadius: 10,
+                offset: Offset(0, 4),
+                spreadRadius: 2,
+                color: Color(0x0D000000),
+              )
+            ]),
+        width: MediaQuery.of(context).size.width * 0.88,
+        height: MediaQuery.of(context).size.height / 2.85,
+        child: Stack(
           children: [
-            Text(
-              sports,
-              style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold),
-            ),
+            Positioned(
+                bottom: MediaQuery.of(context).size.height * 0.02,
+                left: 15,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      child: Text(
+                        sports,
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                )),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.88,
+                height: MediaQuery.of(context).size.height * 0.280,
+                child: Image.asset(
+                  displayImage,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            )
           ],
-        )
-      ],
+        ),
+      ),
     );
   }
 }

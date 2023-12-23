@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
+
+// ignore: must_be_immutable
 class GameNameContainer extends StatefulWidget {
   final String team;
   final String fieldHint;
@@ -34,12 +35,12 @@ class _GameNameContainerState extends State<GameNameContainer> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.sizeOf(context).width / 2.5,
+      width: MediaQuery.sizeOf(context).width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AdminSideHeadings(headings: widget.team),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           AdminTextField(
@@ -47,11 +48,11 @@ class _GameNameContainerState extends State<GameNameContainer> {
             controller: widget.controller,
             hinttext: widget.fieldHint,
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           AdminSideHeadings(headings: widget.flag),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           GestureDetector(
@@ -66,7 +67,7 @@ class _GameNameContainerState extends State<GameNameContainer> {
                       height: 140,
                     ),
                   )
-                : Icon(
+                : const Icon(
                     Icons.image_outlined,
                     color: Colors.white,
                     size: 70,
@@ -76,16 +77,4 @@ class _GameNameContainerState extends State<GameNameContainer> {
       ),
     );
   }
-  // void ontapfunctionone(){
-  //    onTap: widget.onTap1;
-  //           child:widget.selectedImageteam1!=null || widget.selectedImageteam2 != null
-  //                 ? ClipOval(
-  //                   child: Image.file(
-  //                   widget.selectedImageteam1 ?? widget.selectedImageteam2!,
-  //                     fit: BoxFit.cover,
-  //                     width: 140,
-  //                     height: 140,
-  //                   ),
-  //                 )
-  // }
 }
