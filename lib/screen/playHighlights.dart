@@ -1,7 +1,11 @@
+// ignore_for_file: use_build_context_synchronously, unnecessary_null_comparison
+
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:fansseathub/hive/hive_Functions.dart';
-
+import 'package:fansseathub/model/highlights.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class PlayHighlights extends StatefulWidget {
@@ -60,7 +64,7 @@ class _PlayHighlightsState extends State<PlayHighlights> {
                 Container(
                   width: mediaWidth,
                   height: mediaWidth * .54,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.amber,
                   ),
                   child: YoutubePlayer(
@@ -71,19 +75,131 @@ class _PlayHighlightsState extends State<PlayHighlights> {
                 space,
                 Text(
                   formattedTitle,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Colors.black, fontWeight: FontWeight.bold),
                 ),
                 space,
-                Divider(
+                const Divider(
                   color: Colors.black,
                   thickness: 1,
-                )
+                ),
+                 Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: mediaWidth * 0.87,
+                              height: mediaHeight,
+                              decoration: const BoxDecoration(
+                                  // borderRadius: BorderRadius.circular(10),
+                                  ),
+                              child: FutureBuilder(
+                                  future: getYoutubeVideosWithThumbnails(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      final List<Map<String, dynamic>>
+                                          videosWithThumbnails = snapshot.data
+                                              as List<Map<String, dynamic>>;
+                                      return GridView.builder(
+                                        //   child: ListView.builder(
+                                        gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 2,
+                                                crossAxisSpacing: 15.0,
+                                                mainAxisSpacing: 9.0),
+                                        itemCount: videosWithThumbnails.length,
+                                        itemBuilder: (context, index) {
+                                          final video =
+                                              videosWithThumbnails[index]
+                                                  ['video'] as Highlights;
+                                          final thumbnailUrl =
+                                              videosWithThumbnails[index]
+                                                  ['thumbnailUrl'];
+                                          return GestureDetector(
+                                            onTap: () async {
+                                              Map<String, String>? videoInfo =
+                                                  await getYouTubeThumbnail(
+                                                      video.url);
+                                              if (videoInfo != null) {
+                                                String videoTitle = videoInfo[
+                                                        'videoTitle'] ??
+                                                    'Video Title Not Available';
+
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PlayHighlights(
+                                                      // videourl: videos[index].url,
+                                                      videourl: video.url,
+                                                      videotitle: videoTitle,
+
+                                                      //  videoid: ,
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                            child: Image.network(
+                                              thumbnailUrl['thumbnailUrl'],
+                                              fit: BoxFit.fill,
+                                              //height: 120,
+                                            ),
+                                          );
+                                        },
+                                        // ),
+                                      );
+                                    } else {
+                                      return const Center(
+                                          child: CircularProgressIndicator());
+                                    }
+                                  }),
+                            ),
+                          ],
+                        ),
+                      ),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+  Future<List<Map<String, dynamic>>> getYoutubeVideosWithThumbnails() async {
+    final box = await Hive.openBox<Highlights>('highlights');
+    final videos = box.values.toList();
+    final videosWithThumbnails = <Map<String, dynamic>>[];
+
+    for (final video in videos) {
+      final thumbnailUrl = await getYouTubeThumbnail(video.url);
+      videosWithThumbnails.add({
+        'video': video,
+        'thumbnailUrl': thumbnailUrl,
+      });
+    }
+
+    return videosWithThumbnails;
+  }
+
+  Future<Map<String, String>?> getYouTubeThumbnail(String videoUrl) async {
+    final regExp = RegExp(
+        r'(?<=watch\?v=|/videos/|embed\/|youtu.be\/|\/v\/|\/e\/|\?v=|&v=|\/videos\/|\/embed\/|youtu.be\/|\/v\/|\/e\/|watch\?v%3D|watch\?feature=player_embedded&v=|%2Fvideos%2F|embed&v=|%2Fv%2F|e&v=|v=|t=%2Fvideos%2F|t=%2Fv%2F|e&v=|http(?:s)?:\/\/www\.youtube\.com\/playlist\?list=|http(?:s)?:\/\/www\.youtube\.com\/user\/[^\/]+#watch\/|http(?:s)?:\/\/www\.youtube\.com\/c\/[^\/]+\/[^\/]+#watch\/|http(?:s)?:\/\/www\.youtube\.com\/user\/[^\/]+\/videos\/|http(?:s)?:\/\/www\.youtube\.com\/u\/[^\/]+\/[^\/]+#watch\/|http(?:s)?:\/\/youtu\.be\/)([^"&?\/\s]{11})');
+    final match = regExp.firstMatch(videoUrl);
+    final videoId = match?.group(1);
+
+    if (videoId != null) {
+      final youtubeExplode = YoutubeExplode();
+      final video = await youtubeExplode.videos.get(videoId);
+
+      if (video != null) {
+        final thumbnailUrl = video.thumbnails.highResUrl;
+        final videoTitle = video.title;
+
+        return {'thumbnailUrl': thumbnailUrl, 'videoTitle': videoTitle};
+      }
+    }
+
+    return null;
   }
 }

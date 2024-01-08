@@ -1,8 +1,5 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
-import 'package:fansseathub/model/matchdetails.dart';
 import 'package:fansseathub/model/stadiumdetails.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -23,14 +20,13 @@ class _DetailsOfStadiumState extends State<DetailsOfStadium> {
     super.initState();
     stadiumdetailsbox = Hive.box<StadiumDetails>('stadiumdetails');
     stadiumdetailslist = [];
-    print(widget.stadium);
-    print("Stadium Details List Length: ${stadiumdetailslist.length}");
+   
   }
 
   @override
   Widget build(BuildContext context) {
     final mediaWidth = MediaQuery.of(context).size.width;
-    final mediaHeight = MediaQuery.of(context).size.height;
+    //final mediaHeight = MediaQuery.of(context).size.height;
     stadiumdetailslist = stadiumdetailsbox.values
         .toList()
         .where((element) =>
@@ -108,7 +104,7 @@ class _DetailsOfStadiumState extends State<DetailsOfStadium> {
                               child: Row(
                                 children: [
                                   StadiumText(standname: stadium.stands1),
-                                  Spacer(),
+                                  const Spacer(),
                                   StadiumText(standname: stadium.ticketcharge1)
                                 ],
                               ),
@@ -118,7 +114,7 @@ class _DetailsOfStadiumState extends State<DetailsOfStadium> {
                               child: Row(
                                 children: [
                                   StadiumText(standname: stadium.stands2),
-                                  Spacer(),
+                                  const Spacer(),
                                   StadiumText(standname: stadium.ticketcharge2)
                                 ],
                               ),
@@ -128,7 +124,7 @@ class _DetailsOfStadiumState extends State<DetailsOfStadium> {
                               child: Row(
                                 children: [
                                   StadiumText(standname: stadium.stands3),
-                                  Spacer(),
+                                  const Spacer(),
                                   StadiumText(standname: stadium.ticketcharge3)
                                 ],
                               ),
@@ -138,14 +134,14 @@ class _DetailsOfStadiumState extends State<DetailsOfStadium> {
                               child: Row(
                                 children: [
                                   StadiumText(standname: stadium.stands4),
-                                  Spacer(),
+                                  const Spacer(),
                                   StadiumText(standname: stadium.ticketcharge4)
                                 ],
                               ),
                             ),
-                            Padding(
+                            const Padding(
                               padding:
-                                  const EdgeInsets.only(top: 10, bottom: 10),
+                                  EdgeInsets.only(top: 10, bottom: 10),
                               child: Row(
                                 children: [
                                   AdminSideHeadingsBlack(
@@ -158,7 +154,7 @@ class _DetailsOfStadiumState extends State<DetailsOfStadium> {
                               child: Row(
                                 children: [
                                   StadiumText(standname: stadium.standsac1),
-                                  Spacer(),
+                                  const Spacer(),
                                   StadiumText(
                                       standname: stadium.ticketchargeac1)
                                 ],
@@ -169,7 +165,7 @@ class _DetailsOfStadiumState extends State<DetailsOfStadium> {
                               child: Row(
                                 children: [
                                   StadiumText(standname: stadium.standsac2),
-                                  Spacer(),
+                                  const Spacer(),
                                   StadiumText(
                                       standname: stadium.ticketchargeac2)
                                 ],

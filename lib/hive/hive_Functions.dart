@@ -1,4 +1,4 @@
-import 'package:fansseathub/model/highlights.dart';
+
 import 'package:fansseathub/model/matchdetails.dart';
 import 'package:hive/hive.dart';
 

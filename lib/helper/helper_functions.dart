@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:fansseathub/hive/hive_Functions.dart';
 import 'package:fansseathub/model/matchdetails.dart';
-import 'package:fansseathub/model/stadiumdetails.dart';
 import 'package:fansseathub/screen/adminHomeScreen.dart';
 import 'package:fansseathub/screen/bottomBar.dart';
 import 'package:fansseathub/services/database_service.dart';

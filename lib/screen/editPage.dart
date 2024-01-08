@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:io';
 import 'package:datetime_picker_formfield_new/datetime_picker_formfield.dart';
 import 'package:fansseathub/helper/helper_functions.dart';
@@ -5,7 +7,6 @@ import 'package:fansseathub/helper/widgets/dropdown.dart';
 import 'package:fansseathub/hive/hive_Functions.dart';
 import 'package:fansseathub/model/matchdetails.dart';
 import 'package:hive/hive.dart';
-import 'package:fansseathub/helper/widgets/addingField.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -66,7 +67,7 @@ class _EditPageState extends State<EditPage> {
     String? selectedImageteam1;
     String? selectedImageteam2;
     String? matchKey = widget.match.matchKey;
-    final TextEditingController team1controller = TextEditingController();
+   
 
     String? selectedType;
     return Scaffold(
@@ -112,7 +113,7 @@ class _EditPageState extends State<EditPage> {
                 const SizedBox(
                   height: 20,
                 ),
-                Row(
+                const Row(
                   children: [
                     AdminSideHeadings(headings: 'Enter Team'),
                   ],
@@ -128,7 +129,7 @@ class _EditPageState extends State<EditPage> {
                 const SizedBox(
                   height: 10,
                 ),
-                Row(
+                const Row(
                   children: [
                     AdminSideHeadings(headings: 'flag team 1'),
                   ],
@@ -170,7 +171,7 @@ class _EditPageState extends State<EditPage> {
                   padding: EdgeInsets.only(bottom: 60),
                   child: AdminSideHeadings(headings: 'VS'),
                 ),
-                Row(
+                const Row(
                   children: [
                     AdminSideHeadings(headings: 'Enter Team'),
                   ],
@@ -186,7 +187,7 @@ class _EditPageState extends State<EditPage> {
                 const SizedBox(
                   height: 10,
                 ),
-                Row(
+                const Row(
                   children: [
                     AdminSideHeadings(headings: 'flag team 1'),
                   ],
@@ -227,7 +228,7 @@ class _EditPageState extends State<EditPage> {
                 const SizedBox(
                   height: 20,
                 ),
-                Row(
+                const Row(
                   children: [
                     AdminSideHeadings(headings: 'Time'),
                   ],
@@ -257,7 +258,7 @@ class _EditPageState extends State<EditPage> {
                 const SizedBox(
                   height: 10,
                 ),
-                Row(
+                const Row(
                   children: [
                     AdminSideHeadings(headings: 'Category'),
                   ],
@@ -273,7 +274,7 @@ class _EditPageState extends State<EditPage> {
                 const SizedBox(
                   height: 10,
                 ),
-                Row(
+                const Row(
                   children: [
                     AdminSideHeadings(headings: 'Type'),
                   ],
@@ -291,7 +292,7 @@ class _EditPageState extends State<EditPage> {
                     });
                   },
                 ),
-                Row(
+                const Row(
                   children: [
                     AdminSideHeadings(headings: 'Date'),
                   ],
@@ -321,7 +322,7 @@ class _EditPageState extends State<EditPage> {
                 const SizedBox(
                   height: 10,
                 ),
-                Row(
+                const Row(
                   children: [
                     AdminSideHeadings(headings: 'Game no'),
                   ],
@@ -337,7 +338,7 @@ class _EditPageState extends State<EditPage> {
                 const SizedBox(
                   height: 10,
                 ),
-                Row(
+                const Row(
                   children: [
                     AdminSideHeadings(headings: 'Stadium'),
                   ],

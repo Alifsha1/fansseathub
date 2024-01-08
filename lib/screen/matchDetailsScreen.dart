@@ -2,7 +2,7 @@
 
 import 'dart:io';
 import 'package:fansseathub/helper/widgets/widgets.dart';
-import 'package:fansseathub/hive/hive_Functions.dart';
+
 import 'package:fansseathub/model/highlights.dart';
 import 'package:fansseathub/model/matchdetails.dart';
 import 'package:fansseathub/screen/playHighlights.dart';
@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
 
 class MatchDetailsScreen extends StatefulWidget {
   final String typeHeading;
@@ -78,7 +78,7 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(
-                              top: 15, right: 170, left: 15),
+                              top: 15, right: 160, left: 15),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -337,7 +337,6 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     children: [
-                      
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
@@ -451,6 +450,7 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
       final youtubeExplode = YoutubeExplode();
       final video = await youtubeExplode.videos.get(videoId);
 
+      // ignore: unnecessary_null_comparison
       if (video != null) {
         final thumbnailUrl = video.thumbnails.highResUrl;
         final videoTitle = video.title;
