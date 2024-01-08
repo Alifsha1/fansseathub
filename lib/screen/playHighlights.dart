@@ -59,6 +59,7 @@ class _PlayHighlightsState extends State<PlayHighlights> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
             child: Column(
               children: [
                 Container(
@@ -83,82 +84,75 @@ class _PlayHighlightsState extends State<PlayHighlights> {
                   color: Colors.black,
                   thickness: 1,
                 ),
-                 Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: mediaWidth * 0.87,
-                              height: mediaHeight,
-                              decoration: const BoxDecoration(
-                                  // borderRadius: BorderRadius.circular(10),
-                                  ),
-                              child: FutureBuilder(
-                                  future: getYoutubeVideosWithThumbnails(),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.done) {
-                                      final List<Map<String, dynamic>>
-                                          videosWithThumbnails = snapshot.data
-                                              as List<Map<String, dynamic>>;
-                                      return GridView.builder(
-                                        //   child: ListView.builder(
-                                        gridDelegate:
-                                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                                crossAxisCount: 2,
-                                                crossAxisSpacing: 15.0,
-                                                mainAxisSpacing: 9.0),
-                                        itemCount: videosWithThumbnails.length,
-                                        itemBuilder: (context, index) {
-                                          final video =
-                                              videosWithThumbnails[index]
-                                                  ['video'] as Highlights;
-                                          final thumbnailUrl =
-                                              videosWithThumbnails[index]
-                                                  ['thumbnailUrl'];
-                                          return GestureDetector(
-                                            onTap: () async {
-                                              Map<String, String>? videoInfo =
-                                                  await getYouTubeThumbnail(
-                                                      video.url);
-                                              if (videoInfo != null) {
-                                                String videoTitle = videoInfo[
-                                                        'videoTitle'] ??
-                                                    'Video Title Not Available';
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: mediaWidth * 0.87,
+                        height: mediaHeight,
+                        decoration: const BoxDecoration(
+                            ),
+                        child: FutureBuilder(
+                            future: getYoutubeVideosWithThumbnails(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                final List<Map<String, dynamic>>
+                                    videosWithThumbnails =
+                                    snapshot.data as List<Map<String, dynamic>>;
+                                return GridView.builder(
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          crossAxisSpacing: 15.0,
+                                          mainAxisSpacing: 9.0),
+                                  itemCount: videosWithThumbnails.length,
+                                  itemBuilder: (context, index) {
+                                    final video = videosWithThumbnails[index]
+                                        ['video'] as Highlights;
+                                    final thumbnailUrl =
+                                        videosWithThumbnails[index]
+                                            ['thumbnailUrl'];
+                                    return GestureDetector(
+                                      onTap: () async {
+                                        Map<String, String>? videoInfo =
+                                            await getYouTubeThumbnail(
+                                                video.url);
+                                        if (videoInfo != null) {
+                                          String videoTitle =
+                                              videoInfo['videoTitle'] ??
+                                                  'Video Title Not Available';
 
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        PlayHighlights(
-                                                      // videourl: videos[index].url,
-                                                      videourl: video.url,
-                                                      videotitle: videoTitle,
-
-                                                      //  videoid: ,
-                                                    ),
-                                                  ),
-                                                );
-                                              }
-                                            },
-                                            child: Image.network(
-                                              thumbnailUrl['thumbnailUrl'],
-                                              fit: BoxFit.fill,
-                                              //height: 120,
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PlayHighlights(
+                                                videourl: video.url,
+                                                videotitle: videoTitle,
+                                              ),
                                             ),
                                           );
-                                        },
-                                        // ),
-                                      );
-                                    } else {
-                                      return const Center(
-                                          child: CircularProgressIndicator());
-                                    }
-                                  }),
-                            ),
-                          ],
-                        ),
+                                        }
+                                      },
+                                      child: Image.network(
+                                        thumbnailUrl['thumbnailUrl'],
+                                        fit: BoxFit.fill,
+                                        //height: 120,
+                                      ),
+                                    );
+                                  },
+                                );
+                              } else {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              }
+                            }),
                       ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -166,8 +160,9 @@ class _PlayHighlightsState extends State<PlayHighlights> {
       ),
     );
   }
+
   Future<List<Map<String, dynamic>>> getYoutubeVideosWithThumbnails() async {
-    final box = await Hive.openBox<Highlights>('highlights');
+    final box = await Hive.box<Highlights>('highlights');
     final videos = box.values.toList();
     final videosWithThumbnails = <Map<String, dynamic>>[];
 

@@ -396,6 +396,7 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
                                               }
                                             },
                                             child: Image.network(
+                                              
                                               thumbnailUrl['thumbnailUrl'],
                                               fit: BoxFit.fill,
                                               //height: 120,
