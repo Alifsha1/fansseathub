@@ -1,15 +1,17 @@
 import 'dart:io';
 import 'package:fansseathub/helper/helper_functions.dart';
-
 import 'package:fansseathub/model/matchdetails.dart';
 import 'package:hive/hive.dart';
-
 import 'package:fansseathub/helper/widgets/addingField.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class AddNextGame extends StatefulWidget {
-  const AddNextGame({super.key});
+  // final String selectedtype;
+  const AddNextGame({
+    super.key,
+    // required this.selectedtype
+  });
 
   @override
   State<AddNextGame> createState() => _AddFirstGameState();
@@ -27,6 +29,8 @@ class _AddFirstGameState extends State<AddNextGame> {
   final TextEditingController stadiumcontroller = TextEditingController();
   File? _selectedImageteam1;
   File? _selectedImageteam2;
+  String? selectedType;
+
   late Box<MatchDetails> matchdetailsbox;
 
   @override
@@ -91,17 +95,24 @@ class _AddFirstGameState extends State<AddNextGame> {
                   stadiumController: stadiumcontroller,
                   imageSelectedteam1: _selectedImageteam1,
                   imageSelectedteam2: _selectedImageteam2,
+                  selectedtype: selectedType ?? '',
+                  ontypeoption: (value) {
+                    setState(() {
+                      selectedType = value;
+                      print(value);
+                    });
+                  },
+                  // ontypeoption: ,
+
                   onTap1: () async {
                     File? pickimage = await pickImageFromGallery();
                     setState(() {
                       _selectedImageteam1 = pickimage;
-                     
                     });
                   },
                   onTap2: () async {
                     File? pickimage = await pickImageFromGallery();
                     setState(() {
-                      
                       _selectedImageteam2 = pickimage;
                     });
                   },
@@ -114,18 +125,19 @@ class _AddFirstGameState extends State<AddNextGame> {
                       onPressed: () {
                         if (formkey.currentState!.validate()) {
                           submit(
-                              context,
-                              _selectedImageteam1!.path,
-                              _selectedImageteam2!.path,
-                              categorycontroller,
-                              datecontroller,
-                              gamenocontroller,
-                              matchdetailsbox,
-                              stadiumcontroller,
-                              team1controller,
-                              team2controller,
-                              timecontroller,
-                              typecontroller);
+                              context: context,
+                              selectedImageteam1: _selectedImageteam1!.path,
+                              selectedImageteam2: _selectedImageteam2!.path,
+                              categorycontroller: categorycontroller,
+                              datecontroller: datecontroller,
+                              gamenocontroller: gamenocontroller,
+                              matchdetailsbox: matchdetailsbox,
+                              stadiumcontroller: stadiumcontroller,
+                              team1controller: team1controller,
+                              team2controller: team2controller,
+                              timecontroller: timecontroller,
+                              typecontroller: typecontroller,
+                              selectedtype: selectedType);
                           dataClear();
 
                           Navigator.pop(context);

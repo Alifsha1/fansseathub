@@ -1,9 +1,11 @@
 import 'package:fansseathub/helper/helper_functions.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:fansseathub/model/matchdetails.dart';
+import 'package:fansseathub/screen/editPage.dart';
 import 'package:fansseathub/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class AdminHomeScreen extends StatefulWidget {
   const AdminHomeScreen({super.key});
@@ -60,77 +62,94 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
               const SizedBox(
                 height: 20,
               ),
-              SizedBox(
-                height: mediaHeight - 200, // Adjust the height as needed
-                child: ListView.builder(
-                  itemCount: matchdetailList.length,
-                  itemBuilder: (context, index) {
-                    final match = matchdetailList[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: mediaHeight * 0.1,
-                        width: MediaQuery.of(context).size.width * 0.1,
-                        decoration: const BoxDecoration(
-                          color: Color.fromARGB(255, 204, 197, 197),
-                        ),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.2,
+              ValueListenableBuilder(
+                  valueListenable: matchdetailbox.listenable(),
+                  builder: (context, Box<MatchDetails> box, widget) {
+                    matchdetailList = box.values.toList();
+                    return SizedBox(
+                      height: mediaHeight - 200, // Adjust the height as needed
+                      child: ListView.builder(
+                        itemCount: matchdetailList.length,
+                        itemBuilder: (context, index) {
+                          final match = matchdetailList[index];
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              height: mediaHeight * 0.1,
+                              width: MediaQuery.of(context).size.width * 0.1,
+                              decoration: const BoxDecoration(
+                                color: Color.fromARGB(255, 204, 197, 197),
+                              ),
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.2,
+                                  ),
+                                  Expanded(
+                                      child: Text(
+                                    match.team1,
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  const Text(
+                                    'VS',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Expanded(
+                                      child: Text(
+                                    match.team2,
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                                  SizedBox(
+                                    width: mediaWidth * .1,
+                                  ),
+                                  IconButton(
+                                      onPressed: () {
+                                        // showEditingDialog(
+                                        //     context,
+                                        //     match,
+                                        //     _formKey,
+                                        //     mediaWidth,
+                                        //     mediaHeight,
+                                        //     setState);
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) => EditPage(
+                                              match: match,
+                                              context: context,
+                                              setStateCallback: setState,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      icon: const Icon(Icons.edit)),
+                                  IconButton(
+                                      onPressed: () {
+                                        //Repository.deleteData(match.matchKey);
+                                        showDeleteConfirmationDialog(
+                                            context, match.matchKey);
+                                      },
+                                      icon: const Icon(Icons.delete)),
+                                ],
+                              ),
                             ),
-                            Expanded(
-                                child: Text(
-                              match.team1,
-                              style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            )),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            const Text(
-                              'VS',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                                child: Text(
-                              match.team2,
-                              style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            )),
-                            SizedBox(
-                              width: mediaWidth * .1,
-                            ),
-                            IconButton(
-                                onPressed: () {
-                                  showEditingDialog(context, match, _formKey,
-                                      mediaWidth, mediaHeight, setState);
-                                },
-                                icon: const Icon(Icons.edit)),
-                            IconButton(
-                                onPressed: () {
-                                  //Repository.deleteData(match.matchKey);
-                                  showDeleteConfirmationDialog(
-                                      context, match.matchKey);
-                                },
-                                icon: const Icon(Icons.delete)),
-                          ],
-                        ),
+                          );
+                        },
                       ),
                     );
-                  },
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const ButtonElevated(
-                buttonText: '+Add new video',
-              ),
+                  })
             ],
           ),
         ),

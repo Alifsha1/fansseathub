@@ -241,7 +241,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                     Row(
                                                       children: [
                                                         Text(
-                                                          match.date,
+                                                          match.date.toString(),
                                                           style: const TextStyle(
                                                             color: Colors.white,
                                                             fontSize: 15,
@@ -325,7 +325,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                       ),
                                                     ),
                                                     Text(
-                                                      match.time,
+                                                      match.time.toString(),
                                                       style: const TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 15,

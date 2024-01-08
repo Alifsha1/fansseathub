@@ -1,0 +1,61 @@
+FutureBuilder(
+                                  future: getYoutubeVideos(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      final videos =
+                                          snapshot.data as List<Highlights>;
+                                      return GridView.builder(
+                                        //   child: ListView.builder(
+                                        gridDelegate:
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 2,
+                                                crossAxisSpacing: 15.0,
+                                                mainAxisSpacing: 9.0),
+                                        itemCount: videos.length,
+                                        itemBuilder: (context, index) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PlayHighlights(
+                                                    videourl: videos[index].url,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: YoutubePlayer(
+                                                controller:
+                                                    YoutubePlayerController(
+                                                        initialVideoId:
+                                                            VideoUtils
+                                                                .extractVideoId(
+                                                                    videos[index]
+                                                                        .url),
+                                                        flags:
+                                                            YoutubePlayerFlags(
+                                                                autoPlay: false,
+                                                                mute: false))),
+                                          );
+                                        },
+                                        // ),
+                                      );
+                                    } else {
+                                      return Center(
+                                          child: CircularProgressIndicator());
+                                    }
+                                  }),
+                                  YoutubePlayer(
+                                                controller:
+                                                    YoutubePlayerController(
+                                                        initialVideoId:
+                                                            VideoUtils
+                                                                .extractVideoId(
+                                                                    videos[index]
+                                                                        .url),
+                                                        flags:
+                                                            YoutubePlayerFlags(
+                                                                autoPlay: false,
+                                                                mute: false)))

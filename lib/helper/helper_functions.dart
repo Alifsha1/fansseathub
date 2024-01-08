@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:fansseathub/hive/hive_Functions.dart';
 import 'package:fansseathub/model/matchdetails.dart';
+import 'package:fansseathub/model/stadiumdetails.dart';
 import 'package:fansseathub/screen/adminHomeScreen.dart';
 import 'package:fansseathub/screen/bottomBar.dart';
 import 'package:fansseathub/services/database_service.dart';
@@ -66,20 +67,23 @@ Future<File?> pickImageFromGallery() async {
   return null;
 }
 
-submit(
-    context,
-    _selectedImageteam1,
-    _selectedImageteam2,
-    categorycontroller,
-    datecontroller,
-    gamenocontroller,
-    matchdetailsbox,
-    stadiumcontroller,
-    team1controller,
-    team2controller,
-    timecontroller,
-    typecontroller) {
-  if (_selectedImageteam1 == null && _selectedImageteam2 == null) {
+submit({
+  context,
+  selectedImageteam1,
+  selectedImageteam2,
+  categorycontroller,
+   datecontroller,
+  gamenocontroller,
+  matchdetailsbox,
+  stadiumcontroller,
+  team1controller,
+  team2controller,
+  timecontroller,
+  typecontroller,
+  selectedtype,
+}) {
+  
+  if (selectedImageteam1 == null && selectedImageteam2 == null) {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       backgroundColor: Colors.red,
       content: Text(
@@ -97,18 +101,54 @@ submit(
           matchKey: matchKey,
           team1: team1controller.text,
           team2: team2controller.text,
-          imagePath1: _selectedImageteam1,
-          imagePath2: _selectedImageteam2,
+          imagePath1: selectedImageteam1,
+          imagePath2: selectedImageteam2,
           time: timecontroller.text,
           date: datecontroller.text,
           category: categorycontroller.text,
           gameno: gamenocontroller.text,
-          typeofgame: typecontroller.text,
+          typeofgame: selectedtype,
           stadium: stadiumcontroller.text),
       matchKey,
     );
   }
 }
+//  addstadiumdetails({
+//   selectedImage,context,stadiumnamecontroller,guestStandcontroller,guestStandpricecontroller,eastStanduppercontroller,eastStandupperpricecontroller,eastStandlowercontroller,eastStandlowerpricecontroller
+// }) {
+//     if (selectedImage == null) {
+//       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+//         backgroundColor: Colors.red,
+//         content: Text(
+//           'You Must select an image',
+//           style: TextStyle(
+//             color: Colors.white,
+//           ),
+//         ),
+//       ));
+//       return;
+//     } else {
+//       String stadiumKey = DateTime.now().microsecondsSinceEpoch.toString();
+//       StadiumDetails stadiumDetails = StadiumDetails(
+//           stadiumKey: stadiumKey,
+//           imagePathstadium: selectedImage!.path,
+//           stadiumname: stadiumnamecontroller.text,
+//           stands1: guestStandcontroller.text,
+//           ticketcharge1: guestStandpricecontroller.text,
+//           stands2: eastStanduppercontroller.text,
+//           ticketcharge2: eastStandupperpricecontroller.text,
+//           stands3: eastStandlowercontroller.text,
+//           ticketcharge3: eastStandlowerpricecontroller.text,
+//           stands4: northcontroller.text,
+//           ticketcharge4: northpricecontroller.text,
+//           standsac1: acBoxseat15controller.text,
+//           ticketchargeac1: acBoxseat15pricecontroller.text,
+//           standsac2: acBox20controller.text,
+//           ticketchargeac2: acBox20pricecontroller.text);
+//       boxname2.put(stadiumKey, stadiumDetails);
+      
+//     }
+//   }
 
 showDeleteConfirmationDialog(BuildContext context, matchKey) {
   showDialog(
@@ -216,9 +256,9 @@ showEditingDialog(context, MatchDetails match, formKey, mediaWidth, mediaHeight,
       final TextEditingController team2Controller =
           TextEditingController(text: match.team2);
       final TextEditingController timeController =
-          TextEditingController(text: match.time);
+          TextEditingController(text: match.time.toString());
       final TextEditingController dateController =
-          TextEditingController(text: match.date);
+          TextEditingController(text: match.date.toString());
       final TextEditingController categoryController =
           TextEditingController(text: match.category);
       final TextEditingController typeController =
@@ -336,8 +376,8 @@ showEditingDialog(context, MatchDetails match, formKey, mediaWidth, mediaHeight,
                                       selectedImageteam1 ?? match.imagePath1,
                                   imagePath2:
                                       selectedImageteam2 ?? match.imagePath2,
-                                  time: timeController.text,
-                                  date: dateController.text,
+                                  time: match.time,
+                                  date: match.date,
                                   category: categoryController.text,
                                   gameno: gamenoController.text,
                                   typeofgame: typeController.text,

@@ -2,27 +2,46 @@ import 'dart:io';
 
 import 'package:fansseathub/helper/helper_functions.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
+import 'package:fansseathub/model/stadiumdetails.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
-class StadiumDetails extends StatefulWidget {
-  const StadiumDetails({super.key});
+class AddStadiumDetails extends StatefulWidget {
+  const AddStadiumDetails({super.key});
 
   @override
-  State<StadiumDetails> createState() => _StadiumDetailsState();
+  State<AddStadiumDetails> createState() => _AddStadiumDetails();
 }
 
-class _StadiumDetailsState extends State<StadiumDetails> {
+class _AddStadiumDetails extends State<AddStadiumDetails> {
   final formkey = GlobalKey<FormState>();
+  final TextEditingController stadiumnamecontroller = TextEditingController();
   final TextEditingController guestStandcontroller = TextEditingController();
+  final TextEditingController guestStandpricecontroller =
+      TextEditingController();
   final TextEditingController eastStanduppercontroller =
+      TextEditingController();
+  final TextEditingController eastStandupperpricecontroller =
       TextEditingController();
   final TextEditingController eastStandlowercontroller =
       TextEditingController();
+  final TextEditingController eastStandlowerpricecontroller =
+      TextEditingController();
   final TextEditingController northcontroller = TextEditingController();
+  final TextEditingController northpricecontroller = TextEditingController();
   final TextEditingController acBoxseat15controller = TextEditingController();
+  final TextEditingController acBoxseat15pricecontroller =
+      TextEditingController();
   final TextEditingController acBox20controller = TextEditingController();
+  final TextEditingController acBox20pricecontroller = TextEditingController();
 
   File? _selectedImage;
+  late Box boxname2;
+  @override
+  void initState() {
+    super.initState();
+    boxname2 = Hive.box<StadiumDetails>('stadiumdetails');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +76,7 @@ class _StadiumDetailsState extends State<StadiumDetails> {
                     AdminSideHeadingsBlack(headings: 'Details'),
                   ],
                 ),
+                
                 SizedBox(
                   height: mediaHeight * .05,
                 ),
@@ -105,7 +125,7 @@ class _StadiumDetailsState extends State<StadiumDetails> {
                 Space,
                 AdminTextField(
                   hinttext: 'Stadium name',
-                  controller: guestStandcontroller,
+                  controller: stadiumnamecontroller,
                   errormessage: 'name required',
                 ),
                 Space,
@@ -117,37 +137,37 @@ class _StadiumDetailsState extends State<StadiumDetails> {
                 Space,
                 AdminTextField(
                     hinttext: 'ticket charge',
-                    controller: guestStandcontroller,
+                    controller: guestStandpricecontroller,
                     errormessage: 'ticket charge  required'),
                 Space,
                 AdminTextField(
                     hinttext: 'Stands',
-                    controller: guestStandcontroller,
+                    controller: eastStanduppercontroller,
                     errormessage: 'stand name required'),
                 Space,
                 AdminTextField(
                     hinttext: 'ticket charge',
-                    controller: guestStandcontroller,
+                    controller: eastStandupperpricecontroller,
                     errormessage: 'ticket charge  required'),
                 Space,
                 AdminTextField(
                     hinttext: 'Stands',
-                    controller: guestStandcontroller,
+                    controller: eastStandlowercontroller,
                     errormessage: 'stand name required'),
                 Space,
                 AdminTextField(
                     hinttext: 'ticket charge',
-                    controller: guestStandcontroller,
+                    controller: eastStandlowerpricecontroller,
                     errormessage: 'ticket charge  required'),
                 Space,
                 AdminTextField(
                     hinttext: 'Stands',
-                    controller: guestStandcontroller,
+                    controller: northcontroller,
                     errormessage: 'stand name required'),
                 Space,
                 AdminTextField(
                     hinttext: 'ticket charge',
-                    controller: guestStandcontroller,
+                    controller: northpricecontroller,
                     errormessage: 'ticket charge  required'),
                 Space,
                 const Row(
@@ -158,28 +178,29 @@ class _StadiumDetailsState extends State<StadiumDetails> {
                 Space,
                 AdminTextField(
                     hinttext: 'Stands',
-                    controller: guestStandcontroller,
+                    controller: acBoxseat15controller,
                     errormessage: 'stand name required'),
                 Space,
                 AdminTextField(
                     hinttext: 'ticket charge',
-                    controller: guestStandcontroller,
+                    controller: acBoxseat15pricecontroller,
                     errormessage: 'ticket charge  required'),
                 Space,
                 AdminTextField(
                     hinttext: 'Stands',
-                    controller: guestStandcontroller,
+                    controller: acBox20controller,
                     errormessage: 'stand name required'),
                 Space,
                 AdminTextField(
                     hinttext: 'ticket charge',
-                    controller: guestStandcontroller,
+                    controller: acBox20pricecontroller,
                     errormessage: 'ticket charge  required'),
                 Space,
                 SizedBox(
                   child: ElevatedButton(
                       onPressed: () {
                         if (formkey.currentState!.validate()) {
+                          addstadiumdetails();
                           Navigator.pop(context);
                         }
                       },
@@ -201,5 +222,40 @@ class _StadiumDetailsState extends State<StadiumDetails> {
         )),
       ),
     );
+  }
+
+  void addstadiumdetails() {
+    if (_selectedImage == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        backgroundColor: Colors.red,
+        content: Text(
+          'You Must select an image',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ));
+      return;
+    } else {
+      String stadiumKey = DateTime.now().microsecondsSinceEpoch.toString();
+      StadiumDetails stadiumDetails = StadiumDetails(
+          stadiumKey: stadiumKey,
+          imagePathstadium: _selectedImage!.path,
+          stadiumname: stadiumnamecontroller.text,
+          stands1: guestStandcontroller.text,
+          ticketcharge1: guestStandpricecontroller.text,
+          stands2: eastStanduppercontroller.text,
+          ticketcharge2: eastStandupperpricecontroller.text,
+          stands3: eastStandlowercontroller.text,
+          ticketcharge3: eastStandlowerpricecontroller.text,
+          stands4: northcontroller.text,
+          ticketcharge4: northpricecontroller.text,
+          standsac1: acBoxseat15controller.text,
+          ticketchargeac1: acBoxseat15pricecontroller.text,
+          standsac2: acBox20controller.text,
+          ticketchargeac2: acBox20pricecontroller.text);
+      boxname2.put(stadiumKey, stadiumDetails);
+    
+    }
   }
 }

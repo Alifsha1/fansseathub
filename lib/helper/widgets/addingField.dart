@@ -19,21 +19,27 @@ class GameAddingField extends StatefulWidget {
   final void Function()? onTap2;
   File? imageSelectedteam1;
   File? imageSelectedteam2;
+  final String selectedtype;
+  // final String ontypeoption;
+  final void Function(String) ontypeoption;
 
-  GameAddingField(
-      {super.key,
-      required this.team1Controller,
-      required this.team2Controller,
-      required this.timeController,
-      required this.dateController,
-      required this.categoryController,
-      required this.typeController,
-      required this.stadiumController,
-      required this.gamenoController,
-      required this.onTap1,
-      required this.onTap2,
-      required this.imageSelectedteam1,
-      required this.imageSelectedteam2});
+  GameAddingField({
+    super.key,
+    required this.team1Controller,
+    required this.team2Controller,
+    required this.timeController,
+    required this.dateController,
+    required this.categoryController,
+    required this.typeController,
+    required this.stadiumController,
+    required this.gamenoController,
+    required this.onTap1,
+    required this.onTap2,
+    required this.imageSelectedteam1,
+    required this.imageSelectedteam2,
+    required this.selectedtype, required this.ontypeoption,
+    // required this.ontypeoption,
+  });
 
   @override
   State<GameAddingField> createState() => _GameAddingFieldState();
@@ -82,6 +88,9 @@ class _GameAddingFieldState extends State<GameAddingField> {
           timeofgame: 'Time',
           category: 'Category',
           sportsName: 'Type',
+          selectedtype: widget.selectedtype,
+          ontypeoption: widget.ontypeoption,
+          // ontypeotion: widget.ontypeoption,
         ),
         const SizedBox(
           width: 48,

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:fansseathub/screen/hightlightsAdd.dart';
 import 'package:fansseathub/screen/homeScreen.dart';
 import 'package:fansseathub/screen/nxtGameAdding.dart';
 import 'package:fansseathub/screen/stadiumDetailsScreen.dart';
@@ -109,6 +110,40 @@ class AdminSideHeadingsBlack extends StatelessWidget {
   }
 }
 
+class AdminSideHeadingsBlackSize extends StatelessWidget {
+  final String headings;
+  const AdminSideHeadingsBlackSize({super.key, required this.headings});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      headings,
+      style: TextStyle(
+        color: Colors.black,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+}
+
+class StadiumText extends StatelessWidget {
+  final String standname;
+  const StadiumText({super.key, required this.standname});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      standname,
+      style: TextStyle(
+        color: Colors.black,
+        fontSize: 17,
+        fontWeight: FontWeight.w400,
+      ),
+    );
+  }
+}
+
 class AdminTextField extends StatelessWidget {
   final String errormessage;
   final String? Function(String?)? validator;
@@ -149,14 +184,14 @@ class FormTextField extends StatefulWidget {
   TextEditingController? controller;
   // String text;
   void Function(String)? onChanged;
-  FormTextField({
-    super.key,
-    required this.hinttext,
-    required this.validator,
-    required this.onChanged,
-    this.controller
-    // required this.text,
-  });
+  FormTextField(
+      {super.key,
+      required this.hinttext,
+      required this.validator,
+      required this.onChanged,
+      this.controller
+      // required this.text,
+      });
 
   @override
   State<FormTextField> createState() => _FormTextFieldState();
@@ -272,7 +307,7 @@ drawerAdminScreen(
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const StadiumDetails(),
+                        builder: (context) => const AddStadiumDetails(),
                       ),
                     );
                   },
@@ -285,6 +320,34 @@ drawerAdminScreen(
               ),
               const Text(
                 'AddDetails',
+                style: TextStyle(fontSize: 20),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(
+            left: 65,
+          ),
+          child: Row(
+            children: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const AddHighlights(),
+                      ),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.add,
+                    color: Colors.black,
+                  )),
+              SizedBox(
+                width: mediaWidth * .04,
+              ),
+              const Text(
+                'Addvideos',
                 style: TextStyle(fontSize: 20),
               ),
             ],
@@ -335,7 +398,7 @@ drawerAdminScreen(
   );
 }
 
-drawerUserScreen(context,mediaWidth,authService) {
+drawerUserScreen(context, mediaWidth, authService) {
   return Drawer(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
