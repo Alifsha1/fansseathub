@@ -3,6 +3,7 @@
 import 'package:fansseathub/screen/hightlightsAdd.dart';
 import 'package:fansseathub/screen/homeScreen.dart';
 import 'package:fansseathub/screen/nxtGameAdding.dart';
+import 'package:fansseathub/screen/profileScreen.dart';
 import 'package:fansseathub/screen/stadiumDetailsScreen.dart';
 import 'package:flutter/material.dart';
 
@@ -220,7 +221,12 @@ class _FormTextFieldState extends State<FormTextField> {
 }
 
 drawerAdminScreen(
-    context, mediaWidth, isAdminSigned, isUserSigned, authService) {
+  context,
+  mediaWidth,
+  isAdminSigned,
+  isUserSigned,
+  authService,
+) {
   return Drawer(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -398,11 +404,27 @@ drawerAdminScreen(
   );
 }
 
-drawerUserScreen(context, mediaWidth, authService) {
+drawerUserScreen(context, mediaWidth, authService, username, email) {
   return Drawer(
     child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      //mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 70),
+          child: Icon(
+            Icons.account_circle,
+            size: 150,
+            color: Colors.grey[700],
+          ),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        Text(
+          username,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         const Padding(
           padding: EdgeInsets.only(bottom: 25),
           child: Divider(
@@ -448,7 +470,11 @@ drawerUserScreen(context, mediaWidth, authService) {
             children: [
               IconButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ProfileScreen(email: email, username: username)),
+                    );
                   },
                   icon: const Icon(
                     Icons.person,
@@ -459,6 +485,30 @@ drawerUserScreen(context, mediaWidth, authService) {
               ),
               const Text(
                 'Profile',
+                style: TextStyle(fontSize: 20),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(
+            left: 65,
+          ),
+          child: Row(
+            children: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: const Icon(
+                    Icons.settings,
+                    color: Colors.black,
+                  )),
+              SizedBox(
+                width: mediaWidth * .04,
+              ),
+              const Text(
+                'settings',
                 style: TextStyle(fontSize: 20),
               ),
             ],

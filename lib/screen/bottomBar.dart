@@ -1,3 +1,4 @@
+import 'package:fansseathub/helper/helper_functions.dart';
 import 'package:fansseathub/screen/homeScreen.dart';
 import 'package:fansseathub/screen/profileScreen.dart';
 import 'package:fansseathub/screen/searchScreen.dart';
@@ -18,20 +19,46 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
+  String username = "";
+  String email = "";
   int index = 0;
   List<dynamic> tabs = [];
 
   @override
   void initState() {
+    gettingUserData();
     tabs = [
       HomeScreen(
         isUserSigned: widget.isUsersigned,
         idAdminSigned: widget.idAdminsigned,
       ),
       const SearchScreen(),
-      const ProfileScreen(),
+      ProfileScreen(username: username, email: email),
     ];
     super.initState();
+    gettingUserData();
+  }
+
+  gettingUserData() async {
+    await HelperFunction.getUserEmailFromSF().then((value) {
+      setState(() {
+        email = value!;
+      });
+    });
+    await HelperFunction.getUserNameFromSF().then((val) {
+      setState(() {
+        username = val!;
+      });
+    });
+    //getting the list of snapshot in our stream
+
+    // await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+    //     .getUserGroups()
+    //     .then((snapshot) {
+    //   setState(() {
+    //     groups = snapshot;
+    //   });
+    // });
   }
 
   @override

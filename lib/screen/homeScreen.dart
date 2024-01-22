@@ -1,9 +1,12 @@
+import 'package:fansseathub/helper/helper_functions.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:fansseathub/screen/adminHomeScreen.dart';
 import 'package:fansseathub/screen/matchDetailsScreen.dart';
 import 'package:fansseathub/sections/assets.dart';
 import 'package:fansseathub/sections/catogory.dart';
 import 'package:fansseathub/services/auth_service.dart';
+import 'package:fansseathub/services/database_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,11 +23,37 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String username = "";
+  String email = "";
   AuthService authService = AuthService();
 
   @override
   void initState() {
     super.initState();
+    //gettingUserData();
+    gettingUserData();
+  }
+
+  gettingUserData() async {
+    await HelperFunction.getUserEmailFromSF().then((value) {
+      setState(() {
+        email = value!;
+      });
+    });
+    await HelperFunction.getUserNameFromSF().then((val) {
+      setState(() {
+        username = val!;
+      });
+    });
+    // getting the list of snapshot in our stream
+
+    // await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+    //     .getUserGroups()
+    //     .then((snapshot) {
+    //   setState(() {
+    //     groups = snapshot;
+    //   });
+    // });
   }
 
   @override
@@ -53,7 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         elevation: 0,
       ),
-      drawer: drawerUserScreen(context, mediaWidth, authService),
+      drawer:
+          drawerUserScreen(context, mediaWidth, authService, username, email),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(top: 5, left: 20, right: 20),

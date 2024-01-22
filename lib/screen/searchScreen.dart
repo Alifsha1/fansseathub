@@ -1,10 +1,5 @@
-import 'dart:io';
-
-
-import 'package:fansseathub/model/matchdetails.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -13,17 +8,20 @@ class SearchScreen extends StatefulWidget {
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
-late Box<MatchDetails> matchdetailbox;
-late List<MatchDetails> matchdetailList;
-List searchList = [];
+//List searchList = [];
 
 class _SearchScreenState extends State<SearchScreen> {
   final _searchController = TextEditingController();
+  late Stream<QuerySnapshot> _stream;
+  Map<String, dynamic>? recentSearch;
+  List<QueryDocumentSnapshot>? recentSearchResult;
+  List<QueryDocumentSnapshot>? searchResults;
+
+  String searchQuery = "";
   @override
   void initState() {
-    matchdetailbox = Hive.box<MatchDetails>('matchdetails');
-    matchdetailList = matchdetailbox.values.toList();
-    searchList = [];
+    _stream = FirebaseFirestore.instance.collection('matches').snapshots();
+    //searchList = [];
     super.initState();
   }
 
@@ -44,7 +42,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 controller: _searchController,
                 onChanged: (value) {
                   setState(() {
-                    search();
+                    searchQuery = value;
                   });
                 },
                 decoration: InputDecoration(
@@ -65,305 +63,187 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ),
       body: SafeArea(
-          child: Container(
-              child: matchdetailList.isNotEmpty
-                  ? _searchController.text.isNotEmpty
-                      ? searchList.isEmpty
-                          ? const Center(
-                              child: Text('Sorry, No result found'),
-                            )
-                          : ListView.builder(
-                            itemCount: searchList.length,
-                            itemBuilder: (context, index) {
-                           
-                                final detailsList = searchList[index];
+        child: StreamBuilder<QuerySnapshot>(
+            stream: _stream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                List<QueryDocumentSnapshot> documents = snapshot.data!.docs;
 
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    margin: const EdgeInsets.only(left: 10),
-                                    width: mediaWidth * .93,
-                                    height: mediaHeight * .2,
-                                    decoration: BoxDecoration(
-                                        color: Colors.black,
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 17, right: 17, left: 20),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    detailsList.category,
-                                                    style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    detailsList.gameno,
-                                                    style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              const Spacer(),
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    detailsList.date,
-                                                    style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 8),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Container(
-                                                  height: mediaWidth * .07,
-                                                  width: mediaWidth * .07,
-                                                  decoration: const BoxDecoration(
-                                                    color: Colors.white,
-                                                  ),
-                                                  child: Image.file(File(
-                                                      detailsList.imagePath1)),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 10, bottom: 10),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Container(
-                                                  height: mediaWidth * .07,
-                                                  width: mediaWidth * .07,
-                                                  decoration: const BoxDecoration(
-                                                    color: Colors.white,
-                                                  ),
-                                                  child: Image.file(File(
-                                                      detailsList.imagePath2)),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Row(
-                                            children: [
-                                              const Text(
-                                                'Starts at ',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                              Text(
-                                                detailsList.time,
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              
-                            })
-                      : Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SingleChildScrollView(
+                searchResults = documents
+                    .where((search) =>
+                        search['categorycontroller']
+                            .toString()
+                            .toLowerCase()
+                            .contains(searchQuery.toLowerCase()) ||
+                        search['team1']
+                            .toString()
+                            .toLowerCase()
+                            .contains(searchQuery.toLowerCase()) ||
+                        search['team2']
+                            .toString()
+                            .toLowerCase()
+                            .contains(searchQuery.toLowerCase()) ||
+                        search['selectedtype']
+                            .toString()
+                            .toLowerCase()
+                            .contains(searchQuery.toLowerCase()))
+                    .toList();
+
+                if (searchResults!.isNotEmpty) {
+                  return ListView.builder(
+                    itemCount: searchResults!.length,
+                    itemBuilder: (context, index) {
+                      var thisItems =
+                          searchResults![index].data() as Map<String, dynamic>;
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          margin: const EdgeInsets.only(left: 10),
+                          width: mediaWidth * .93,
+                          height: mediaHeight * .23,
+                          decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 17, right: 17, left: 20),
                             child: Column(
                               children: [
-                                SizedBox(
-                                  height: mediaHeight - 200,
-                                  child: ListView.builder(
-                                    itemCount: matchdetailList.length,
-                                    itemBuilder: (context, index) {
-                                      // MatchDetails matchss = matchdetailList[index];
-                                      final match = matchdetailList[index];
-                                      return Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Container(
-                                          margin: const EdgeInsets.only(left: 10),
-                                          width: mediaWidth * .93,
-                                          height: mediaHeight * .2,
-                                          decoration: BoxDecoration(
-                                              color: Colors.black,
-                                              borderRadius:
-                                                  BorderRadius.circular(15)),
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 17, right: 17, left: 20),
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        Text(
-                                                          match.category,
-                                                          style: const TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 15,
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          match.gameno,
-                                                          style: const TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 15,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    const Spacer(),
-                                                    Row(
-                                                      children: [
-                                                        Text(
-                                                          match.date.toString(),
-                                                          style: const TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 15,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 8),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      Container(
-                                                        height:
-                                                            mediaWidth * .07,
-                                                        width: mediaWidth * .07,
-                                                        decoration:
-                                                            const BoxDecoration(
-                                                          color: Colors.white,
-                                                        ),
-                                                        child: Image.file(File(
-                                                            match.imagePath1)),
-                                                      ),
-                                                      SizedBox(
-                                                        width: mediaWidth * .01,
-                                                      ),
-                                                      Text(
-                                                        match.team1,
-                                                        style: const TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 15,
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 10, bottom: 10),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      Container(
-                                                        height:
-                                                            mediaWidth * .07,
-                                                        width: mediaWidth * .07,
-                                                        decoration:
-                                                            const BoxDecoration(
-                                                          color: Colors.white,
-                                                        ),
-                                                        child: Image.file(File(
-                                                            match.imagePath2)),
-                                                      ),
-                                                      SizedBox(
-                                                        width: mediaWidth * .01,
-                                                      ),
-                                                      Text(
-                                                        match.team2,
-                                                        style: const TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 15,
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    const Text(
-                                                      'Starts at ',
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 15,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      match.time.toString(),
-                                                      style: const TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 15,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                )
-                                              ],
-                                            ),
+                                Row(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          '${thisItems['categorycontroller']}',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 15,
                                           ),
                                         ),
-                                      );
-                                    },
+                                        const SizedBox(
+                                          width: 2,
+                                        ),
+                                        Text(
+                                          '${thisItems['gamenocontroller']}',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Spacer(),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          '${thisItems['datecontroller']}'
+                                              .toString(),
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        height: mediaWidth * .07,
+                                        width: mediaWidth * .07,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                        ),
+                                        child: Image.network(
+                                            '${thisItems['selectedImageteam1']}'),
+                                      ),
+                                      SizedBox(
+                                        width: mediaWidth * .01,
+                                      ),
+                                      Text(
+                                        '${thisItems['team1']}',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 10, bottom: 10),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        height: mediaWidth * .07,
+                                        width: mediaWidth * .07,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                        ),
+                                        child: Image.network(
+                                            '${thisItems['selectedImageteam2']}'),
+                                      ),
+                                      SizedBox(
+                                        width: mediaWidth * .01,
+                                      ),
+                                      Text(
+                                        '${thisItems['team2']}',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    const Text(
+                                      'Starts at ',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${thisItems['timecontroller']}'
+                                          .toString(),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
                           ),
-                        )
-                  : Container())),
+                        ),
+                      );
+                    },
+                  );
+                } else {
+                  return const Text(
+                    'No Search Results.',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF6fb2d2),
+                    ),
+                  );
+                }
+              }
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }),
+      ),
     );
-  }
-
-  void search() {
-    
-    if (_searchController.text.isNotEmpty) {
-      searchList = matchdetailbox.values
-          .where((detailsList) =>
-              detailsList.team1.toLowerCase().contains(
-                    _searchController.text.toLowerCase(),
-                  ) ||
-              detailsList.team2.toLowerCase().contains(
-                    _searchController.text.toLowerCase(),
-                  ) ||
-              detailsList.category.toLowerCase().contains(
-                    _searchController.text.toLowerCase(),
-                  ))
-          .toList();
-    }
   }
 }

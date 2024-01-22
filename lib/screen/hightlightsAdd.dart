@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fansseathub/helper/widgets/dropdown.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:fansseathub/model/highlights.dart';
@@ -15,11 +16,11 @@ class _AddHighlightsState extends State<AddHighlights> {
   final formkey = GlobalKey<FormState>();
   final TextEditingController urlcontroller = TextEditingController();
   String? selectedType;
-  late Box boxname3;
+  // late Box boxname3;
   @override
   void initState() {
     super.initState();
-    boxname3 = Hive.box<Highlights>('highlights');
+    // boxname3 = Hive.box<Highlights>('highlights');
   }
 
   @override
@@ -74,6 +75,7 @@ class _AddHighlightsState extends State<AddHighlights> {
                 child: ElevatedButton(
                     onPressed: () {
                       if (formkey.currentState!.validate()) {
+                        // addhighlights();
                         addhighlights();
                         Navigator.pop(context);
                       }
@@ -97,13 +99,23 @@ class _AddHighlightsState extends State<AddHighlights> {
     );
   }
 
-  void addhighlights() {
-    String highlightskey = DateTime.now().microsecondsSinceEpoch.toString();
-    Highlights highlights = Highlights(
-        highlightsKey: highlightskey,
-        url: urlcontroller.text,
-        type: selectedType.toString());
-    boxname3.put(highlightskey, highlights);
-    urlcontroller.clear();
+  // void addhighlights() {
+  //   String highlightskey = DateTime.now().microsecondsSinceEpoch.toString();
+  //   Highlights highlights = Highlights(
+  //       highlightsKey: highlightskey,
+  //       url: urlcontroller.text,
+  //       type: selectedType.toString());
+  //   boxname3.put(highlightskey, highlights);
+  //   urlcontroller.clear();
+  // }
+  addhighlights() {
+    DocumentReference documentReference =
+        FirebaseFirestore.instance.collection("youtubevideos").doc();
+    String url = urlcontroller.text;
+    documentReference.set({
+      "url": url,
+      "selectedtype": selectedType,
+    });
+    print("youtubdesaved");
   }
 }

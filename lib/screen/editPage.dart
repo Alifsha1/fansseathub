@@ -1,27 +1,34 @@
 // ignore_for_file: unnecessary_null_comparison
 
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datetime_picker_formfield_new/datetime_picker_formfield.dart';
 import 'package:fansseathub/helper/helper_functions.dart';
 import 'package:fansseathub/helper/widgets/dropdown.dart';
 import 'package:fansseathub/hive/hive_Functions.dart';
 import 'package:fansseathub/model/matchdetails.dart';
+import 'package:fansseathub/sections/assets.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class EditPage extends StatefulWidget {
-  final MatchDetails match;
-  final BuildContext context;
+  final Map<dynamic, dynamic> thisItems;
+  final String id;
+  // final MatchDetails match;
+  // final BuildContext context;
   final dynamic setStateCallback;
   //final Form formkey;
   // final String selectedtype;
   const EditPage({
     super.key,
-    required this.match,
-    required this.context,
+    // required this.match,
+    // required this.context,
     required this.setStateCallback,
+    required this.thisItems,
+    required this.id,
     // required this.formkey,
     // required this.selectedtype
   });
@@ -30,44 +37,50 @@ class EditPage extends StatefulWidget {
   State<EditPage> createState() => _EditPageState();
 }
 
-late Box<MatchDetails> matchdetailbox;
-late List<MatchDetails> matchdetailList;
+// late Box<MatchDetails> matchdetailbox;
+// late List<MatchDetails> matchdetailList;
 
 class _EditPageState extends State<EditPage> {
   final formkey = GlobalKey<FormState>();
   final formattime = DateFormat("HH:mm");
   final formatdate = DateFormat("yyyy-MM-dd");
-  late Box<MatchDetails> matchdetailsbox;
+  late String _initialSelectedType;
+  //late Box<MatchDetails> matchdetailsbox;
 
   @override
   void initState() {
     super.initState();
-    matchdetailbox = Hive.box<MatchDetails>('matchdetails');
-    matchdetailList = matchdetailbox.values.toList();
+    _initialSelectedType = widget.thisItems['selectedtype'];
+    // matchdetailbox = Hive.box<MatchDetails>('matchdetails');
+    // matchdetailList = matchdetailbox.values.toList();
+    print('${widget.thisItems['selectedImageteam1']}');
   }
 
   @override
   Widget build(BuildContext context) {
     final TextEditingController team1Controller =
-        TextEditingController(text: widget.match.team1);
+        TextEditingController(text: widget.thisItems['team1']);
     final TextEditingController team2Controller =
-        TextEditingController(text: widget.match.team2);
+        TextEditingController(text: widget.thisItems['team2']);
     final TextEditingController timeController =
-        TextEditingController(text: widget.match.time.toString());
+        TextEditingController(text: widget.thisItems['timecontroller']);
     final TextEditingController dateController =
-        TextEditingController(text: widget.match.date.toString());
+        TextEditingController(text: widget.thisItems['datecontroller']);
     final TextEditingController categoryController =
-        TextEditingController(text: widget.match.category);
+        TextEditingController(text: widget.thisItems['categorycontroller']);
     final TextEditingController typeController =
-        TextEditingController(text: widget.match.typeofgame);
+        TextEditingController(text: widget.thisItems['selectedtype']);
     final TextEditingController gamenoController =
-        TextEditingController(text: widget.match.gameno);
+        TextEditingController(text: widget.thisItems['gamenocontroller']);
     final TextEditingController stadiumController =
-        TextEditingController(text: widget.match.stadium);
-    String? selectedImageteam1;
-    String? selectedImageteam2;
-    String? matchKey = widget.match.matchKey;
-   
+        TextEditingController(text: widget.thisItems['stadiumcontroller']);
+    File? selectedImageteam1;
+    File? selectedImageteam2;
+    String? team1ImageUrl;
+    String? team2ImageUrl;
+    String? imageUrl;
+
+    // String? matchKey = widget.match.matchKey;
 
     String? selectedType;
     return Scaffold(
@@ -140,25 +153,55 @@ class _EditPageState extends State<EditPage> {
                 Row(
                   children: [
                     GestureDetector(
-                      onTap: () {
-                        pickImageFromGallery().then((pickImage) {
-                          if (pickImage != null) {
-                            setState(() {
-                              widget.match.imagePath1 = pickImage.path;
-                            });
-                          }
-                        });
+                      onTap: () async {
+                        File? pickImage = await pickImageFromGallery();
+                        //then((pickImage) {
+                        if (pickImage != null) {
+                          setState(() {
+                            selectedImageteam1 = pickImage;
+                          });
+                        }
+                        // });
+                        // String fileName =
+                        //     DateTime.now().microsecondsSinceEpoch.toString();
+                        //get reference to storage root
+                        //we create the image folder first and insider folder we upload the image
+                        // Reference referenceRoot =
+                        //     FirebaseStorage.instance.ref();
+                        // Reference referenceDireImage =
+                        //     referenceRoot.child('team1image');
+                        // //we have create reference for the image to be stored
+                        // Reference referenceImageToUpload =
+                        //     referenceDireImage.child(fileName);
+                        // //for error handled and/or success
+                        print(
+                            'firebase image: ${widget.thisItems['selectedImageteam1']}');
+                        print('selected image: $selectedImageteam1');
+                        Reference referenceImageToUpload = FirebaseStorage
+                            .instance
+                            .refFromURL(widget.thisItems['selectedImageteam1']);
+                        try {
+                          await referenceImageToUpload
+                              .putFile(File(pickImage!.path));
+                          team1ImageUrl =
+                              await referenceImageToUpload.getDownloadURL();
+                        } catch (error) {
+                          //some error
+                          print('error uploading $error');
+                        }
+
+                        print('team1 image: $team1ImageUrl');
                       },
                       child: ClipOval(
                         child: selectedImageteam1 != null
                             ? Image.file(
-                                File(selectedImageteam1),
+                                File(selectedImageteam1.path),
                                 fit: BoxFit.cover,
                                 width: 140,
                                 height: 140,
                               )
-                            : Image.file(
-                                File(widget.match.imagePath1),
+                            : Image.network(
+                                widget.thisItems['selectedImageteam1'],
                                 fit: BoxFit.cover,
                                 width: 140,
                                 height: 140,
@@ -198,25 +241,52 @@ class _EditPageState extends State<EditPage> {
                 Row(
                   children: [
                     GestureDetector(
-                      onTap: () {
-                        pickImageFromGallery().then((pickImage) {
-                          if (pickImage != null) {
-                            setState(() {
-                              widget.match.imagePath2 = pickImage.path;
-                            });
-                          }
-                        });
+                      onTap: () async {
+                        File? pickImage = await pickImageFromGallery();
+                        //.then((pickImage) {
+                        if (pickImage != null) {
+                          setState(() {
+                            selectedImageteam2 = pickImage;
+                          });
+                        }
+                        //   });
+                        // String fileName =
+                        //     DateTime.now().microsecondsSinceEpoch.toString();
+                        //get reference to storage root
+                        //we create the image folder first and insider folder we upload the image
+                        // Reference referenceRoot =
+                        //     FirebaseStorage.instance.ref();
+                        // Reference referenceDireImage =
+                        //     referenceRoot.child('team2image');
+                        // //we have create reference for the image to be stored
+                        // Reference referenceImageToUpload =
+                        //     referenceDireImage.child(fileName);
+                        // // Reference referenceImageToUpload =
+                        // //     FirebaseStorage.instance.refFromURL( widget.thisItems['selectedImageteam2']);
+                        //for error handled and/or success
+                        Reference referenceImageToUpload = FirebaseStorage
+                            .instance
+                            .refFromURL(widget.thisItems['selectedImageteam2']);
+
+                        try {
+                          await referenceImageToUpload
+                              .putFile(File(pickImage!.path));
+                          team1ImageUrl =
+                              await referenceImageToUpload.getDownloadURL();
+                        } catch (error) {
+                          //some error
+                        }
                       },
                       child: ClipOval(
                         child: selectedImageteam2 != null
                             ? Image.file(
-                                File(selectedImageteam2),
+                                File(selectedImageteam2.path),
                                 fit: BoxFit.cover,
                                 width: 140,
                                 height: 140,
                               )
-                            : Image.file(
-                                File(widget.match.imagePath2),
+                            : Image.network(
+                                widget.thisItems['selectedImageteam2'],
                                 fit: BoxFit.cover,
                                 width: 140,
                                 height: 140,
@@ -283,11 +353,12 @@ class _EditPageState extends State<EditPage> {
                   height: 10,
                 ),
                 DropDownFormField(
-                  selectedtype: selectedType ?? '',
+                  selectedtype: selectedType ?? _initialSelectedType,
                   hintText: 'selecttype',
                   ontypeoption: (value) {
                     setState(() {
                       selectedType = value;
+                      _initialSelectedType = value;
                       print(value);
                     });
                   },
@@ -354,23 +425,57 @@ class _EditPageState extends State<EditPage> {
                 SizedBox(
                   child: ElevatedButton(
                       onPressed: () {
-                        Repository.updatematchdetails(
-                            MatchDetails(
-                                matchKey: matchKey,
-                                team1: team1Controller.text,
-                                team2: team2Controller.text,
-                                imagePath1: selectedImageteam1 ??
-                                    widget.match.imagePath1,
-                                imagePath2: selectedImageteam2 ??
-                                    widget.match.imagePath2,
-                                time: widget.match.time,
-                                date: widget.match.date,
-                                category: categoryController.text,
-                                gameno: gamenoController.text,
-                                typeofgame: typeController.text,
-                                stadium: stadiumController.text),
-                            matchKey);
+                        DocumentReference documentReference = FirebaseFirestore
+                            .instance
+                            .collection("matches")
+                            .doc(widget.id);
 
+                        String team1 = team1Controller.text;
+                        String team2 = team2Controller.text;
+                        String category = categoryController.text;
+                        String date = dateController.text;
+                        String gameno = gamenoController.text;
+                        String stadium = stadiumController.text;
+                        String time = timeController.text;
+                        String type = typeController.text;
+
+                        // try {
+                        //   await referenceImageToUpload.putFile(image);
+                        //   String downloadURL = await referenceImageToUpload.getDownloadURL();
+                        // } catch (error) {
+                        //   print('Error uploading image: $error');
+                        // }
+
+                        // String team1ImagePath = await uploadImage(_selectedImageteam1!, 'team1image');
+                        //   String team2ImagePath = await uploadImage(_selectedImageteam2!, 'team2image');
+
+                        print("on updating team 1 $team1ImageUrl");
+                        documentReference.update({
+                          // "team1": team1controller,
+                          // "team2": team2controller,
+                          // "selectedImageteam1": _selectedImageteam1!.path,
+                          // "selectedImageteam2": _selectedImageteam2!.path,
+                          // "categorycontroller": categorycontroller,
+                          // "datecontroller": datecontroller,
+                          // "gamenocontroller": gamenocontroller,
+                          // "matchdetailsbox": matchdetailsbox,
+                          // "stadiumcontroller": stadiumcontroller,
+                          // "timecontroller": timecontroller,
+                          // "typecontroller": typecontroller,
+                          // "selectedtype": selectedType
+                          "team1": team1,
+                          "team2": team2,
+                          "selectedImageteam1": team1ImageUrl,
+                          "selectedImageteam2": team2ImageUrl,
+                          "categorycontroller": category,
+                          "datecontroller": date,
+                          "gamenocontroller": gameno,
+                          // "matchdetailsbox": matchdetailsbox,
+                          "stadiumcontroller": stadium,
+                          "timecontroller": time,
+                          "typecontroller": type,
+                          "selectedtype": _initialSelectedType,
+                        });
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(

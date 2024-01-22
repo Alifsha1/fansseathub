@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fansseathub/helper/helper_functions.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:fansseathub/model/matchdetails.dart';
@@ -15,17 +16,19 @@ class AdminHomeScreen extends StatefulWidget {
 }
 
 final _formKey = GlobalKey<FormState>();
-late Box<MatchDetails> matchdetailbox;
-late List<MatchDetails> matchdetailList;
+// late Box<MatchDetails> matchdetailbox;
+// late List<MatchDetails> matchdetailList;
 
 class _AdminHomeScreenState extends State<AdminHomeScreen> {
   final bool _isUserSigned = false;
   final bool _isAdminSigned = false;
+  late Stream<QuerySnapshot> _stream;
   @override
   void initState() {
-    matchdetailbox = Hive.box<MatchDetails>('matchdetails');
-    matchdetailList = matchdetailbox.values.toList();
+    // matchdetailbox = Hive.box<MatchDetails>('matchdetails');
+    // matchdetailList = matchdetailbox.values.toList();
     super.initState();
+    _stream = FirebaseFirestore.instance.collection('matches').snapshots();
   }
 
   AuthService authService = AuthService();
@@ -62,98 +65,142 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
               const SizedBox(
                 height: 20,
               ),
-              ValueListenableBuilder(
-                  valueListenable: matchdetailbox.listenable(),
-                  builder: (context, Box<MatchDetails> box, widget) {
-                    matchdetailList = box.values.toList();
-                    return SizedBox(
-                      height: mediaHeight - 200, // Adjust the height as needed
-                      child: ListView.builder(
-                        itemCount: matchdetailList.length,
-                        itemBuilder: (context, index) {
-                          final match = matchdetailList[index];
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              height: mediaHeight * 0.1,
-                              width: MediaQuery.of(context).size.width * 0.1,
-                              decoration: const BoxDecoration(
-                                color: Color.fromARGB(255, 204, 197, 197),
-                              ),
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.2,
-                                  ),
-                                  Expanded(
-                                      child: Text(
-                                    match.team1,
-                                    style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  )),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  const Text(
-                                    'VS',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                      child: Text(
-                                    match.team2,
-                                    style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  )),
-                                  SizedBox(
-                                    width: mediaWidth * .1,
-                                  ),
-                                  IconButton(
-                                      onPressed: () {
-                                        // showEditingDialog(
-                                        //     context,
-                                        //     match,
-                                        //     _formKey,
-                                        //     mediaWidth,
-                                        //     mediaHeight,
-                                        //     setState);
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) => EditPage(
-                                              match: match,
-                                              context: context,
-                                              setStateCallback: setState,
+              // ValueListenableBuilder(
+              //     valueListenable: matchdetailbox.listenable(),
+              //     builder: (context, Box<MatchDetails> box, widget) {
+              //       matchdetailList = box.values.toList();
+              //       return
+              SizedBox(
+                  height: mediaHeight - 200, // Adjust the height as needed
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: _stream,
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text("Some Error occured${snapshot.error}"),
+                        );
+                      }
+                      if (snapshot.hasData) {
+                        QuerySnapshot querySnapshot = snapshot.data;
+                        List<QueryDocumentSnapshot> document =
+                            querySnapshot.docs;
+                        List<Map> items =
+                            document.map((e) => e.data() as Map).toList();
+
+                        return ListView.builder(
+                          itemCount: items.length,
+                          itemBuilder: (context, index) {
+                            Map thisItems = items[index];
+                            String id = snapshot.data.docs[index].id;
+                            // print(id);
+
+                            // final match = matchdetailList[index];
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                height: mediaHeight * 0.1,
+                                width: MediaQuery.of(context).size.width * 0.1,
+                                decoration: const BoxDecoration(
+                                  color: Color.fromARGB(255, 204, 197, 197),
+                                ),
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.2,
+                                    ),
+                                    Expanded(
+                                        child: Text(
+                                      '${thisItems['team1']}',
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    )),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    const Text(
+                                      'VS',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Expanded(
+                                        child: Text(
+                                      '${thisItems['team2']}',
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    )),
+                                    SizedBox(
+                                      width: mediaWidth * .1,
+                                    ),
+                                    IconButton(
+                                        onPressed: () {
+                                          // showEditingDialog(
+                                          //     context,
+                                          //     match,
+                                          //     _formKey,
+                                          //     mediaWidth,
+                                          //     mediaHeight,
+                                          //     setState);
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) => EditPage(
+                                                thisItems: thisItems,
+                                                setStateCallback: setState,
+                                                id: id,
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      },
-                                      icon: const Icon(Icons.edit)),
-                                  IconButton(
-                                      onPressed: () {
-                                        //Repository.deleteData(match.matchKey);
-                                        showDeleteConfirmationDialog(
-                                            context, match.matchKey);
-                                      },
-                                      icon: const Icon(Icons.delete)),
-                                ],
+                                          );
+                                        },
+                                        icon: const Icon(Icons.edit)),
+                                    IconButton(
+                                        onPressed: () {
+                                          //Repository.deleteData(match.matchKey);
+                                          // showDeleteConfirmationDialog(
+                                          //     context, match.matchKey);
+                                          DocumentReference documentReference =
+                                              FirebaseFirestore.instance
+                                                  .collection("matches")
+                                                  .doc(id);
+                                          documentReference
+                                              .delete()
+                                              .whenComplete(() {
+                                            print('');
+                                          });
+                                        },
+                                        icon: const Icon(Icons.delete)),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  })
+                            );
+                          },
+                        );
+                      }
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    },
+                  ))
+              // }
+              // )
             ],
           ),
         ),
       )),
     );
+  }
+
+  deleteData() {
+    print("deleted");
+    DocumentReference documentReference =
+        FirebaseFirestore.instance.collection("").doc();
+    documentReference.delete().whenComplete(() {
+      print('');
+    });
   }
 }

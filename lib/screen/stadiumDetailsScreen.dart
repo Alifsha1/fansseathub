@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fansseathub/helper/helper_functions.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:fansseathub/model/stadiumdetails.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -34,13 +36,13 @@ class _AddStadiumDetails extends State<AddStadiumDetails> {
       TextEditingController();
   final TextEditingController acBox20controller = TextEditingController();
   final TextEditingController acBox20pricecontroller = TextEditingController();
-
+   String? stadiumImageUrl;
   File? _selectedImage;
-  late Box boxname2;
+  // late Box boxname2;
   @override
   void initState() {
     super.initState();
-    boxname2 = Hive.box<StadiumDetails>('stadiumdetails');
+    // boxname2 = Hive.box<StadiumDetails>('stadiumdetails');
   }
 
   @override
@@ -76,7 +78,6 @@ class _AddStadiumDetails extends State<AddStadiumDetails> {
                     AdminSideHeadingsBlack(headings: 'Details'),
                   ],
                 ),
-                
                 SizedBox(
                   height: mediaHeight * .05,
                 ),
@@ -86,6 +87,25 @@ class _AddStadiumDetails extends State<AddStadiumDetails> {
                     setState(() {
                       _selectedImage = pickimage;
                     });
+                    String fileName =
+                        DateTime.now().microsecondsSinceEpoch.toString();
+                    //get reference to storage root
+                    //we create the image folder first and insider folder we upload the image
+                    Reference referenceRoot = FirebaseStorage.instance.ref();
+                    Reference referenceDireImage =
+                        referenceRoot.child('stadiumimage');
+                    //we have create reference for the image to be stored
+                    Reference referenceImageToUpload =
+                        referenceDireImage.child(fileName);
+                    //for error handled and/or success
+                    try {
+                      await referenceImageToUpload
+                          .putFile(File(pickimage!.path));
+                           stadiumImageUrl =
+                          await referenceImageToUpload.getDownloadURL();
+                    } catch (error) {
+                      //some error
+                    }
                   },
                   child: _selectedImage != null
                       ? CircleAvatar(
@@ -200,7 +220,8 @@ class _AddStadiumDetails extends State<AddStadiumDetails> {
                   child: ElevatedButton(
                       onPressed: () {
                         if (formkey.currentState!.validate()) {
-                          addstadiumdetails();
+                          //addstadiumdetails();
+                          addstadiumdetailstofirebase();
                           Navigator.pop(context);
                         }
                       },
@@ -237,25 +258,72 @@ class _AddStadiumDetails extends State<AddStadiumDetails> {
       ));
       return;
     } else {
-      String stadiumKey = DateTime.now().microsecondsSinceEpoch.toString();
-      StadiumDetails stadiumDetails = StadiumDetails(
-          stadiumKey: stadiumKey,
-          imagePathstadium: _selectedImage!.path,
-          stadiumname: stadiumnamecontroller.text,
-          stands1: guestStandcontroller.text,
-          ticketcharge1: guestStandpricecontroller.text,
-          stands2: eastStanduppercontroller.text,
-          ticketcharge2: eastStandupperpricecontroller.text,
-          stands3: eastStandlowercontroller.text,
-          ticketcharge3: eastStandlowerpricecontroller.text,
-          stands4: northcontroller.text,
-          ticketcharge4: northpricecontroller.text,
-          standsac1: acBoxseat15controller.text,
-          ticketchargeac1: acBoxseat15pricecontroller.text,
-          standsac2: acBox20controller.text,
-          ticketchargeac2: acBox20pricecontroller.text);
-      boxname2.put(stadiumKey, stadiumDetails);
-    
+      // String stadiumKey = DateTime.now().microsecondsSinceEpoch.toString();
+      // StadiumDetails stadiumDetails = StadiumDetails(
+      //     stadiumKey: stadiumKey,
+      //     imagePathstadium: _selectedImage!.path,
+      //     stadiumname: stadiumnamecontroller.text,
+      //     stands1: guestStandcontroller.text,
+      //     ticketcharge1: guestStandpricecontroller.text,
+      //     stands2: eastStanduppercontroller.text,
+      //     ticketcharge2: eastStandupperpricecontroller.text,
+      //     stands3: eastStandlowercontroller.text,
+      //     ticketcharge3: eastStandlowerpricecontroller.text,
+      //     stands4: northcontroller.text,
+      //     ticketcharge4: northpricecontroller.text,
+      //     standsac1: acBoxseat15controller.text,
+      //     ticketchargeac1: acBoxseat15pricecontroller.text,
+      //     standsac2: acBox20controller.text,
+      //     ticketchargeac2: acBox20pricecontroller.text);
+      // boxname2.put(stadiumKey, stadiumDetails);
+    }
+  }
+
+  addstadiumdetailstofirebase() async {
+    if (_selectedImage == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        backgroundColor: Colors.red,
+        content: Text(
+          'You Must select an image',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ));
+      return;
+    } else {
+      DocumentReference documentReference =
+          FirebaseFirestore.instance.collection("stadiums").doc();
+
+      String stadiumname = stadiumnamecontroller.text;
+      String stands1 = guestStandcontroller.text;
+      String ticketcharge1 = guestStandpricecontroller.text;
+      String stands2 = eastStanduppercontroller.text;
+      String ticketcharge2 = eastStandupperpricecontroller.text;
+      String stands3 = eastStandlowercontroller.text;
+      String ticketcharge3 = eastStandlowerpricecontroller.text;
+      String stands4 = northcontroller.text;
+      String ticketcharge4 = northpricecontroller.text;
+      String standsac1 = acBoxseat15controller.text;
+      String ticketchargeac1 = acBoxseat15pricecontroller.text;
+      String standsac2 = acBox20controller.text;
+      String ticketchargeac2 = acBox20pricecontroller.text;
+      documentReference.set({
+        "imagePathstadium": stadiumImageUrl,
+        "stadiumname": stadiumname,
+        "stands1": stands1,
+        "ticketcharge1": ticketcharge1,
+        "stands2": stands2,
+        "ticketcharge2": ticketcharge2,
+        "stands3": stands3,
+        "ticketcharge3": ticketcharge3,
+        "stands4": stands4,
+        "ticketcharge4": ticketcharge4,
+        "standsac1": standsac1,
+        "ticketchargeac1": ticketchargeac1,
+        "standsac2": standsac2,
+        "ticketchargeac2": ticketchargeac2,
+      });
     }
   }
 }

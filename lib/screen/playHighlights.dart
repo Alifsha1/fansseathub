@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, unnecessary_null_comparison
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:fansseathub/hive/hive_Functions.dart';
 import 'package:fansseathub/model/highlights.dart';
@@ -91,10 +92,9 @@ class _PlayHighlightsState extends State<PlayHighlights> {
                       Container(
                         width: mediaWidth * 0.87,
                         height: mediaHeight,
-                        decoration: const BoxDecoration(
-                            ),
-                        child: FutureBuilder(
-                            future: getYoutubeVideosWithThumbnails(),
+                        decoration: const BoxDecoration(),
+                         child:FutureBuilder(
+                            future: getYoutubeVideosWithThumbnailsFromFirestore(),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.done) {
@@ -104,21 +104,21 @@ class _PlayHighlightsState extends State<PlayHighlights> {
                                 return GridView.builder(
                                   gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          crossAxisSpacing: 15.0,
-                                          mainAxisSpacing: 9.0),
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 15.0,
+                                    mainAxisSpacing: 9.0,
+                                  ),
                                   itemCount: videosWithThumbnails.length,
                                   itemBuilder: (context, index) {
                                     final video = videosWithThumbnails[index]
-                                        ['video'] as Highlights;
+                                        ['video'] ;
                                     final thumbnailUrl =
                                         videosWithThumbnails[index]
                                             ['thumbnailUrl'];
                                     return GestureDetector(
                                       onTap: () async {
                                         Map<String, String>? videoInfo =
-                                            await getYouTubeThumbnail(
-                                                video.url);
+                                            await getYouTubeThumbnail(video['url']);
                                         if (videoInfo != null) {
                                           String videoTitle =
                                               videoInfo['videoTitle'] ??
@@ -129,7 +129,7 @@ class _PlayHighlightsState extends State<PlayHighlights> {
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   PlayHighlights(
-                                                videourl: video.url,
+                                                videourl: video['url'],
                                                 videotitle: videoTitle,
                                               ),
                                             ),
@@ -139,7 +139,6 @@ class _PlayHighlightsState extends State<PlayHighlights> {
                                       child: Image.network(
                                         thumbnailUrl['thumbnailUrl'],
                                         fit: BoxFit.fill,
-                                        //height: 120,
                                       ),
                                     );
                                   },
@@ -148,7 +147,63 @@ class _PlayHighlightsState extends State<PlayHighlights> {
                                 return const Center(
                                     child: CircularProgressIndicator());
                               }
-                            }),
+                            })
+                        // FutureBuilder(
+                        //     future: getYoutubeVideosWithThumbnailsFromFirestore(),
+                        //     builder: (context, snapshot) {
+                        //       if (snapshot.connectionState ==
+                        //           ConnectionState.done) {
+                        //         final List<Map<String, dynamic>>
+                        //             videosWithThumbnails =
+                        //             snapshot.data as List<Map<String, dynamic>>;
+                        //         return GridView.builder(
+                        //           gridDelegate:
+                        //               const SliverGridDelegateWithFixedCrossAxisCount(
+                        //                   crossAxisCount: 2,
+                        //                   crossAxisSpacing: 15.0,
+                        //                   mainAxisSpacing: 9.0),
+                        //           itemCount: videosWithThumbnails.length,
+                        //           itemBuilder: (context, index) {
+                        //             final video = videosWithThumbnails[index]
+                        //                 ['video'] as Highlights;
+                        //             final thumbnailUrl =
+                        //                 videosWithThumbnails[index]
+                        //                     ['thumbnailUrl'];
+                        //             return GestureDetector(
+                        //               onTap: () async {
+                        //                 Map<String, String>? videoInfo =
+                        //                     await getYouTubeThumbnail(
+                        //                         video.url);
+                        //                 if (videoInfo != null) {
+                        //                   String videoTitle =
+                        //                       videoInfo['videoTitle'] ??
+                        //                           'Video Title Not Available';
+
+                        //                   Navigator.push(
+                        //                     context,
+                        //                     MaterialPageRoute(
+                        //                       builder: (context) =>
+                        //                           PlayHighlights(
+                        //                         videourl: video.url,
+                        //                         videotitle: videoTitle,
+                        //                       ),
+                        //                     ),
+                        //                   );
+                        //                 }
+                        //               },
+                        //               child: Image.network(
+                        //                 thumbnailUrl['thumbnailUrl'],
+                        //                 fit: BoxFit.fill,
+                        //                 //height: 120,
+                        //               ),
+                        //             );
+                        //           },
+                        //         );
+                        //       } else {
+                        //         return const Center(
+                        //             child: CircularProgressIndicator());
+                        //       }
+                        //     }),
                       ),
                     ],
                   ),
@@ -161,21 +216,38 @@ class _PlayHighlightsState extends State<PlayHighlights> {
     );
   }
 
-  Future<List<Map<String, dynamic>>> getYoutubeVideosWithThumbnails() async {
-    final box = await Hive.box<Highlights>('highlights');
-    final videos = box.values.toList();
-    final videosWithThumbnails = <Map<String, dynamic>>[];
+  // Future<List<Map<String, dynamic>>> getYoutubeVideosWithThumbnails() async {
+  //   final box = await Hive.box<Highlights>('highlights');
+  //   final videos = box.values.toList();
+  //   final videosWithThumbnails = <Map<String, dynamic>>[];
 
-    for (final video in videos) {
-      final thumbnailUrl = await getYouTubeThumbnail(video.url);
-      videosWithThumbnails.add({
-        'video': video,
-        'thumbnailUrl': thumbnailUrl,
-      });
-    }
+  //   for (final video in videos) {
+  //     final thumbnailUrl = await getYouTubeThumbnail(video.url);
+  //     videosWithThumbnails.add({
+  //       'video': video,
+  //       'thumbnailUrl': thumbnailUrl,
+  //     });
+  //   }
 
-    return videosWithThumbnails;
+  //   return videosWithThumbnails;
+  // }
+  Future<List<Map<String, dynamic>>> getYoutubeVideosWithThumbnailsFromFirestore() async {
+  final collectionReference = FirebaseFirestore.instance.collection('youtubevideos');
+  final querySnapshot = await collectionReference.get();
+  final videos = querySnapshot.docs.map((doc) => doc.data()).toList();
+  final videosWithThumbnails = <Map<String, dynamic>>[];
+
+  for (final video in videos) {
+     final url = video['url'] as String; 
+    final thumbnailUrl = await getYouTubeThumbnail(url);
+    videosWithThumbnails.add({
+      'video': video,
+      'thumbnailUrl': thumbnailUrl,
+    });
   }
+
+  return videosWithThumbnails;
+}
 
   Future<Map<String, String>?> getYouTubeThumbnail(String videoUrl) async {
     final regExp = RegExp(

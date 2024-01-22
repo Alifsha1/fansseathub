@@ -22,8 +22,8 @@ void main() async {
   Hive.registerAdapter<StadiumDetails>(StadiumDetailsAdapter());
   await Hive.openBox<StadiumDetails>('stadiumdetails');
 
-  Hive.registerAdapter<Highlights>(HighlightsAdapter());
-  await Hive.openBox<Highlights>('highlights');
+  // Hive.registerAdapter<Highlights>(HighlightsAdapter());
+  // await Hive.openBox<Highlights>('highlights');
 
   runApp(const MyApp());
 }

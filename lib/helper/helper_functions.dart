@@ -55,6 +55,14 @@ class HelperFunction {
     SharedPreferences sf = await SharedPreferences.getInstance();
     return sf.getBool(adminloggedInkey);
   }
+  static Future<String?> getUserEmailFromSF()async{
+  SharedPreferences sf = await SharedPreferences.getInstance();
+  return sf.getString(userEmailkey);
+}
+static Future<String?> getUserNameFromSF()async{
+  SharedPreferences sf = await SharedPreferences.getInstance();
+  return sf.getString(userNameKey);
+}
 }
 
 Future<File?> pickImageFromGallery() async {
