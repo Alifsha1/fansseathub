@@ -3,10 +3,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:fansseathub/hive/hive_Functions.dart';
-import 'package:fansseathub/model/highlights.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class PlayHighlights extends StatefulWidget {
@@ -60,7 +58,7 @@ class _PlayHighlightsState extends State<PlayHighlights> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
+            physics: const AlwaysScrollableScrollPhysics(),
             child: Column(
               children: [
                 Container(
@@ -148,62 +146,6 @@ class _PlayHighlightsState extends State<PlayHighlights> {
                                     child: CircularProgressIndicator());
                               }
                             })
-                        // FutureBuilder(
-                        //     future: getYoutubeVideosWithThumbnailsFromFirestore(),
-                        //     builder: (context, snapshot) {
-                        //       if (snapshot.connectionState ==
-                        //           ConnectionState.done) {
-                        //         final List<Map<String, dynamic>>
-                        //             videosWithThumbnails =
-                        //             snapshot.data as List<Map<String, dynamic>>;
-                        //         return GridView.builder(
-                        //           gridDelegate:
-                        //               const SliverGridDelegateWithFixedCrossAxisCount(
-                        //                   crossAxisCount: 2,
-                        //                   crossAxisSpacing: 15.0,
-                        //                   mainAxisSpacing: 9.0),
-                        //           itemCount: videosWithThumbnails.length,
-                        //           itemBuilder: (context, index) {
-                        //             final video = videosWithThumbnails[index]
-                        //                 ['video'] as Highlights;
-                        //             final thumbnailUrl =
-                        //                 videosWithThumbnails[index]
-                        //                     ['thumbnailUrl'];
-                        //             return GestureDetector(
-                        //               onTap: () async {
-                        //                 Map<String, String>? videoInfo =
-                        //                     await getYouTubeThumbnail(
-                        //                         video.url);
-                        //                 if (videoInfo != null) {
-                        //                   String videoTitle =
-                        //                       videoInfo['videoTitle'] ??
-                        //                           'Video Title Not Available';
-
-                        //                   Navigator.push(
-                        //                     context,
-                        //                     MaterialPageRoute(
-                        //                       builder: (context) =>
-                        //                           PlayHighlights(
-                        //                         videourl: video.url,
-                        //                         videotitle: videoTitle,
-                        //                       ),
-                        //                     ),
-                        //                   );
-                        //                 }
-                        //               },
-                        //               child: Image.network(
-                        //                 thumbnailUrl['thumbnailUrl'],
-                        //                 fit: BoxFit.fill,
-                        //                 //height: 120,
-                        //               ),
-                        //             );
-                        //           },
-                        //         );
-                        //       } else {
-                        //         return const Center(
-                        //             child: CircularProgressIndicator());
-                        //       }
-                        //     }),
                       ),
                     ],
                   ),
@@ -215,22 +157,6 @@ class _PlayHighlightsState extends State<PlayHighlights> {
       ),
     );
   }
-
-  // Future<List<Map<String, dynamic>>> getYoutubeVideosWithThumbnails() async {
-  //   final box = await Hive.box<Highlights>('highlights');
-  //   final videos = box.values.toList();
-  //   final videosWithThumbnails = <Map<String, dynamic>>[];
-
-  //   for (final video in videos) {
-  //     final thumbnailUrl = await getYouTubeThumbnail(video.url);
-  //     videosWithThumbnails.add({
-  //       'video': video,
-  //       'thumbnailUrl': thumbnailUrl,
-  //     });
-  //   }
-
-  //   return videosWithThumbnails;
-  // }
   Future<List<Map<String, dynamic>>> getYoutubeVideosWithThumbnailsFromFirestore() async {
   final collectionReference = FirebaseFirestore.instance.collection('youtubevideos');
   final querySnapshot = await collectionReference.get();

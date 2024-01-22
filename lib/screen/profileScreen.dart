@@ -18,14 +18,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text(
+        title: const Text(
           'Profile',
           style: TextStyle(
               color: Colors.black, fontSize: 27, fontWeight: FontWeight.bold),
         ),
       ),
       body: SafeArea(
-        //padding: EdgeInsets.symmetric(horizontal: 40, vertical: 170),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
@@ -36,35 +35,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 size: 200,
                 color: Colors.grey[700],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     "Full Name",
                     style: TextStyle(fontSize: 17),
                   ),
                   Text(
                     widget.username,
-                    style: TextStyle(fontSize: 17, color: Colors.black),
+                    style: const TextStyle(fontSize: 17, color: Colors.black),
                   ),
                 ],
               ),
-              Divider(
+              const Divider(
                 height: 20,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     "email ",
                     style: TextStyle(fontSize: 17),
                   ),
                   Text(
                     widget.email,
-                    style: TextStyle(fontSize: 17),
+                    style: const TextStyle(fontSize: 17),
                   ),
                 ],
               ),

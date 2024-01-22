@@ -3,11 +3,8 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fansseathub/helper/helper_functions.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
-import 'package:fansseathub/model/stadiumdetails.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-
 class AddStadiumDetails extends StatefulWidget {
   const AddStadiumDetails({super.key});
 
@@ -220,7 +217,6 @@ class _AddStadiumDetails extends State<AddStadiumDetails> {
                   child: ElevatedButton(
                       onPressed: () {
                         if (formkey.currentState!.validate()) {
-                          //addstadiumdetails();
                           addstadiumdetailstofirebase();
                           Navigator.pop(context);
                         }
@@ -258,24 +254,6 @@ class _AddStadiumDetails extends State<AddStadiumDetails> {
       ));
       return;
     } else {
-      // String stadiumKey = DateTime.now().microsecondsSinceEpoch.toString();
-      // StadiumDetails stadiumDetails = StadiumDetails(
-      //     stadiumKey: stadiumKey,
-      //     imagePathstadium: _selectedImage!.path,
-      //     stadiumname: stadiumnamecontroller.text,
-      //     stands1: guestStandcontroller.text,
-      //     ticketcharge1: guestStandpricecontroller.text,
-      //     stands2: eastStanduppercontroller.text,
-      //     ticketcharge2: eastStandupperpricecontroller.text,
-      //     stands3: eastStandlowercontroller.text,
-      //     ticketcharge3: eastStandlowerpricecontroller.text,
-      //     stands4: northcontroller.text,
-      //     ticketcharge4: northpricecontroller.text,
-      //     standsac1: acBoxseat15controller.text,
-      //     ticketchargeac1: acBoxseat15pricecontroller.text,
-      //     standsac2: acBox20controller.text,
-      //     ticketchargeac2: acBox20pricecontroller.text);
-      // boxname2.put(stadiumKey, stadiumDetails);
     }
   }
 

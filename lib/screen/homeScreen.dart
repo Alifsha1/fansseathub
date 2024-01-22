@@ -5,8 +5,6 @@ import 'package:fansseathub/screen/matchDetailsScreen.dart';
 import 'package:fansseathub/sections/assets.dart';
 import 'package:fansseathub/sections/catogory.dart';
 import 'package:fansseathub/services/auth_service.dart';
-import 'package:fansseathub/services/database_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {

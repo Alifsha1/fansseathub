@@ -21,7 +21,6 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
     _stream = FirebaseFirestore.instance.collection('matches').snapshots();
-    //searchList = [];
     super.initState();
   }
 

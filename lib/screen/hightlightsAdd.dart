@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fansseathub/helper/widgets/dropdown.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
-import 'package:fansseathub/model/highlights.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 
 class AddHighlights extends StatefulWidget {
   const AddHighlights({super.key});
@@ -26,6 +24,7 @@ class _AddHighlightsState extends State<AddHighlights> {
   @override
   Widget build(BuildContext context) {
     final mediaHeight = MediaQuery.of(context).size.height;
+    // ignore: non_constant_identifier_names
     final Space = SizedBox(
       height: mediaHeight * .01,
     );
@@ -49,6 +48,7 @@ class _AddHighlightsState extends State<AddHighlights> {
           key: formkey,
           child: Column(
             children: [
+              // ignore: prefer_const_constructors
               AdminSideHeadingsBlack(headings: 'Add New Hightlights'),
               SizedBox(
                 height: mediaHeight * .05,
@@ -116,6 +116,5 @@ class _AddHighlightsState extends State<AddHighlights> {
       "url": url,
       "selectedtype": selectedType,
     });
-    print("youtubdesaved");
   }
 }

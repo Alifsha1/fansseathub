@@ -1,9 +1,7 @@
-import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
-import 'package:fansseathub/model/stadiumdetails.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 
 class DetailsOfStadium extends StatefulWidget {
   final String stadium;
@@ -14,36 +12,21 @@ class DetailsOfStadium extends StatefulWidget {
 }
 
 class _DetailsOfStadiumState extends State<DetailsOfStadium> {
-  // late Box<StadiumDetails> stadiumdetailsbox;
-  // late List<StadiumDetails> stadiumdetailslist;
   late Stream<QuerySnapshot> _stream;
   @override
   void initState() {
     print(widget.stadium);
     super.initState();
-    // stadiumdetailsbox = Hive.box<StadiumDetails>('stadiumdetails');
-    // stadiumdetailslist = [];
     _stream = FirebaseFirestore.instance
         .collection('stadiums')
         .where('stadiumname',
             isEqualTo: widget.stadium)
         .snapshots();
-    print(_stream);
-     print(widget.stadium);
   }
 
   @override
   Widget build(BuildContext context) {
     final mediaWidth = MediaQuery.of(context).size.width;
-    //final mediaHeight = MediaQuery.of(context).size.height;
-    // stadiumdetailslist = stadiumdetailsbox.values
-    //     .toList()
-    //     .where((element) =>
-    //         widget.stadium.toLowerCase() == element.stadiumname.toLowerCase())
-    //     .toList();
-
-    // final stadiums = stadiumdetailslist;
-
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -62,14 +45,6 @@ class _DetailsOfStadiumState extends State<DetailsOfStadium> {
                     const Heading(),
                   ],
                 ),
-                // const Padding(
-                //   padding: EdgeInsets.all(8.0),
-                //   child: Row(
-                //     children: [
-                //       AdminSideHeadingsBlack(headings: 'Details'),
-                //     ],
-                //   ),
-                // ),
                 StreamBuilder<QuerySnapshot>(
                   stream: _stream,
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -83,11 +58,6 @@ class _DetailsOfStadiumState extends State<DetailsOfStadium> {
                       List<QueryDocumentSnapshot> document = querySnapshot.docs;
                       List<Map> items =
                           document.map((e) => e.data() as Map).toList();
-                      //             return ListView.builder(
-                      // shrinkWrap: true,
-                      // itemCount: stadiums.length,
-                      // itemBuilder: (context, index) {
-                      //   final stadium = stadiums[index];
                       return Column(
                         children: [
                           Padding(
@@ -214,8 +184,6 @@ class _DetailsOfStadiumState extends State<DetailsOfStadium> {
                           )
                         ],
                       );
-                      //},
-                      //),
                     }
                     return const Center(
                       child: CircularProgressIndicator(),

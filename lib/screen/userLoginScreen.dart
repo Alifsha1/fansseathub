@@ -20,7 +20,7 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
   String email = "";
   String password = "";
   // ignore: unused_field
-  bool _isLoading = false;
+  final bool _isLoading = false;
   AuthService authService = AuthService();
   @override
   Widget build(BuildContext context) {

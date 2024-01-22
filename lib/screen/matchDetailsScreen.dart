@@ -1,15 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
-
-import 'package:fansseathub/model/highlights.dart';
-import 'package:fansseathub/model/matchdetails.dart';
 import 'package:fansseathub/screen/playHighlights.dart';
 import 'package:fansseathub/screen/stadiumDetailsShowing.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class MatchDetailsScreen extends StatefulWidget {
@@ -26,16 +21,11 @@ class MatchDetailsScreen extends StatefulWidget {
 }
 
 class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
-  // late Box<MatchDetails> matchdetailsbox;
-  // late List<MatchDetails> matchdetailslist;
   late Stream<QuerySnapshot> _stream;
   String stadiumname = ' ';
   @override
   void initState() {
     super.initState();
-
-    // matchdetailsbox = Hive.box<MatchDetails>('matchdetails');
-    // matchdetailslist = [];
     _stream = FirebaseFirestore.instance
         .collection('matches')
         .where('selectedtype', isEqualTo: widget.type!.toUpperCase())
@@ -46,12 +36,6 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
   Widget build(BuildContext context) {
     final mediaWidth = MediaQuery.of(context).size.width;
     final mediaHeight = MediaQuery.of(context).size.height;
-    // matchdetailslist = matchdetailsbox.values
-    //     .toList()
-    //     .where((element) =>
-    //         widget.type!.toLowerCase() == element.typeofgame.toLowerCase())
-    //     .toList();
-    // final matchs = matchdetailslist[0];
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -94,11 +78,7 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
                               querySnapshot.docs;
                           List<Map> items =
                               document.map((e) => e.data() as Map).toList();
-                          stadiumname = items[0]['stadiumcontroller'];
-                          // return ListView.builder(
-                          //   itemCount: 1,
-                          //   itemBuilder: (context, index) {
-                          //  Map thisItems = items[0];
+                          stadiumname = items[0]['stadiumcontroller']; 
                           return Column(
                             children: [
                               Padding(
@@ -269,10 +249,6 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
                               itemCount: items.length - 1,
                               itemBuilder: (BuildContext context, int index) {
                                 Map thisItems = items[index + 1];
-                                // if (index == 0) {
-                                //   return const SizedBox.shrink();
-                                // } else {
-                                // MatchDetails matchss = matchdetailslist[index];
                                 return GestureDetector(
                                   onTap: () {
                                     Navigator.push(
@@ -413,75 +389,6 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           children: [
-                            // Container(
-                            //   width: mediaWidth * 0.87,
-                            //   height: mediaHeight,
-                            //   decoration: const BoxDecoration(
-                            //       // borderRadius: BorderRadius.circular(10),
-                            //       ),
-                            //   child: FutureBuilder(
-                            //       future: getYoutubeVideosWithThumbnailsFromFirestore(),
-                            //       builder: (context, snapshot) {
-                            //         if (snapshot.connectionState ==
-                            //             ConnectionState.done) {
-                            //           final List<Map<String, dynamic>>
-                            //               videosWithThumbnails = snapshot.data
-                            //                   as List<Map<String, dynamic>>;
-                            //           return GridView.builder(
-                            //             //   child: ListView.builder(
-                            //             gridDelegate:
-                            //                 const SliverGridDelegateWithFixedCrossAxisCount(
-                            //                     crossAxisCount: 2,
-                            //                     crossAxisSpacing: 15.0,
-                            //                     mainAxisSpacing: 9.0),
-                            //             itemCount: videosWithThumbnails.length,
-                            //             itemBuilder: (context, index) {
-                            //               final video =
-                            //                   videosWithThumbnails[index]
-                            //                       ['video'] ;
-                            //               final thumbnailUrl =
-                            //                   videosWithThumbnails[index]
-                            //                       ['thumbnailUrl'];
-                            //               return GestureDetector(
-                            //                 onTap: () async {
-                            //                   Map<String, String>? videoInfo =
-                            //                       await getYouTubeThumbnail(
-                            //                           video.url);
-                            //                   if (videoInfo != null) {
-                            //                     String videoTitle = videoInfo[
-                            //                             'videoTitle'] ??
-                            //                         'Video Title Not Available';
-
-                            //                     Navigator.push(
-                            //                       context,
-                            //                       MaterialPageRoute(
-                            //                         builder: (context) =>
-                            //                             PlayHighlights(
-                            //                           // videourl: videos[index].url,
-                            //                           videourl: video.url,
-                            //                           videotitle: videoTitle,
-
-                            //                           //  videoid: ,
-                            //                         ),
-                            //                       ),
-                            //                     );
-                            //                   }
-                            //                 },
-                            //                 child: Image.network(
-                            //                   thumbnailUrl['thumbnailUrl'],
-                            //                   fit: BoxFit.fill,
-                            //                   //height: 120,
-                            //                 ),
-                            //               );
-                            //             },
-                            //             // ),
-                            //           );
-                            //         } else {
-                            //           return const Center(
-                            //               child: CircularProgressIndicator());
-                            //         }
-                            //       }),
-                            // ),
                             Container(
                               width: mediaWidth * 0.87,
                               height: mediaHeight,
@@ -563,21 +470,7 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
     );
   }
 
-  // Future<List<Map<String, dynamic>>> getYoutubeVideosWithThumbnails() async {
-  //   final box = await Hive.openBox<Highlights>('highlights');
-  //   final videos = box.values.toList();
-  //   final videosWithThumbnails = <Map<String, dynamic>>[];
-
-  //   for (final video in videos) {
-  //     final thumbnailUrl = await getYouTubeThumbnail(video.url);
-  //     videosWithThumbnails.add({
-  //       'video': video,
-  //       'thumbnailUrl': thumbnailUrl,
-  //     });
-  //   }
-
-  //   return videosWithThumbnails;
-  // }
+  
   Future<List<Map<String, dynamic>>>
       getYoutubeVideosWithThumbnailsFromFirestore() async {
     final collectionReference =

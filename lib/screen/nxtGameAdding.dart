@@ -1,9 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fansseathub/helper/helper_functions.dart';
-import 'package:fansseathub/model/matchdetails.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:hive/hive.dart';
 import 'package:fansseathub/helper/widgets/addingField.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -103,7 +101,6 @@ class _AddFirstGameState extends State<AddNextGame> {
                   ontypeoption: (value) {
                     setState(() {
                       selectedType = value;
-                      print(value);
                     });
                   },
                   // ontypeoption: ,
@@ -115,15 +112,11 @@ class _AddFirstGameState extends State<AddNextGame> {
                     });
                     String fileName =
                         DateTime.now().microsecondsSinceEpoch.toString();
-                    //get reference to storage root
-                    //we create the image folder first and insider folder we upload the image
                     Reference referenceRoot = FirebaseStorage.instance.ref();
                     Reference referenceDireImage =
                         referenceRoot.child('team1image');
-                    //we have create reference for the image to be stored
                     Reference referenceImageToUpload =
                         referenceDireImage.child(fileName);
-                    //for error handled and/or success
                     try {
                       await referenceImageToUpload
                           .putFile(File(pickimage!.path));
@@ -140,15 +133,11 @@ class _AddFirstGameState extends State<AddNextGame> {
                     });
                     String fileName =
                         DateTime.now().microsecondsSinceEpoch.toString();
-                    //get reference to storage root
-                    //we create the image folder first and insider folder we upload the image
                     Reference referenceRoot = FirebaseStorage.instance.ref();
                     Reference referenceDireImage =
                         referenceRoot.child('team2image');
-                    //we have create reference for the image to be stored
                     Reference referenceImageToUpload =
                         referenceDireImage.child(fileName);
-                    //for error handled and/or success
                     try {
                       await referenceImageToUpload
                           .putFile(File(pickimage!.path));
@@ -166,20 +155,6 @@ class _AddFirstGameState extends State<AddNextGame> {
                   child: ElevatedButton(
                       onPressed: () {
                         if (formkey.currentState!.validate()) {
-                          // submit(
-                          //     context: context,
-                          //     selectedImageteam1: _selectedImageteam1!.path,
-                          //     selectedImageteam2: _selectedImageteam2!.path,
-                          //     categorycontroller: categorycontroller,
-                          //     datecontroller: datecontroller,
-                          //     gamenocontroller: gamenocontroller,
-                          //     matchdetailsbox: matchdetailsbox,
-                          //     stadiumcontroller: stadiumcontroller,
-                          //     team1controller: team1controller,
-                          //     team2controller: team2controller,
-                          //     timecontroller: timecontroller,
-                          //     typecontroller: typecontroller,
-                          //     selectedtype: selectedType);
                           submittofirebase();
                           dataClear();
 
@@ -242,30 +217,7 @@ class _AddFirstGameState extends State<AddNextGame> {
       String gameno = gamenocontroller.text;
       String stadium = stadiumcontroller.text;
       String time = timecontroller.text;
-    
-
-      // try {
-      //   await referenceImageToUpload.putFile(image);
-      //   String downloadURL = await referenceImageToUpload.getDownloadURL();
-      // } catch (error) {
-      //   print('Error uploading image: $error');
-      // }
-
-      // String team1ImagePath = await uploadImage(_selectedImageteam1!, 'team1image');
-      //   String team2ImagePath = await uploadImage(_selectedImageteam2!, 'team2image');
       documentReference.set({
-        // "team1": team1controller,
-        // "team2": team2controller,
-        // "selectedImageteam1": _selectedImageteam1!.path,
-        // "selectedImageteam2": _selectedImageteam2!.path,
-        // "categorycontroller": categorycontroller,
-        // "datecontroller": datecontroller,
-        // "gamenocontroller": gamenocontroller,
-        // "matchdetailsbox": matchdetailsbox,
-        // "stadiumcontroller": stadiumcontroller,
-        // "timecontroller": timecontroller,
-        // "typecontroller": typecontroller,
-        // "selectedtype": selectedType
         "team1": team1,
         "team2": team2,
         "selectedImageteam1": team1ImageUrl,
@@ -273,7 +225,6 @@ class _AddFirstGameState extends State<AddNextGame> {
         "categorycontroller": category,
         "datecontroller": date,
         "gamenocontroller": gameno,
-        // "matchdetailsbox": matchdetailsbox,
         "stadiumcontroller": stadium,
         "timecontroller": time,
         
@@ -281,20 +232,4 @@ class _AddFirstGameState extends State<AddNextGame> {
       });
     }
   }
-
-  // Future<String> uploadImage(File image, String folderName) async {
-  //   String fileName = DateTime.now().microsecondsSinceEpoch.toString();
-  //   Reference referenceRoot = FirebaseStorage.instance.ref();
-  //   Reference referenceDireImage = referenceRoot.child(folderName);
-  //   Reference referenceImageToUpload = referenceDireImage.child(fileName);
-
-  //   try {
-  //     await referenceImageToUpload.putFile(image);
-  //     String downloadURL = await referenceImageToUpload.getDownloadURL();
-  //     return downloadURL;
-  //   } catch (error) {
-  //     print('Error uploading image: $error');
-  //     return '';
-  //   }
-  // }
 }

@@ -1,12 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fansseathub/helper/helper_functions.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
-import 'package:fansseathub/model/matchdetails.dart';
 import 'package:fansseathub/screen/editPage.dart';
 import 'package:fansseathub/services/auth_service.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 class AdminHomeScreen extends StatefulWidget {
   const AdminHomeScreen({super.key});
@@ -25,8 +21,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   late Stream<QuerySnapshot> _stream;
   @override
   void initState() {
-    // matchdetailbox = Hive.box<MatchDetails>('matchdetails');
-    // matchdetailList = matchdetailbox.values.toList();
     super.initState();
     _stream = FirebaseFirestore.instance.collection('matches').snapshots();
   }
@@ -170,7 +164,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                                           documentReference
                                               .delete()
                                               .whenComplete(() {
-                                            print('');
                                           });
                                         },
                                         icon: const Icon(Icons.delete)),
@@ -196,11 +189,11 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   }
 
   deleteData() {
-    print("deleted");
+
     DocumentReference documentReference =
         FirebaseFirestore.instance.collection("").doc();
     documentReference.delete().whenComplete(() {
-      print('');
+     
     });
   }
 }
