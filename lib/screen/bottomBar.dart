@@ -24,21 +24,6 @@ class _BottomBarState extends State<BottomBar> {
   int index = 0;
   List<dynamic> tabs = [];
 
-  @override
-  void initState() {
-    gettingUserData();
-    tabs = [
-      HomeScreen(
-        isUserSigned: widget.isUsersigned,
-        idAdminSigned: widget.idAdminsigned,
-      ),
-      const SearchScreen(),
-      ProfileScreen(username: username, email: email),
-    ];
-    super.initState();
-    gettingUserData();
-  }
-
   gettingUserData() async {
     await HelperFunction.getUserEmailFromSF().then((value) {
       setState(() {
@@ -59,6 +44,21 @@ class _BottomBarState extends State<BottomBar> {
     //     groups = snapshot;
     //   });
     // });
+  }
+
+  @override
+  void initState() {
+    gettingUserData();
+    tabs = [
+      HomeScreen(
+        isUserSigned: widget.isUsersigned,
+        idAdminSigned: widget.idAdminsigned,
+      ),
+      const SearchScreen(),
+      ProfileScreen(username: username, email: email),
+    ];
+    super.initState();
+    gettingUserData();
   }
 
   @override

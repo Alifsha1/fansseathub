@@ -23,6 +23,8 @@ class MatchDetailsScreen extends StatefulWidget {
 class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
   late Stream<QuerySnapshot> _stream;
   String stadiumname = ' ';
+  bool isFavorite = false;
+  Set<String> favoriteVideoIds = Set<String>();
   @override
   void initState() {
     super.initState();
@@ -78,7 +80,7 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
                               querySnapshot.docs;
                           List<Map> items =
                               document.map((e) => e.data() as Map).toList();
-                          stadiumname = items[0]['stadiumcontroller']; 
+                          stadiumname = items[0]['stadiumcontroller'];
                           return Column(
                             children: [
                               Padding(
@@ -402,28 +404,54 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
                                     final List<Map<String, dynamic>>
                                         videosWithThumbnails = snapshot.data
                                             as List<Map<String, dynamic>>;
+                                    // QuerySnapshot querySnapshot =
+                                    //     snapshot.data as QuerySnapshot<Object?>;
+                                    // List<QueryDocumentSnapshot> document =
+                                    //     querySnapshot.docs;
+                                    // List<Map> items = document
+                                    //     .map((e) => e.data() as Map)
+                                    //     .toList();
                                     return GridView.builder(
                                       gridDelegate:
                                           const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        crossAxisSpacing: 15.0,
-                                        mainAxisSpacing: 9.0,
-                                        childAspectRatio: 1.6
-                                      ),
+                                              crossAxisCount: 2,
+                                              crossAxisSpacing: 15.0,
+                                              mainAxisSpacing: 9.0,
+                                              childAspectRatio: 1.6),
                                       itemCount: videosWithThumbnails.length,
                                       itemBuilder: (context, index) {
-                                        final video =
-                                            videosWithThumbnails[index]
-                                                ['video'];
+                                        // Map thisItems = items[index];
+                                        Map<String, dynamic> thisItem =
+                                            videosWithThumbnails[index];
+                                        String documentId = thisItem[
+                                            'id']; // Get the document ID
+                                        // String id = videosWithThumbnails[index]['id'];
+                                        // final video =
+                                        //     videosWithThumbnails[index]
+                                        //         ['video'];
+                                        // final thumbnailUrl =
+                                        //     videosWithThumbnails[index]
+                                        //         ['thumbnailUrl'];
+                                        // final videoId =
+                                        //     videosWithThumbnails[index]['id'];
+                                        final video = thisItem['video'];
                                         final thumbnailUrl =
-                                            videosWithThumbnails[index]
-                                                ['thumbnailUrl'];
+                                            thisItem['thumbnailUrl'];
+                                        final videoId = thisItem['id'];
+
+                                        bool isFavorite =
+                                            favoriteVideoIds.contains(videoId);
+
                                         return GestureDetector(
                                           onTap: () async {
                                             Map<String, String>? videoInfo =
                                                 await getYouTubeThumbnail(
                                                     video['url']);
                                             if (videoInfo != null) {
+                                              // await addToFavorites(
+                                              //     video['url'],
+                                              //     videoInfo['videoTitle']!,
+                                              //     thumbnailUrl['thumbnailUrl']);
                                               String videoTitle = videoInfo[
                                                       'videoTitle'] ??
                                                   'Video Title Not Available';
@@ -439,13 +467,65 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
                                               );
                                             }
                                           },
-                                          child: Container(
-                                            color:Colors.amber ,
-                                            child: Image.network(
-                                              thumbnailUrl['thumbnailUrl'],
-                                              fit: BoxFit.fitWidth,
-                                            ),
+                                          child: Stack(
+                                            fit: StackFit.expand,
+                                            children: [
+                                              Container(
+                                                color: Colors.amber,
+                                                child: Image.network(
+                                                  thumbnailUrl['thumbnailUrl'],
+                                                  fit: BoxFit.fill,
+                                                ),
+                                              ),
+                                              Positioned(
+                                                  bottom: 8.0,
+                                                  left: 8.0,
+                                                  child: IconButton(
+                                                      onPressed: () async {
+                                                        Map<String, String>?
+                                                            videoInfo =
+                                                            await getYouTubeThumbnail(
+                                                                video['url']);
+                                                        if (videoInfo != null) {
+                                                          setState(() {
+                                                            if (isFavorite) {
+                                                              favoriteVideoIds
+                                                                  .remove(
+                                                                      videoId);
+                                                              removeFromFavorites(
+                                                                  videoId);
+                                                            } else {
+                                                              favoriteVideoIds
+                                                                  .add(videoId);
+                                                              addToFavorites(
+                                                                  video['url'],
+                                                                  videoInfo[
+                                                                      'videoTitle']!,
+                                                                  thumbnailUrl[
+                                                                      'thumbnailUrl'],
+                                                                  documentId);
+                                                            }
+                                                          });
+                                                        }
+                                                      },
+                                                      icon: Icon(
+                                                        isFavorite
+                                                            ? Icons.favorite
+                                                            : Icons
+                                                                .favorite_outline_outlined,
+                                                        color: isFavorite
+                                                            ? Colors.red
+                                                            : Colors.white,
+                                                      ))),
+                                            ],
                                           ),
+                                          //     Container(
+                                          //   color: Colors.amber,
+                                          //   child: Image.network(
+                                          //     thumbnailUrl['thumbnailUrl'],
+                                          //     fit: BoxFit.fitWidth,
+                                          //   ),
+                                          // ),
                                         );
                                       },
                                     );
@@ -470,20 +550,33 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
     );
   }
 
-  
+  Future<void> addToFavorites(
+      String videoUrl, String videoTitle, String thumbnailUrl, String documentId) async {
+    final favoritesCollection =
+        FirebaseFirestore.instance.collection('favorites');
+    await favoritesCollection.add({
+      'url': videoUrl,
+      'title': videoTitle,
+      'thumbnailUrl': thumbnailUrl,
+    });
+  }
+
   Future<List<Map<String, dynamic>>>
       getYoutubeVideosWithThumbnailsFromFirestore() async {
     final collectionReference =
         FirebaseFirestore.instance.collection('youtubevideos');
     final querySnapshot = await collectionReference.get();
-    final videos = querySnapshot.docs.map((doc) => doc.data()).toList();
+   // final videos = querySnapshot.docs.map((doc) => doc.data()).toList();
     final videosWithThumbnails = <Map<String, dynamic>>[];
 
-    for (final video in videos) {
+    for (final QueryDocumentSnapshot<Map<String, dynamic>> doc
+        in querySnapshot.docs) {
+      final video = doc.data();
       final thumbnailUrl = await getYouTubeThumbnail(video['url']);
       videosWithThumbnails.add({
         'video': video,
         'thumbnailUrl': thumbnailUrl,
+        'id': doc.id,
       });
     }
 
@@ -510,5 +603,11 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
     }
 
     return null;
+  }
+
+  Future<void> removeFromFavorites(String videoId) async {
+    final favoritesCollection =
+        FirebaseFirestore.instance.collection('favorites');
+    await favoritesCollection.doc(videoId).delete();
   }
 }

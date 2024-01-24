@@ -74,7 +74,7 @@ class _EditPageState extends State<EditPage> {
     File? selectedImageteam2;
     String? team1ImageUrl;
     String? team2ImageUrl;
-    String? imageUrl;
+    //String? imageUrl;
 
     // String? matchKey = widget.match.matchKey;
 
@@ -435,30 +435,8 @@ class _EditPageState extends State<EditPage> {
                         String time = timeController.text;
                         String type = typeController.text;
 
-                        // try {
-                        //   await referenceImageToUpload.putFile(image);
-                        //   String downloadURL = await referenceImageToUpload.getDownloadURL();
-                        // } catch (error) {
-                        //   print('Error uploading image: $error');
-                        // }
-
-                        // String team1ImagePath = await uploadImage(_selectedImageteam1!, 'team1image');
-                        //   String team2ImagePath = await uploadImage(_selectedImageteam2!, 'team2image');
-
                         print("on updating team 1 $team1ImageUrl");
                         documentReference.update({
-                          // "team1": team1controller,
-                          // "team2": team2controller,
-                          // "selectedImageteam1": _selectedImageteam1!.path,
-                          // "selectedImageteam2": _selectedImageteam2!.path,
-                          // "categorycontroller": categorycontroller,
-                          // "datecontroller": datecontroller,
-                          // "gamenocontroller": gamenocontroller,
-                          // "matchdetailsbox": matchdetailsbox,
-                          // "stadiumcontroller": stadiumcontroller,
-                          // "timecontroller": timecontroller,
-                          // "typecontroller": typecontroller,
-                          // "selectedtype": selectedType
                           "team1": team1,
                           "team2": team2,
                           "selectedImageteam1": team1ImageUrl,

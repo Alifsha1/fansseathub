@@ -1,10 +1,15 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:fansseathub/screen/favorites.dart';
 import 'package:fansseathub/screen/hightlightsAdd.dart';
 import 'package:fansseathub/screen/homeScreen.dart';
 import 'package:fansseathub/screen/nxtGameAdding.dart';
 import 'package:fansseathub/screen/profileScreen.dart';
+import 'package:fansseathub/screen/settings.dart';
 import 'package:fansseathub/screen/stadiumDetailsScreen.dart';
+import 'package:fansseathub/sections/assets.dart';
+import 'package:fansseathub/services/database_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 void showSnackbar(context, color, message) {
@@ -360,6 +365,30 @@ drawerAdminScreen(
           ),
         ),
         Padding(
+          padding: const EdgeInsets.only(
+            left: 65,
+          ),
+          child: Row(
+            children: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: const Icon(
+                    Icons.settings,
+                    color: Colors.black,
+                  )),
+              SizedBox(
+                width: mediaWidth * .04,
+              ),
+              const Text(
+                'settings',
+                style: TextStyle(fontSize: 20),
+              ),
+            ],
+          ),
+        ),
+        Padding(
           padding: const EdgeInsets.only(left: 68),
           child: Row(
             children: [
@@ -405,180 +434,211 @@ drawerAdminScreen(
 }
 
 drawerUserScreen(context, mediaWidth, authService, username, email) {
-  return Drawer(
-    child: Column(
-      //mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 70),
-          child: Icon(
-            Icons.account_circle,
-            size: 150,
-            color: Colors.grey[700],
-          ),
-        ),
-        SizedBox(
-          height: 15,
-        ),
-        Text(
-          username,
-          textAlign: TextAlign.center,
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        const Padding(
-          padding: EdgeInsets.only(bottom: 25),
-          child: Divider(
-            thickness: 1,
-            indent: 10,
-            endIndent: 10,
-            color: Colors.grey,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 65,
-          ),
-          child: Row(
-            children: [
-              IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(
-                    Icons.home,
-                    color: Colors.black,
-                  )),
-              SizedBox(
-                width: mediaWidth * .04,
-              ),
-              GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text(
-                    'Home',
-                    style: TextStyle(fontSize: 20),
-                  )),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 65,
-          ),
-          child: Row(
-            children: [
-              IconButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ProfileScreen(email: email, username: username)),
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.person,
-                    color: Colors.black,
-                  )),
-              SizedBox(
-                width: mediaWidth * .04,
-              ),
-              const Text(
-                'Profile',
-                style: TextStyle(fontSize: 20),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 65,
-          ),
-          child: Row(
-            children: [
-              IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(
-                    Icons.settings,
-                    color: Colors.black,
-                  )),
-              SizedBox(
-                width: mediaWidth * .04,
-              ),
-              const Text(
-                'settings',
-                style: TextStyle(fontSize: 20),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 65,
-          ),
-          child: Row(
-            children: [
-              IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(
-                    Icons.favorite,
-                    color: Colors.black,
-                  )),
-              SizedBox(
-                width: mediaWidth * .04,
-              ),
-              const Text(
-                'Favorites',
-                style: TextStyle(fontSize: 20),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 65),
-          child: Row(
-            children: [
-              IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(
-                    Icons.logout_outlined,
-                    color: Colors.black,
-                  )),
-              SizedBox(
-                width: mediaWidth * .04,
-              ),
-              GestureDetector(
-                onTap: () {},
-                child: InkWell(
-                  onTap: () async {
-                    await authService.showSignOutConfirmationDialog(context);
-                    // ignore: use_build_context_synchronously
-                  },
-                  child: const Text(
-                    'Logout',
-                    style: TextStyle(fontSize: 20),
+  final userDataStream = DatabaseService().getUserDetails(
+      FirebaseAuth.instance.currentUser?.uid ?? 'XzO7r4F9bvU95bLggJdOQ0S3qhl1');
+  return StreamBuilder(
+      stream: userDataStream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final userDataSnapshot =
+              snapshot.data?.data() as Map<String, dynamic>;
+          final String userProfilePic = userDataSnapshot['profilepic'];
+          print('obj: $userProfilePic');
+          return Container(
+            width: MediaQuery.of(context).size.width * 0.7,
+            color: Colors.white,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 70),
+                  child: ClipOval(
+                      child: userProfilePic.isNotEmpty
+                          ? Image.network(
+                              userProfilePic,
+                              fit: BoxFit.cover,
+                              width: 140,
+                              height: 140,
+                            )
+                          : Icon(
+                              Icons.person,
+                              size: 150,
+                            )
+                      //Image.asset(crik)
+                      ),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  username,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 25),
+                  child: Divider(
+                    thickness: 1,
+                    indent: 10,
+                    endIndent: 10,
+                    color: Colors.grey,
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
-        const Padding(
-          padding: EdgeInsets.only(top: 25),
-          child: Divider(
-            thickness: 1,
-            indent: 10,
-            endIndent: 10,
-            color: Color.fromARGB(255, 163, 160, 160),
-          ),
-        ),
-      ],
-    ),
-  );
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 65,
+                  ),
+                  child: Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          icon: const Icon(
+                            Icons.home,
+                            color: Colors.black,
+                          )),
+                      SizedBox(
+                        width: mediaWidth * .04,
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text(
+                            'Home',
+                            style: TextStyle(fontSize: 20),
+                          )),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 65,
+                  ),
+                  child: Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => ProfileScreen(
+                                      email: email, username: username)),
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.person,
+                            color: Colors.black,
+                          )),
+                      SizedBox(
+                        width: mediaWidth * .04,
+                      ),
+                      const Text(
+                        'Profile',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 65,
+                  ),
+                  child: Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => SettingsScreen()),
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.settings,
+                            color: Colors.black,
+                          )),
+                      SizedBox(
+                        width: mediaWidth * .04,
+                      ),
+                      const Text(
+                        'settings',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 65,
+                  ),
+                  child: Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            print('favv');
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => favorites()),
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.favorite,
+                            color: Colors.black,
+                          )),
+                      SizedBox(
+                        width: mediaWidth * .04,
+                      ),
+                      const Text(
+                        'Favorites',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 65),
+                  child: Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          icon: const Icon(
+                            Icons.logout_outlined,
+                            color: Colors.black,
+                          )),
+                      SizedBox(
+                        width: mediaWidth * .04,
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: InkWell(
+                          onTap: () async {
+                            await authService
+                                .showSignOutConfirmationDialog(context);
+                            // ignore: use_build_context_synchronously
+                          },
+                          child: const Text(
+                            'Logout',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 25),
+                  child: Divider(
+                    thickness: 1,
+                    indent: 10,
+                    endIndent: 10,
+                    color: Color.fromARGB(255, 163, 160, 160),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+        return CircularProgressIndicator();
+      });
 }

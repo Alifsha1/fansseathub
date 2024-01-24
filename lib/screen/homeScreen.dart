@@ -1,3 +1,4 @@
+
 import 'package:fansseathub/helper/helper_functions.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:fansseathub/screen/adminHomeScreen.dart';
@@ -23,13 +24,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String username = "";
   String email = "";
+  // String? userProfilePic;
   AuthService authService = AuthService();
-
+  // Stream<DocumentSnapshot>? userDataStream;
   @override
   void initState() {
     super.initState();
-    //gettingUserData();
     gettingUserData();
+   
   }
 
   gettingUserData() async {
@@ -43,16 +45,23 @@ class _HomeScreenState extends State<HomeScreen> {
         username = val!;
       });
     });
-    // getting the list of snapshot in our stream
-
-    // await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
-    //     .getUserGroups()
-    //     .then((snapshot) {
-    //   setState(() {
-    //     groups = snapshot;
-    //   });
-    // });
   }
+  // getting the list of snapshot in our stream
+
+  // await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+  //     .getUserGroups()
+  //     .then((snapshot) {
+  //   setState(() {
+  //     groups = snapshot;
+  //   });
+  // });
+  // fetchData() async {
+  //   final uid = FirebaseAuth.instance.currentUser!.uid;
+  //   final doc =
+  //       await FirebaseFirestore.instance.collection('user').doc(uid).get();
+  //   final pic = doc['profilepic'];
+  //   return pic;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -80,8 +89,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         elevation: 0,
       ),
-      drawer:
-          drawerUserScreen(context, mediaWidth, authService, username, email),
+      drawer: drawerUserScreen(
+          context, mediaWidth, authService, username, email),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(top: 5, left: 20, right: 20),

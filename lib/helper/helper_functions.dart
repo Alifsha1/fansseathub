@@ -6,6 +6,7 @@ import 'package:fansseathub/hive/hive_Functions.dart';
 import 'package:fansseathub/model/matchdetails.dart';
 import 'package:fansseathub/screen/adminHomeScreen.dart';
 import 'package:fansseathub/screen/bottomBar.dart';
+import 'package:fansseathub/services/auth_service.dart';
 import 'package:fansseathub/services/database_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -119,43 +120,7 @@ submit({
       matchKey,
     );
   }
-}
-//  addstadiumdetails({
-//   selectedImage,context,stadiumnamecontroller,guestStandcontroller,guestStandpricecontroller,eastStanduppercontroller,eastStandupperpricecontroller,eastStandlowercontroller,eastStandlowerpricecontroller
-// }) {
-//     if (selectedImage == null) {
-//       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-//         backgroundColor: Colors.red,
-//         content: Text(
-//           'You Must select an image',
-//           style: TextStyle(
-//             color: Colors.white,
-//           ),
-//         ),
-//       ));
-//       return;
-//     } else {
-//       String stadiumKey = DateTime.now().microsecondsSinceEpoch.toString();
-//       StadiumDetails stadiumDetails = StadiumDetails(
-//           stadiumKey: stadiumKey,
-//           imagePathstadium: selectedImage!.path,
-//           stadiumname: stadiumnamecontroller.text,
-//           stands1: guestStandcontroller.text,
-//           ticketcharge1: guestStandpricecontroller.text,
-//           stands2: eastStanduppercontroller.text,
-//           ticketcharge2: eastStandupperpricecontroller.text,
-//           stands3: eastStandlowercontroller.text,
-//           ticketcharge3: eastStandlowerpricecontroller.text,
-//           stands4: northcontroller.text,
-//           ticketcharge4: northpricecontroller.text,
-//           standsac1: acBoxseat15controller.text,
-//           ticketchargeac1: acBoxseat15pricecontroller.text,
-//           standsac2: acBox20controller.text,
-//           ticketchargeac2: acBox20pricecontroller.text);
-//       boxname2.put(stadiumKey, stadiumDetails);
-      
-//     }
-//   }
+}  
 
 showDeleteConfirmationDialog(BuildContext context, matchKey) {
   showDialog(
@@ -223,7 +188,7 @@ login(formkey, setStateCallback, _isLoading, authService, email, password,
   }
 }
 
-signup(formkey, setStateCallback, _isLoading, authService, fullName, email,
+signup(formkey, setStateCallback, _isLoading, AuthService authService, fullName, email,
     password, context, _isUserSigned, _isAdminSigned) async {
   if (formkey.currentState!.validate()) {
     setStateCallback(() {

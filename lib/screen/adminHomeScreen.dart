@@ -12,8 +12,6 @@ class AdminHomeScreen extends StatefulWidget {
 }
 
 final _formKey = GlobalKey<FormState>();
-// late Box<MatchDetails> matchdetailbox;
-// late List<MatchDetails> matchdetailList;
 
 class _AdminHomeScreenState extends State<AdminHomeScreen> {
   final bool _isUserSigned = false;
@@ -59,11 +57,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
               const SizedBox(
                 height: 20,
               ),
-              // ValueListenableBuilder(
-              //     valueListenable: matchdetailbox.listenable(),
-              //     builder: (context, Box<MatchDetails> box, widget) {
-              //       matchdetailList = box.values.toList();
-              //       return
               SizedBox(
                   height: mediaHeight - 200, // Adjust the height as needed
                   child: StreamBuilder<QuerySnapshot>(
@@ -86,9 +79,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                           itemBuilder: (context, index) {
                             Map thisItems = items[index];
                             String id = snapshot.data.docs[index].id;
-                            // print(id);
-
-                            // final match = matchdetailList[index];
                             return Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Container(
@@ -134,13 +124,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                                     ),
                                     IconButton(
                                         onPressed: () {
-                                          // showEditingDialog(
-                                          //     context,
-                                          //     match,
-                                          //     _formKey,
-                                          //     mediaWidth,
-                                          //     mediaHeight,
-                                          //     setState);
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
                                               builder: (context) => EditPage(
@@ -154,9 +137,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                                         icon: const Icon(Icons.edit)),
                                     IconButton(
                                         onPressed: () {
-                                          //Repository.deleteData(match.matchKey);
-                                          // showDeleteConfirmationDialog(
-                                          //     context, match.matchKey);
                                           DocumentReference documentReference =
                                               FirebaseFirestore.instance
                                                   .collection("matches")
@@ -179,8 +159,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                       );
                     },
                   ))
-              // }
-              // )
             ],
           ),
         ),
