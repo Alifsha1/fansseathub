@@ -15,7 +15,6 @@ class _DetailsOfStadiumState extends State<DetailsOfStadium> {
   late Stream<QuerySnapshot> _stream;
   @override
   void initState() {
-    print(widget.stadium);
     super.initState();
     _stream = FirebaseFirestore.instance
         .collection('stadiums')

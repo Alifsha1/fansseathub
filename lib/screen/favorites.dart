@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:fansseathub/screen/playHighlights.dart';
@@ -116,7 +118,6 @@ class _favoritesState extends State<favorites> {
                               if (isFavorite) {
                                 favoriteVideoIds.remove(videoId);
                                 await removeFromFavorites(videoId);
-                                print('removed$videoId');
                                 setState(() {});
                               }
                               // Handle removing from favorites if needed
@@ -193,7 +194,6 @@ class _favoritesState extends State<favorites> {
   //   await favoritesCollection.doc(videoId).delete();
   // }
   Future<void> removeFromFavorites(String documentId) async {
-    print('over$documentId');
     final favoritesCollection =
         FirebaseFirestore.instance.collection('favorites');
     await favoritesCollection.doc(documentId).delete();

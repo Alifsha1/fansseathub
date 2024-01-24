@@ -170,9 +170,8 @@ class _EditPageState extends State<EditPage> {
                         // Reference referenceImageToUpload =
                         //     referenceDireImage.child(fileName);
                         // //for error handled and/or success
-                        print(
-                            'firebase image: ${widget.thisItems['selectedImageteam1']}');
-                        print('selected image: $selectedImageteam1');
+                       
+                       
                         Reference referenceImageToUpload = FirebaseStorage
                             .instance
                             .refFromURL(widget.thisItems['selectedImageteam1']);
@@ -183,10 +182,7 @@ class _EditPageState extends State<EditPage> {
                               await referenceImageToUpload.getDownloadURL();
                         } catch (error) {
                           //some error
-                          print('error uploading $error');
                         }
-
-                        print('team1 image: $team1ImageUrl');
                       },
                       child: ClipOval(
                         child: selectedImageteam1 != null

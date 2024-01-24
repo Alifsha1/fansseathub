@@ -7,7 +7,6 @@ import 'package:fansseathub/screen/nxtGameAdding.dart';
 import 'package:fansseathub/screen/profileScreen.dart';
 import 'package:fansseathub/screen/settings.dart';
 import 'package:fansseathub/screen/stadiumDetailsScreen.dart';
-import 'package:fansseathub/sections/assets.dart';
 import 'package:fansseathub/services/database_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

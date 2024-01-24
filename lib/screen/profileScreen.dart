@@ -28,7 +28,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    print(FirebaseAuth.instance.currentUser!.uid);
     //gettingUserData();
     gettingUserData();
     userDataStream = DatabaseService()
@@ -82,7 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   email = userDataSnapshot['email'];
                   userProfilePic = userDataSnapshot['profilepic'] ?? "https://firebasestorage.googleapis.com/v0/b/fansseathub.appspot.com/o/profilepic%2F1706017404040831?alt=media&token=3d350d73-9888-4426-adf6-537e269fe98a"
 ;
-                  print('aaa- $userProfilePic');
+                
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -169,7 +168,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 backgroundColor: Colors.black,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(50))),
-                            child: Text(
+                            child: const Text(
                               'Edit',
                               style: TextStyle(),
                             )),

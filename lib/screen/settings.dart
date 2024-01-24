@@ -18,8 +18,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: true,
-        title: AdminSideHeadingsBlack(headings: 'settings'),
-        leading: Icon(
+        title: const AdminSideHeadingsBlack(headings: 'settings'),
+        leading: const Icon(
           Icons.arrow_back,
           color: Colors.black,
         ),
@@ -27,12 +27,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: SafeArea(
           child: Column(
             children: [
-              AdminSideHeadingsBlack(headings: 'About'),
+              const AdminSideHeadingsBlack(headings: 'About'),
               ListtileItem(
                 listtileText: 'Terms & conditions',
                 onTap: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => TermsAndConditions()),
+                    MaterialPageRoute(builder: (context) => const TermsAndConditions()),
                   );
                 },
               ),
@@ -40,7 +40,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 listtileText: 'privacy & policy',
                 onTap: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => PrivacyAndPolicy()),
+                    MaterialPageRoute(builder: (context) => const PrivacyAndPolicy()),
                   );
                 },
               )
