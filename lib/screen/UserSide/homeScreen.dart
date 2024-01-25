@@ -1,8 +1,8 @@
 
 import 'package:fansseathub/helper/helper_functions.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
-import 'package:fansseathub/screen/adminHomeScreen.dart';
-import 'package:fansseathub/screen/matchDetailsScreen.dart';
+import 'package:fansseathub/screen/AdminSide/adminHomeScreen.dart';
+import 'package:fansseathub/screen/UserSide/matchDetailsScreen.dart';
 import 'package:fansseathub/sections/assets.dart';
 import 'package:fansseathub/sections/catogory.dart';
 import 'package:fansseathub/services/auth_service.dart';
@@ -46,23 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     });
   }
-  // getting the list of snapshot in our stream
-
-  // await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
-  //     .getUserGroups()
-  //     .then((snapshot) {
-  //   setState(() {
-  //     groups = snapshot;
-  //   });
-  // });
-  // fetchData() async {
-  //   final uid = FirebaseAuth.instance.currentUser!.uid;
-  //   final doc =
-  //       await FirebaseFirestore.instance.collection('user').doc(uid).get();
-  //   final pic = doc['profilepic'];
-  //   return pic;
-  // }
-
   @override
   Widget build(BuildContext context) {
     final mediaWidth = MediaQuery.of(context).size.width;

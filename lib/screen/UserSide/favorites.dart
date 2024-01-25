@@ -2,7 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
-import 'package:fansseathub/screen/playHighlights.dart';
+import 'package:fansseathub/screen/UserSide/playHighlights.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
@@ -15,9 +15,11 @@ class favorites extends StatefulWidget {
   State<favorites> createState() => _favoritesState();
 }
 
+// ignore: camel_case_types
 class _favoritesState extends State<favorites> {
   //final List<int> _items = [];
   bool isFavorite = true;
+  // ignore: prefer_collection_literals
   Set<String> favoriteVideoIds = Set<String>();
   @override
   void initState() {
@@ -146,13 +148,6 @@ class _favoritesState extends State<favorites> {
       ),
     );
   }
-
-//   Future<List<Map<String, dynamic>>> getFavoriteVideosFromFirestore() async {
-//   final favoritesCollection = FirebaseFirestore.instance.collection('favorites');
-//   final querySnapshot = await favoritesCollection.get();
-//   final favoriteVideos = querySnapshot.docs.map((doc) => doc.data()).toList();
-//   return favoriteVideos;
-// }
   Future<List<Map<String, dynamic>>> getFavoriteVideosFromFirestore() async {
     final favoritesCollection =
         FirebaseFirestore.instance.collection('favorites');
@@ -187,12 +182,6 @@ class _favoritesState extends State<favorites> {
 
     return null;
   }
-
-  // Add a function to remove a video from favorites if needed
-  // Future<void> removeFromFavorites(String videoId) async {
-  //   final favoritesCollection = FirebaseFirestore.instance.collection('favorites');
-  //   await favoritesCollection.doc(videoId).delete();
-  // }
   Future<void> removeFromFavorites(String documentId) async {
     final favoritesCollection =
         FirebaseFirestore.instance.collection('favorites');

@@ -1,7 +1,7 @@
 import 'package:fansseathub/helper/helper_functions.dart';
-import 'package:fansseathub/screen/homeScreen.dart';
-import 'package:fansseathub/screen/profileScreen.dart';
-import 'package:fansseathub/screen/searchScreen.dart';
+import 'package:fansseathub/screen/UserSide/homeScreen.dart';
+import 'package:fansseathub/screen/UserSide/profileScreen.dart';
+import 'package:fansseathub/screen/UserSide/searchScreen.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable

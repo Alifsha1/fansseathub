@@ -5,6 +5,7 @@ import 'package:fansseathub/helper/helper_functions.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+
 class AddStadiumDetails extends StatefulWidget {
   const AddStadiumDetails({super.key});
 
@@ -33,7 +34,7 @@ class _AddStadiumDetails extends State<AddStadiumDetails> {
       TextEditingController();
   final TextEditingController acBox20controller = TextEditingController();
   final TextEditingController acBox20pricecontroller = TextEditingController();
-   String? stadiumImageUrl;
+  String? stadiumImageUrl;
   File? _selectedImage;
   // late Box boxname2;
   @override
@@ -47,7 +48,7 @@ class _AddStadiumDetails extends State<AddStadiumDetails> {
     // final mediaWidth = MediaQuery.of(context).size.width;
     final mediaHeight = MediaQuery.of(context).size.height;
     final Space = SizedBox(
-      height: mediaHeight * .01,
+      height: mediaHeight * .02,
     );
     return Scaffold(
       appBar: AppBar(
@@ -98,7 +99,7 @@ class _AddStadiumDetails extends State<AddStadiumDetails> {
                     try {
                       await referenceImageToUpload
                           .putFile(File(pickimage!.path));
-                           stadiumImageUrl =
+                      stadiumImageUrl =
                           await referenceImageToUpload.getDownloadURL();
                     } catch (error) {
                       //some error
@@ -140,50 +141,50 @@ class _AddStadiumDetails extends State<AddStadiumDetails> {
                   ],
                 ),
                 Space,
-                AdminTextField(
-                  hinttext: 'Stadium name',
+                StadiumTextField(
+                  label: Text('Stadium name'),
                   controller: stadiumnamecontroller,
                   errormessage: 'name required',
                 ),
                 Space,
-                AdminTextField(
-                  hinttext: 'Stands',
+                StadiumTextField(
+                  label: Text('Stands'),
                   controller: guestStandcontroller,
                   errormessage: 'stand name required',
                 ),
                 Space,
-                AdminTextField(
-                    hinttext: 'ticket charge',
+                StadiumTextField(
+                    label: Text('ticket charge'),
                     controller: guestStandpricecontroller,
                     errormessage: 'ticket charge  required'),
                 Space,
-                AdminTextField(
-                    hinttext: 'Stands',
+                StadiumTextField(
+                    label: Text('Stands'),
                     controller: eastStanduppercontroller,
                     errormessage: 'stand name required'),
                 Space,
-                AdminTextField(
-                    hinttext: 'ticket charge',
+                StadiumTextField(
+                    label: Text('ticket charge'),
                     controller: eastStandupperpricecontroller,
                     errormessage: 'ticket charge  required'),
                 Space,
-                AdminTextField(
-                    hinttext: 'Stands',
+                StadiumTextField(
+                    label: Text('Stands'),
                     controller: eastStandlowercontroller,
                     errormessage: 'stand name required'),
                 Space,
-                AdminTextField(
-                    hinttext: 'ticket charge',
+                StadiumTextField(
+                    label: Text('ticket charge'),
                     controller: eastStandlowerpricecontroller,
                     errormessage: 'ticket charge  required'),
                 Space,
-                AdminTextField(
-                    hinttext: 'Stands',
+                StadiumTextField(
+                    label: Text('Stands'),
                     controller: northcontroller,
                     errormessage: 'stand name required'),
                 Space,
-                AdminTextField(
-                    hinttext: 'ticket charge',
+                StadiumTextField(
+                    label: Text('ticket charge'),
                     controller: northpricecontroller,
                     errormessage: 'ticket charge  required'),
                 Space,
@@ -193,23 +194,23 @@ class _AddStadiumDetails extends State<AddStadiumDetails> {
                   ],
                 ),
                 Space,
-                AdminTextField(
-                    hinttext: 'Stands',
+                StadiumTextField(
+                    label: Text('Stands'),
                     controller: acBoxseat15controller,
                     errormessage: 'stand name required'),
                 Space,
-                AdminTextField(
-                    hinttext: 'ticket charge',
+                StadiumTextField(
+                    label: Text('ticket charge'),
                     controller: acBoxseat15pricecontroller,
                     errormessage: 'ticket charge  required'),
                 Space,
-                AdminTextField(
-                    hinttext: 'Stands',
+                StadiumTextField(
+                    label: Text('Stands'),
                     controller: acBox20controller,
                     errormessage: 'stand name required'),
                 Space,
-                AdminTextField(
-                    hinttext: 'ticket charge',
+                StadiumTextField(
+                    label: Text('ticket charge'),
                     controller: acBox20pricecontroller,
                     errormessage: 'ticket charge  required'),
                 Space,
@@ -253,8 +254,7 @@ class _AddStadiumDetails extends State<AddStadiumDetails> {
         ),
       ));
       return;
-    } else {
-    }
+    } else {}
   }
 
   addstadiumdetailstofirebase() async {

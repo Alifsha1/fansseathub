@@ -1,6 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
+import 'package:fansseathub/screen/stadiumimageshowing.dart';
 import 'package:flutter/material.dart';
 
 class DetailsOfStadium extends StatefulWidget {
@@ -68,13 +69,22 @@ class _DetailsOfStadiumState extends State<DetailsOfStadium> {
                               ],
                             ),
                           ),
-                          Container(
-                            width: mediaWidth,
-                            height: mediaWidth * .8,
-                            decoration:
-                                const BoxDecoration(color: Colors.white),
-                            child: Image.network(
-                                "${items[0]['imagePathstadium']}"),
+                          GestureDetector(
+                            onTap: (){
+                               Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => StadiumImage(image:  "${items[0]['imagePathstadium']}",)
+                      ),
+                    );
+                            },
+                            child: Container(
+                              width: mediaWidth,
+                              height: mediaWidth * .8,
+                              decoration:
+                                  const BoxDecoration(color: Colors.white),
+                              child: Image.network(
+                                  "${items[0]['imagePathstadium']}"),
+                            ),
                           ),
                           const Divider(
                             thickness: 2,

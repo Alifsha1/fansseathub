@@ -2,8 +2,8 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
-import 'package:fansseathub/screen/playHighlights.dart';
-import 'package:fansseathub/screen/stadiumDetailsShowing.dart';
+import 'package:fansseathub/screen/UserSide/playHighlights.dart';
+import 'package:fansseathub/screen/UserSide/stadiumDetailsShowing.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
@@ -90,7 +90,7 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '${items[0]['typecontroller']}',
+                                      '${items[0]['categorycontroller']}',
                                       style: const TextStyle(
                                           color: Colors.white, fontSize: 15),
                                     ),
@@ -550,8 +550,8 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
     );
   }
 
-  Future<void> addToFavorites(
-      String videoUrl, String videoTitle, String thumbnailUrl, String documentId) async {
+  Future<void> addToFavorites(String videoUrl, String videoTitle,
+      String thumbnailUrl, String documentId) async {
     final favoritesCollection =
         FirebaseFirestore.instance.collection('favorites');
     await favoritesCollection.add({
@@ -566,7 +566,7 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
     final collectionReference =
         FirebaseFirestore.instance.collection('youtubevideos');
     final querySnapshot = await collectionReference.get();
-   // final videos = querySnapshot.docs.map((doc) => doc.data()).toList();
+    // final videos = querySnapshot.docs.map((doc) => doc.data()).toList();
     final videosWithThumbnails = <Map<String, dynamic>>[];
 
     for (final QueryDocumentSnapshot<Map<String, dynamic>> doc

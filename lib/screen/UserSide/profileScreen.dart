@@ -2,7 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fansseathub/helper/helper_functions.dart';
-import 'package:fansseathub/screen/editProfile.dart';
+import 'package:fansseathub/screen/Subpages/editProfile.dart';
 import 'package:fansseathub/sections/assets.dart';
 import 'package:fansseathub/services/auth_service.dart';
 import 'package:fansseathub/services/database_service.dart';

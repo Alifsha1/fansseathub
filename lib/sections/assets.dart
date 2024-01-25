@@ -2,6 +2,7 @@
 String crik = 'assets/catogory/images.jpeg';
 String foot = 'assets/catogory/football.jpg';
 String bad = 'assets/catogory/badminton.jpg';
+String noresults = 'assets/catogory/no search results.jpg';
 
 String privacyhead1 = "Privacy Policy for FansSeatHub";
 String privacyp1 =
@@ -175,22 +176,23 @@ You warrant and represent that:
 You hereby grant FansSeatHub a non-exclusive license to use, reproduce, edit and authorize others to use, reproduce and edit any of your Comments in any and all forms, formats or media.
   ''';
 String termsh3 = "iFrames";
-String termsp3 = ''' Without prior approval and written permission, you may not create frames around our Webpages that alter in any way the visual presentation or appearance of our App.''';
-
-
-
-
+String termsp3 =
+    ''' Without prior approval and written permission, you may not create frames around our Webpages that alter in any way the visual presentation or appearance of our App.''';
 
 String termsh4 = "Content Liability";
-String termsp4 = '''We shall not be hold responsible for any content that appears on your App. You agree to protect and defend us against all claims that is rising on our App. No link(s) should appear on any Website that may be interpreted as libelous, obscene or criminal, or which infringes, otherwise violates, or advocates the infringement or other violation of, any third party rights. ''';
+String termsp4 =
+    '''We shall not be hold responsible for any content that appears on your App. You agree to protect and defend us against all claims that is rising on our App. No link(s) should appear on any Website that may be interpreted as libelous, obscene or criminal, or which infringes, otherwise violates, or advocates the infringement or other violation of, any third party rights. ''';
 String termsh5 = "Reservation of Rights";
-String termsp5 = '''We reserve the right to request that you remove all links or any particular link to our App. You approve to immediately remove all links to our App upon request. We also reserve the right to amen these terms and conditions and it's linking policy at any time. By continuously linking to our App, you agree to be bound to and follow these linking terms and conditions.''';
+String termsp5 =
+    '''We reserve the right to request that you remove all links or any particular link to our App. You approve to immediately remove all links to our App upon request. We also reserve the right to amen these terms and conditions and it's linking policy at any time. By continuously linking to our App, you agree to be bound to and follow these linking terms and conditions.''';
 String termsh6 = "Removal of links from our App";
-String termsp6 = ''' If you find any link on our App that is offensive for any reason, you are free to contact and inform us any moment. We will consider requests to remove links but we are not obligated to or so or to respond to you directly.
+String termsp6 =
+    ''' If you find any link on our App that is offensive for any reason, you are free to contact and inform us any moment. We will consider requests to remove links but we are not obligated to or so or to respond to you directly.
 
 We do not ensure that the information on this website is correct, we do not warrant its completeness or accuracy; nor do we promise to ensure that the website remains available or that the material on the website is kept up to date.''';
 String termsh7 = "Disclaimer";
-String termsp7 = '''To the maximum extent permitted by applicable law, we exclude all representations, warranties and conditions relating to our App and the use of this website. Nothing in this disclaimer will:
+String termsp7 =
+    '''To the maximum extent permitted by applicable law, we exclude all representations, warranties and conditions relating to our App and the use of this website. Nothing in this disclaimer will:
 
     limit or exclude our or your liability for death or personal injury;
     limit or exclude our or your liability for fraud or fraudulent misrepresentation;
@@ -201,3 +203,55 @@ String termsp7 = '''To the maximum extent permitted by applicable law, we exclud
 The limitations and prohibitions of liability set in this Section and elsewhere in this disclaimer: (a) are subject to the preceding paragraph; and (b) govern all liabilities arising under the disclaimer, including liabilities arising in contract, in tort and for breach of statutory duty.
 
 As long as the website and the information and services on the website are provided free of charge, we will not be liable for any loss or damage of any nature. ''';
+String aboutheading = 'About FanSeatHub';
+String aboutheadingp =
+    '''Welcome to FanSeatHub, your go-to destination for sports highlights and match details!
+''';
+String aboutmainhead1 = 'What is FanSeatHub?';
+
+String aboutp1 =
+    '''FanSeatHub is a dedicated platform designed for sports enthusiasts who want to relive the excitement of their favorite sports moments. Whether you are a passionate football fan, a basketball aficionado, or a cricket buff, FanSeatHub has got you covered with a vast collection of sports highlights.''';
+String aboutmainhead2 = 'Key Features:';
+String abouthead2 = '1. Highlights Galore';
+String aboutp2 =
+    '''Enjoy the thrill of the game with our extensive library of sports highlights. From jaw-dropping goals to game-changing plays, FanSeatHub brings you the best moments from various sports leagues around the world.''';
+
+String abouthead3 = '2. Favorites Playlist';
+String aboutp3 =
+    '''Create your personalized playlist of favorite highlights! Easily bookmark and organize the moments that give you the most excitement, so you can relive them anytime, anywhere.''';
+
+String abouthead4 = '3. Match Details';
+String aboutp4 =
+    '''Stay informed about upcoming matches with our detailed match information. Find out the date, time, and stadium details, including ticket charges, ensuring you never miss a game.''';
+
+String abouthead5 = '4. User-Friendly Interface';
+String aboutp5 =
+    '''Navigate through the app effortlessly with our user-friendly interface. The clean design and intuitive controls make it easy for you to find and enjoy your favorite sports moments.''';
+
+String abouthead6 = '5. Personalized Experience';
+String aboutp6 =
+    '''FanSeatHub is all about tailoring the sports experience to your preferences. Customize your profile, manage your favorites, and explore content that aligns with your favorite teams and players.''';
+String aboutmainhead3 = 'How FanSeatHub Works:';
+String abouthead7 = '1. Browse Highlights:';
+String aboutp7 =
+    '''Explore a vast collection of sports highlights from various leagues.
+Use search and filter options to find highlights of specific teams or players.''';
+String abouthead8 = '2. Create Your Playlist:';
+String aboutp8 =
+    '''Save your favorite highlights to create a personalized playlist.
+Easily access your playlist to enjoy your most cherished moments.''';
+String abouthead9 = '3. Stay Updated:';
+String aboutp9 =
+    '''Check the match details section for information on upcoming games.
+Plan your sports calendar with dates, times, and stadium details.''';
+String abouthead10 = '4. Enjoy Anytime, Anywhere:';
+String aboutp10 =
+    '''FanSeatHub is available on multiple platforms, allowing you to enjoy sports highlights on your terms.
+Whether you're at home or on the go, the excitement is just a tap away. ''';
+String aboutmainhead4 = 'Join the FanSeatHub Community';
+String aboutmainhead4p =
+    '''Follow us on social media to stay updated on the latest highlights, app updates, and exclusive content. We value your feedback, so feel free to reach out and share your thoughts with us.
+
+Thank you for being a part of the FanSeatHub community. Get ready to experience sports like never before!
+
+''';

@@ -351,7 +351,7 @@ class _EditPageState extends State<EditPage> {
                     setState(() {
                       selectedType = value;
                       _initialSelectedType = value;
-                      print(value);
+                      
                     });
                   },
                 ),
@@ -466,5 +466,7 @@ class _EditPageState extends State<EditPage> {
         )),
       ),
     );
+    
   }
+
 }

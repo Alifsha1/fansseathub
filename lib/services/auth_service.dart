@@ -1,6 +1,6 @@
 import 'package:fansseathub/helper/helper_functions.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
-import 'package:fansseathub/screen/userLoginScreen.dart';
+import 'package:fansseathub/screen/UserSide/userLoginScreen.dart';
 import 'package:fansseathub/services/database_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

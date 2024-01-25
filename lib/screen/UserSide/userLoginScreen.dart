@@ -1,8 +1,8 @@
 import 'package:fansseathub/helper/helper_functions.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
-import 'package:fansseathub/screen/adminLoginScreen.dart';
-import 'package:fansseathub/screen/forgetScreen.dart';
-import 'package:fansseathub/screen/signupScreen.dart';
+import 'package:fansseathub/screen/AdminSide/adminLoginScreen.dart';
+import 'package:fansseathub/screen/UserSide/forgetScreen.dart';
+import 'package:fansseathub/screen/UserSide/signupScreen.dart';
 import 'package:fansseathub/services/auth_service.dart';
 import 'package:flutter/material.dart';
 

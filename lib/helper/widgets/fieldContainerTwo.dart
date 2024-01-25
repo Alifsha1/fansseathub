@@ -28,8 +28,8 @@ class Fieldforsecond extends StatefulWidget {
     required this.timeerrorMessage,
     required this.categoryerrorMessage,
     required this.typeerrorMessage,
-    required this.selectedtype, required this.ontypeoption,
-    
+    required this.selectedtype,
+    required this.ontypeoption,
   });
 
   @override
@@ -151,8 +151,7 @@ class DateContainer extends StatefulWidget {
 }
 
 class _DateContainerState extends State<DateContainer> {
-  
-  final formatdate = DateFormat("yyyy-MM-dd");
+  final formatdate = DateFormat("dd-MM-yyyy");
 
   @override
   Widget build(BuildContext context) {

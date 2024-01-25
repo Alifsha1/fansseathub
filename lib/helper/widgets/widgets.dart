@@ -1,13 +1,14 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'package:fansseathub/screen/favorites.dart';
-import 'package:fansseathub/screen/hightlightsAdd.dart';
-import 'package:fansseathub/screen/homeScreen.dart';
-import 'package:fansseathub/screen/nxtGameAdding.dart';
-import 'package:fansseathub/screen/profileScreen.dart';
-import 'package:fansseathub/screen/settings.dart';
-import 'package:fansseathub/screen/stadiumDetailsScreen.dart';
+import 'package:fansseathub/screen/UserSide/favorites.dart';
+import 'package:fansseathub/screen/AdminSide/hightlightsAdd.dart';
+import 'package:fansseathub/screen/UserSide/homeScreen.dart';
+import 'package:fansseathub/screen/AdminSide/nxtGameAdding.dart';
+import 'package:fansseathub/screen/UserSide/profileScreen.dart';
+import 'package:fansseathub/screen/UserSide/settings.dart';
+import 'package:fansseathub/screen/AdminSide/stadiumDetailsScreen.dart';
 import 'package:fansseathub/services/database_service.dart';
+import 'package:feather_icons/feather_icons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -168,6 +169,39 @@ class AdminTextField extends StatelessWidget {
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
         hintText: hinttext,
+        filled: true,
+        fillColor: Colors.white,
+      ),
+      validator: (value) {
+        if (value!.isNotEmpty) {
+          return null;
+        } else {
+          return errormessage;
+        }
+      },
+    );
+  }
+}
+
+class StadiumTextField extends StatelessWidget {
+  final String errormessage;
+  final String? Function(String?)? validator;
+  final Widget? label;
+  final TextEditingController controller;
+  const StadiumTextField(
+      {super.key,
+      required this.label,
+      this.validator,
+      required this.controller,
+      required this.errormessage});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+        label: label,
         filled: true,
         fillColor: Colors.white,
       ),
@@ -573,7 +607,6 @@ drawerUserScreen(context, mediaWidth, authService, username, email) {
                     children: [
                       IconButton(
                           onPressed: () {
-                            print('favv');
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                   builder: (context) => favorites()),
@@ -634,6 +667,24 @@ drawerUserScreen(context, mediaWidth, authService, username, email) {
                     color: Color.fromARGB(255, 163, 160, 160),
                   ),
                 ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.07,
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: const Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'v2.0.1',
+                        style: TextStyle(
+                            color: Color(0x1A000000),
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           );

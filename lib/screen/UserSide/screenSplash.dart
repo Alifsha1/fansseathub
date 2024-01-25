@@ -2,10 +2,10 @@
 
 import 'package:fansseathub/helper/helper_functions.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
-import 'package:fansseathub/screen/adminHomeScreen.dart';
-import 'package:fansseathub/screen/bottomBar.dart';
+import 'package:fansseathub/screen/AdminSide/adminHomeScreen.dart';
+import 'package:fansseathub/screen/Subpages/bottomBar.dart';
 
-import 'package:fansseathub/screen/userLoginScreen.dart';
+import 'package:fansseathub/screen/UserSide/userLoginScreen.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {

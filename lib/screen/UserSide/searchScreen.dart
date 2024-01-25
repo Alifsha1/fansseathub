@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fansseathub/sections/assets.dart';
 import 'package:flutter/material.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -228,12 +229,25 @@ class _SearchScreenState extends State<SearchScreen> {
                     },
                   );
                 } else {
-                  return const Text(
-                    'No Search Results.',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF6fb2d2),
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: mediaWidth * .3,
+                          height: mediaWidth * .3,
+                          decoration: const BoxDecoration(color: Colors.amber),
+                          child: Image.asset(noresults),
+                        ),
+                        const Text(
+                          'No Search Results.',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF6fb2d2),
+                          ),
+                        ),
+                      ],
                     ),
                   );
                 }
@@ -243,6 +257,7 @@ class _SearchScreenState extends State<SearchScreen> {
               );
             }),
       ),
+      backgroundColor: Colors.white,
     );
   }
 }

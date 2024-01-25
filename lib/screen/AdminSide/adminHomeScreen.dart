@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
-import 'package:fansseathub/screen/editPage.dart';
+import 'package:fansseathub/screen/AdminSide/editPage.dart';
 import 'package:fansseathub/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
