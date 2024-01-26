@@ -227,7 +227,6 @@ class _AddFirstGameState extends State<AddNextGame> {
         "gamenocontroller": gameno,
         "stadiumcontroller": stadium,
         "timecontroller": time,
-        
         "selectedtype": selectedType
       });
     }

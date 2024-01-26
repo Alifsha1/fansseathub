@@ -8,7 +8,6 @@ import 'package:fansseathub/screen/UserSide/profileScreen.dart';
 import 'package:fansseathub/screen/UserSide/settings.dart';
 import 'package:fansseathub/screen/AdminSide/stadiumDetailsScreen.dart';
 import 'package:fansseathub/services/database_service.dart';
-import 'package:feather_icons/feather_icons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

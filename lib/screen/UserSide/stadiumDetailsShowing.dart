@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
 import 'package:fansseathub/screen/stadiumimageshowing.dart';
@@ -19,8 +18,7 @@ class _DetailsOfStadiumState extends State<DetailsOfStadium> {
     super.initState();
     _stream = FirebaseFirestore.instance
         .collection('stadiums')
-        .where('stadiumname',
-            isEqualTo: widget.stadium)
+        .where('stadiumname', isEqualTo: widget.stadium)
         .snapshots();
   }
 
@@ -70,12 +68,14 @@ class _DetailsOfStadiumState extends State<DetailsOfStadium> {
                             ),
                           ),
                           GestureDetector(
-                            onTap: (){
-                               Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => StadiumImage(image:  "${items[0]['imagePathstadium']}",)
-                      ),
-                    );
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => StadiumImage(
+                                          image:
+                                              "${items[0]['imagePathstadium']}",
+                                        )),
+                              );
                             },
                             child: Container(
                               width: mediaWidth,
@@ -204,6 +204,7 @@ class _DetailsOfStadiumState extends State<DetailsOfStadium> {
           ),
         ),
       ),
+      backgroundColor: Colors.white,
     );
   }
 }

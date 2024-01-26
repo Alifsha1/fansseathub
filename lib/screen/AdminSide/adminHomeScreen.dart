@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fansseathub/helper/widgets/widgets.dart';
-import 'package:fansseathub/screen/AdminSide/editPage.dart';
+import 'package:fansseathub/screen/AdminSide/edit_page.dart';
 import 'package:fansseathub/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
@@ -91,7 +91,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                                   children: [
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width *
-                                          0.2,
+                                          0.05,
                                     ),
                                     Expanded(
                                         child: Text(
@@ -100,8 +100,9 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold),
                                     )),
-                                    const SizedBox(
-                                      width: 10,
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.05,
                                     ),
                                     const Text(
                                       'VS',
@@ -109,8 +110,9 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    const SizedBox(
-                                      width: 10,
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.05,
                                     ),
                                     Expanded(
                                         child: Text(
@@ -143,8 +145,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                                                   .doc(id);
                                           documentReference
                                               .delete()
-                                              .whenComplete(() {
-                                          });
+                                              .whenComplete(() {});
                                         },
                                         icon: const Icon(Icons.delete)),
                                   ],
@@ -167,11 +168,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   }
 
   deleteData() {
-
     DocumentReference documentReference =
         FirebaseFirestore.instance.collection("").doc();
-    documentReference.delete().whenComplete(() {
-     
-    });
+    documentReference.delete().whenComplete(() {});
   }
 }

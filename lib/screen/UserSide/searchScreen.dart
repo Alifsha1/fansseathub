@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fansseathub/screen/UserSide/stadiumDetailsShowing.dart';
 import 'package:fansseathub/sections/assets.dart';
 import 'package:flutter/material.dart';
 
@@ -97,131 +98,143 @@ class _SearchScreenState extends State<SearchScreen> {
                           searchResults![index].data() as Map<String, dynamic>;
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 10),
-                          width: mediaWidth * .93,
-                          height: mediaHeight * .23,
-                          decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 17, right: 17, left: 20),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Row(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => DetailsOfStadium(
+                                      stadium:
+                                          '${thisItems['stadiumcontroller']}')),
+                            );
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 10),
+                            width: mediaWidth,
+                            height: mediaHeight * .22,
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 17, right: 17, left: 20),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            '${thisItems['categorycontroller']}',
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 2,
+                                          ),
+                                          Text(
+                                            '${thisItems['gamenocontroller']}',
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const Spacer(),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            '${thisItems['datecontroller']}'
+                                                .toString(),
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 8),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
+                                        Container(
+                                          height: mediaWidth * .07,
+                                          width: mediaWidth * .07,
+                                          decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                          ),
+                                          child: Image.network(
+                                              '${thisItems['selectedImageteam1']}'),
+                                        ),
+                                        SizedBox(
+                                          width: mediaWidth * .01,
+                                        ),
                                         Text(
-                                          '${thisItems['categorycontroller']}',
+                                          '${thisItems['team1']}',
                                           style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 15,
                                           ),
-                                        ),
-                                        const SizedBox(
-                                          width: 2,
-                                        ),
-                                        Text(
-                                          '${thisItems['gamenocontroller']}',
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                          ),
-                                        ),
+                                        )
                                       ],
                                     ),
-                                    const Spacer(),
-                                    Row(
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 10, bottom: 10),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
+                                        Container(
+                                          height: mediaWidth * .07,
+                                          width: mediaWidth * .07,
+                                          decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                          ),
+                                          child: Image.network(
+                                              '${thisItems['selectedImageteam2']}'),
+                                        ),
+                                        SizedBox(
+                                          width: mediaWidth * .01,
+                                        ),
                                         Text(
-                                          '${thisItems['datecontroller']}'
-                                              .toString(),
+                                          '${thisItems['team2']}',
                                           style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 15,
                                           ),
-                                        ),
+                                        )
                                       ],
-                                    )
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 8),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    ),
+                                  ),
+                                  Row(
                                     children: [
-                                      Container(
-                                        height: mediaWidth * .07,
-                                        width: mediaWidth * .07,
-                                        decoration: const BoxDecoration(
+                                      const Text(
+                                        'Starts at ',
+                                        style: TextStyle(
                                           color: Colors.white,
+                                          fontSize: 15,
                                         ),
-                                        child: Image.network(
-                                            '${thisItems['selectedImageteam1']}'),
-                                      ),
-                                      SizedBox(
-                                        width: mediaWidth * .01,
                                       ),
                                       Text(
-                                        '${thisItems['team1']}',
+                                        '${thisItems['timecontroller']}'
+                                            .toString(),
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 15,
                                         ),
-                                      )
+                                      ),
                                     ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 10, bottom: 10),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        height: mediaWidth * .07,
-                                        width: mediaWidth * .07,
-                                        decoration: const BoxDecoration(
-                                          color: Colors.white,
-                                        ),
-                                        child: Image.network(
-                                            '${thisItems['selectedImageteam2']}'),
-                                      ),
-                                      SizedBox(
-                                        width: mediaWidth * .01,
-                                      ),
-                                      Text(
-                                        '${thisItems['team2']}',
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Row(
-                                  children: [
-                                    const Text(
-                                      'Starts at ',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                    Text(
-                                      '${thisItems['timecontroller']}'
-                                          .toString(),
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ),

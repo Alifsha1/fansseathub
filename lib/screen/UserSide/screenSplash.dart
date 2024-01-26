@@ -29,14 +29,15 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: SafeArea(
           child: Column(
             children: [
-              const SizedBox(
-                height: 30,
+              SizedBox(
+                height: mediaHeight * .15,
               ),
               const Heading(),
               Image.asset(
@@ -55,9 +56,9 @@ class _SplashScreenState extends State<SplashScreen> {
                     fontWeight: FontWeight.bold,
                     fontFamily: "Miltonian_Tattoo"),
               ),
-              const SizedBox(
-                height: 40,
-              )
+              // const SizedBox(
+              //   height: 40,
+              // )
             ],
           ),
         ),
@@ -70,7 +71,8 @@ class _SplashScreenState extends State<SplashScreen> {
     if (_isUserSigned) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-            builder: (context) =>  BottomBar(isUsersigned: _isUserSigned, idAdminsigned: _isAdminSigned),
+            builder: (context) => BottomBar(
+                isUsersigned: _isUserSigned, idAdminsigned: _isAdminSigned),
           ),
           (route) => false);
     } else if (_isAdminSigned) {

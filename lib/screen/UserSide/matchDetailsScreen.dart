@@ -229,7 +229,7 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
                   padding: const EdgeInsets.only(left: 4, right: 4),
                   child: SizedBox(
                       width: mediaWidth,
-                      height: mediaHeight * .22,
+                      height: mediaHeight * .18,
                       child: StreamBuilder<QuerySnapshot>(
                         stream: _stream,
                         builder: (context, snapshot) {
