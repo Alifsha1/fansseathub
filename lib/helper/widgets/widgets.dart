@@ -242,7 +242,7 @@ class _FormTextFieldState extends State<FormTextField> {
       controller: widget.controller,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-        hintText: 'gmail',
+        hintText: widget.hinttext,
         filled: true,
         fillColor: Colors.white,
       ),

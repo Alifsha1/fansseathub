@@ -62,7 +62,7 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
                   padding: const EdgeInsets.only(top: 20, bottom: 10),
                   child: Container(
                     width: mediaHeight,
-                    height: mediaHeight * .28,
+                    height: mediaHeight * .29,
                     decoration: BoxDecoration(
                         color: Colors.black,
                         borderRadius: BorderRadius.circular(15)),
@@ -229,7 +229,7 @@ class _MatchDetailsScreenState extends State<MatchDetailsScreen> {
                   padding: const EdgeInsets.only(left: 4, right: 4),
                   child: SizedBox(
                       width: mediaWidth,
-                      height: mediaHeight * .18,
+                      height: mediaHeight * .22,
                       child: StreamBuilder<QuerySnapshot>(
                         stream: _stream,
                         builder: (context, snapshot) {
